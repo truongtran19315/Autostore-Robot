@@ -6,76 +6,77 @@ from utils import *
 import random
 import numpy as np
 from datetime import datetime
+import cv2
 
 
 ObstacleTest = pygame.Rect(300, 600, 500, 1000)
 
 
-class Lane():
-    def __init__(self) -> None:
-        #  (left, top, width, height)
-        self.outSideMostLeft = pygame.Rect(LANE_SETTING.OUTSIDE_LEFT_PADDING,
-                                           LANE_SETTING.OUTSIDE_TOP_PADDING, LANE_SETTING.WIDTH_OF_LANE_BORDER,
-                                           GAME_SETTING.SCREEN_HEIGHT -
-                                           (LANE_SETTING.OUTSIDE_TOP_PADDING + LANE_SETTING.OUTSIDE_BOTTOM_PADDING))
-        self.outSideMostTop = pygame.Rect(LANE_SETTING.OUTSIDE_LEFT_PADDING,
-                                          LANE_SETTING.OUTSIDE_TOP_PADDING,
-                                          GAME_SETTING.SCREEN_WIDTH -
-                                          (LANE_SETTING.OUTSIDE_LEFT_PADDING +
-                                           LANE_SETTING.OUTSIDE_RIGHT_PADDING),
-                                          LANE_SETTING.WIDTH_OF_LANE_BORDER)
-        self.outSideMostRight = pygame.Rect(GAME_SETTING.SCREEN_WIDTH - LANE_SETTING.OUTSIDE_RIGHT_PADDING,
-                                            LANE_SETTING.OUTSIDE_TOP_PADDING,
-                                            LANE_SETTING.WIDTH_OF_LANE_BORDER,
-                                            GAME_SETTING.SCREEN_HEIGHT -
-                                            (LANE_SETTING.OUTSIDE_TOP_PADDING + LANE_SETTING.OUTSIDE_BOTTOM_PADDING))
-        self.outSideMostBottom = pygame.Rect(LANE_SETTING.OUTSIDE_LEFT_PADDING,
-                                             GAME_SETTING.SCREEN_HEIGHT - LANE_SETTING.OUTSIDE_BOTTOM_PADDING,
-                                             GAME_SETTING.SCREEN_WIDTH -
-                                             (LANE_SETTING.OUTSIDE_LEFT_PADDING +
-                                              LANE_SETTING.OUTSIDE_RIGHT_PADDING),
-                                             LANE_SETTING.WIDTH_OF_LANE_BORDER)
+# class Lane():
+#     def __init__(self) -> None:
+#         #  (left, top, width, height)
+#         self.outSideMostLeft = pygame.Rect(LANE_SETTING.OUTSIDE_LEFT_PADDING,
+#                                            LANE_SETTING.OUTSIDE_TOP_PADDING, LANE_SETTING.WIDTH_OF_LANE_BORDER,
+#                                            GAME_SETTING.SCREEN_HEIGHT -
+#                                            (LANE_SETTING.OUTSIDE_TOP_PADDING + LANE_SETTING.OUTSIDE_BOTTOM_PADDING))
+#         self.outSideMostTop = pygame.Rect(LANE_SETTING.OUTSIDE_LEFT_PADDING,
+#                                           LANE_SETTING.OUTSIDE_TOP_PADDING,
+#                                           GAME_SETTING.SCREEN_WIDTH -
+#                                           (LANE_SETTING.OUTSIDE_LEFT_PADDING +
+#                                            LANE_SETTING.OUTSIDE_RIGHT_PADDING),
+#                                           LANE_SETTING.WIDTH_OF_LANE_BORDER)
+#         self.outSideMostRight = pygame.Rect(GAME_SETTING.SCREEN_WIDTH - LANE_SETTING.OUTSIDE_RIGHT_PADDING,
+#                                             LANE_SETTING.OUTSIDE_TOP_PADDING,
+#                                             LANE_SETTING.WIDTH_OF_LANE_BORDER,
+#                                             GAME_SETTING.SCREEN_HEIGHT -
+#                                             (LANE_SETTING.OUTSIDE_TOP_PADDING + LANE_SETTING.OUTSIDE_BOTTOM_PADDING))
+#         self.outSideMostBottom = pygame.Rect(LANE_SETTING.OUTSIDE_LEFT_PADDING,
+#                                              GAME_SETTING.SCREEN_HEIGHT - LANE_SETTING.OUTSIDE_BOTTOM_PADDING,
+#                                              GAME_SETTING.SCREEN_WIDTH -
+#                                              (LANE_SETTING.OUTSIDE_LEFT_PADDING +
+#                                               LANE_SETTING.OUTSIDE_RIGHT_PADDING),
+#                                              LANE_SETTING.WIDTH_OF_LANE_BORDER)
 
-        self.inSideMostLeft = pygame.Rect(LANE_SETTING.INSIDE_LEFT_PADDING,
-                                          LANE_SETTING.INSIDE_TOP_PADDING, LANE_SETTING.WIDTH_OF_LANE_BORDER,
-                                          GAME_SETTING.SCREEN_HEIGHT -
-                                          (LANE_SETTING.INSIDE_TOP_PADDING + LANE_SETTING.INSIDE_BOTTOM_PADDING))
-        self.inSideMostTop = pygame.Rect(LANE_SETTING.INSIDE_LEFT_PADDING,
-                                         LANE_SETTING.INSIDE_TOP_PADDING,
-                                         GAME_SETTING.SCREEN_WIDTH -
-                                         (LANE_SETTING.INSIDE_LEFT_PADDING +
-                                          LANE_SETTING.INSIDE_RIGHT_PADDING),
-                                         LANE_SETTING.WIDTH_OF_LANE_BORDER)
-        self.inSideMostRight = pygame.Rect(GAME_SETTING.SCREEN_WIDTH - LANE_SETTING.INSIDE_RIGHT_PADDING,
-                                           LANE_SETTING.INSIDE_TOP_PADDING,
-                                           LANE_SETTING.WIDTH_OF_LANE_BORDER,
-                                           GAME_SETTING.SCREEN_HEIGHT -
-                                           (LANE_SETTING.INSIDE_TOP_PADDING + LANE_SETTING.INSIDE_BOTTOM_PADDING))
-        self.inSideMostBottom = pygame.Rect(LANE_SETTING.INSIDE_LEFT_PADDING,
-                                            GAME_SETTING.SCREEN_HEIGHT - LANE_SETTING.INSIDE_BOTTOM_PADDING,
-                                            GAME_SETTING.SCREEN_WIDTH -
-                                            (LANE_SETTING.INSIDE_LEFT_PADDING +
-                                             LANE_SETTING.INSIDE_RIGHT_PADDING),
-                                            LANE_SETTING.WIDTH_OF_LANE_BORDER)
+#         self.inSideMostLeft = pygame.Rect(LANE_SETTING.INSIDE_LEFT_PADDING,
+#                                           LANE_SETTING.INSIDE_TOP_PADDING, LANE_SETTING.WIDTH_OF_LANE_BORDER,
+#                                           GAME_SETTING.SCREEN_HEIGHT -
+#                                           (LANE_SETTING.INSIDE_TOP_PADDING + LANE_SETTING.INSIDE_BOTTOM_PADDING))
+#         self.inSideMostTop = pygame.Rect(LANE_SETTING.INSIDE_LEFT_PADDING,
+#                                          LANE_SETTING.INSIDE_TOP_PADDING,
+#                                          GAME_SETTING.SCREEN_WIDTH -
+#                                          (LANE_SETTING.INSIDE_LEFT_PADDING +
+#                                           LANE_SETTING.INSIDE_RIGHT_PADDING),
+#                                          LANE_SETTING.WIDTH_OF_LANE_BORDER)
+#         self.inSideMostRight = pygame.Rect(GAME_SETTING.SCREEN_WIDTH - LANE_SETTING.INSIDE_RIGHT_PADDING,
+#                                            LANE_SETTING.INSIDE_TOP_PADDING,
+#                                            LANE_SETTING.WIDTH_OF_LANE_BORDER,
+#                                            GAME_SETTING.SCREEN_HEIGHT -
+#                                            (LANE_SETTING.INSIDE_TOP_PADDING + LANE_SETTING.INSIDE_BOTTOM_PADDING))
+#         self.inSideMostBottom = pygame.Rect(LANE_SETTING.INSIDE_LEFT_PADDING,
+#                                             GAME_SETTING.SCREEN_HEIGHT - LANE_SETTING.INSIDE_BOTTOM_PADDING,
+#                                             GAME_SETTING.SCREEN_WIDTH -
+#                                             (LANE_SETTING.INSIDE_LEFT_PADDING +
+#                                              LANE_SETTING.INSIDE_RIGHT_PADDING),
+#                                             LANE_SETTING.WIDTH_OF_LANE_BORDER)
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, COLOR.WHITE, self.outSideMostLeft)
-        pygame.draw.rect(screen, COLOR.WHITE, self.outSideMostTop)
-        pygame.draw.rect(screen, COLOR.WHITE, self.outSideMostRight)
-        pygame.draw.rect(screen, COLOR.WHITE, self.outSideMostBottom)
+#     def draw(self, screen):
+#         pygame.draw.rect(screen, COLOR.WHITE, self.outSideMostLeft)
+#         pygame.draw.rect(screen, COLOR.WHITE, self.outSideMostTop)
+#         pygame.draw.rect(screen, COLOR.WHITE, self.outSideMostRight)
+#         pygame.draw.rect(screen, COLOR.WHITE, self.outSideMostBottom)
 
-        pygame.draw.rect(screen, COLOR.WHITE, self.inSideMostLeft)
-        pygame.draw.rect(screen, COLOR.WHITE, self.inSideMostTop)
-        pygame.draw.rect(screen, COLOR.WHITE, self.inSideMostRight)
-        pygame.draw.rect(screen, COLOR.WHITE, self.inSideMostBottom)
+#         pygame.draw.rect(screen, COLOR.WHITE, self.inSideMostLeft)
+#         pygame.draw.rect(screen, COLOR.WHITE, self.inSideMostTop)
+#         pygame.draw.rect(screen, COLOR.WHITE, self.inSideMostRight)
+#         pygame.draw.rect(screen, COLOR.WHITE, self.inSideMostBottom)
 
-    def isCollideWithThing(self, thing):
-        return \
-            self.outSideMostLeft.colliderect(thing) or self.outSideMostTop.colliderect(thing) or \
-            self.outSideMostRight.colliderect(thing) or self.outSideMostBottom.colliderect(thing) or \
-            self.inSideMostLeft.colliderect(thing) or self.inSideMostTop.colliderect(thing) or \
-            self.inSideMostRight.colliderect(
-                thing) or self.inSideMostBottom.colliderect(thing)
+#     def isCollideWithThing(self, thing):
+#         return \
+#             self.outSideMostLeft.colliderect(thing) or self.outSideMostTop.colliderect(thing) or \
+#             self.outSideMostRight.colliderect(thing) or self.outSideMostBottom.colliderect(thing) or \
+#             self.inSideMostLeft.colliderect(thing) or self.inSideMostTop.colliderect(thing) or \
+#             self.inSideMostRight.colliderect(
+#                 thing) or self.inSideMostBottom.colliderect(thing)
 
 
 class Car():
@@ -151,17 +152,17 @@ class Robot(Car):
                                 "color": COLOR.WHITE
                                 } for x in range(PLAYER_SETTING.CASTED_RAYS)]
 
-    def checkCollision(self, collisions, lane):
+    def checkCollision(self, collisions):
         if collisions == None or len(collisions) == 0:
             self.is_alive = True
             return
 
-        recColliderAroundRobot = pygame.Rect(self.xPos - self.radiusObject, self.yPos -
-                                             self.radiusObject, self.radiusObject*2, self.radiusObject*2)
-        if lane.isCollideWithThing(recColliderAroundRobot):
-            self.is_alive = False
-            print(self.is_alive, datetime.now().strftime("%H:%M:%S"))
-            return
+        # recColliderAroundRobot = pygame.Rect(self.xPos - self.radiusObject, self.yPos -
+        #                                      self.radiusObject, self.radiusObject*2, self.radiusObject*2)
+        # if lane.isCollideWithThing(recColliderAroundRobot):
+        #     self.is_alive = False
+        #     print(self.is_alive, datetime.now().strftime("%H:%M:%S"))
+        #     return
 
         for collision in collisions:
             distanceBetweenCenter = Utils.distanceBetweenTwoPoints(
@@ -179,8 +180,8 @@ class Robot(Car):
         inRangeLidarObject = []
         for obstacle in obstacles:
             distance = Utils.distanceBetweenTwoPoints(
-                self.xPos, self.yPos, obstacle.xPos, obstacle.yPos)
-            isInRageLidar = distance < OBSTACLE_SETTING.RADIUS_OBJECT + \
+                self.xPos, self.yPos, obstacle.xCenter, obstacle.yCenter)
+            isInRageLidar = distance < obstacle.isObstacles(self.xPos, self.yPos) + \
                 PLAYER_SETTING.RADIUS_LIDAR
             if (isInRageLidar == True):
                 inRangeLidarObject.append(obstacle)
@@ -328,6 +329,51 @@ class Obstacles(Car):
                           self.yPos + math.cos(self.currAngle)*20), 3)
 
 
+class CircleObject():
+    def __init__(self, initX, initY, radius) -> None:
+        self.xPos = initX
+        self.yPos = initY
+        self.xCenter = initX
+        self.yCenter = initY
+        self.radius = radius    
+    
+    def isObstacles(self, x, y):
+        # if (self.xPos - x) ** 2 + (self.yPos - y) ** 2 >= self.radius ** 2:
+        #     return True
+        # return False
+        return self.radius
+    
+    def draw(self, screen):
+        pygame.draw.circle(
+            screen, COLOR.BLUE, (self.xPos, self.yPos), self.radius
+        )
+        
+        
+class RectangleObject():
+    def __init__(self, initX, initY, height, width) -> None:
+        self.xPos = initX
+        self.yPos = initY
+        self.xCenter = initX + width // 2
+        self.yCenter = initY + height // 2
+        self.height = height
+        self.width = width    
+    
+    def isObstacles(self, x, y):
+        # if x >= self.xPos and x <= self.xPos + self.width and y >= self.yPos and y <= self.yPos + self.height:
+        #     return True
+        # return False
+        cos = abs(y - self.yCenter) / Utils.distanceBetweenTwoPoints(
+                self.xCenter, self.yCenter, x, y)
+        return (self.height // 2) / cos
+    
+    def draw(self, screen):
+        rect = pygame.Rect(self.xPos, self.yPos, self.width, self.height)
+        pygame.draw.rect(
+            screen, COLOR.BLUE, rect
+        )
+            
+            
+
 class PyGame2D():
     def __init__(self) -> None:
         pygame.init()
@@ -335,7 +381,6 @@ class PyGame2D():
             (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.robot = Robot()
-        self.lane = Lane()
         self.obstacles = self._initObstacle()
         self.mode = 0
 
@@ -345,76 +390,84 @@ class PyGame2D():
         numOfObstacles = OBSTACLE_SETTING.MAX_INSTANCES
         obstacles = []
         for _ in range(numOfObstacles):
-            obstacleInstance = Obstacles(
-                initX=GAME_SETTING.SCREEN_WIDTH//2 +
-                random.randint(-int(0.8*GAME_SETTING.SCREEN_WIDTH//2),
-                               int(0.8*GAME_SETTING.SCREEN_WIDTH//2)),
-                initY=random.randint(0, int(0.7*GAME_SETTING.SCREEN_HEIGHT))
-            )
+            if random.randint(1, 2) == 1:    #Circle
+                obstacleInstance = CircleObject(
+                    initX=random.randint(5, GAME_SETTING.SCREEN_WIDTH - 5),
+                    initY=random.randint(5, GAME_SETTING.SCREEN_HEIGHT - 5),
+                    radius=random.randint(10, 50)
+                )
+            else: 
+                obstacleInstance = RectangleObject(
+                    initX=random.randint(5, GAME_SETTING.SCREEN_WIDTH - 5),
+                    initY=random.randint(5, GAME_SETTING.SCREEN_HEIGHT - 5),
+                    height=random.randint(10, 50),
+                    width=random.randint(10, 50),
+                )
+                
             obstacles.append(obstacleInstance)
         return obstacles
 
-    def _obstacleMoves(self):
-        for obstacle in self.obstacles:
-            keys = ACTIONS_LIST
-            probs = OBSTACLE_SETTING.PROBABILITIES_ACTION
-            randomIndex = random.choices(range(len(keys)), probs)[0]
-            choosedKey = keys[randomIndex]
-            obstacle.move(action=choosedKey)
+    # def _obstacleMoves(self):
+    #     for obstacle in self.obstacles:
+    #         keys = ACTIONS_LIST
+    #         probs = OBSTACLE_SETTING.PROBABILITIES_ACTION
+    #         randomIndex = random.choices(range(len(keys)), probs)[0]
+    #         choosedKey = keys[randomIndex]
+    #         obstacle.move(action=choosedKey)
 
     def action(self, action):
         self.robot.move(action=action)
-        self._obstacleMoves()
-        self.robot.checkCollision(collisions=self.obstacles, lane=self.lane)
+        # self._obstacleMoves()
+        self.robot.checkCollision(collisions=self.obstacles)
         self.robot.scanLidar(obstacles=self.obstacles)
         self.robot.checkAchieveGoal()
 
-    def evaluate(self):
-        reward = 0
-        if not self.robot.is_alive:
-            reward += -1000
+    # def evaluate(self):
+    #     reward = 0
+    #     if not self.robot.is_alive:
+    #         reward += -1000
 
-        if (GAME_SETTING.SCREEN_HEIGHT - self.robot.yPos) >= 1:
-            reward += -10000
+    #     if (GAME_SETTING.SCREEN_HEIGHT - self.robot.yPos) >= 1:
+    #         reward += -10000
 
-        frontLidars = self.robot.lidarSignals[75:105]
-        eachFrontPenalty = 0.01
+    #     frontLidars = self.robot.lidarSignals[75:105]
+    #     eachFrontPenalty = 0.01
 
-        leftLidars = self.robot.lidarSignals[0:75]
-        eachLeftPenalty = 0.005
+    #     leftLidars = self.robot.lidarSignals[0:75]
+    #     eachLeftPenalty = 0.005
 
-        rightLidars = self.robot.lidarSignals[105:180]
-        eachRightPenalty = 0.005
+    #     rightLidars = self.robot.lidarSignals[105:180]
+    #     eachRightPenalty = 0.005
 
-        for frontLidar in frontLidars:
-            if frontLidar == INT_INFINITY:
-                reward += 1
-                break
-            reward += -abs(PLAYER_SETTING.RADIUS_LIDAR -
-                           frontLidar)*eachFrontPenalty
+    #     for frontLidar in frontLidars:
+    #         if frontLidar == INT_INFINITY:
+    #             reward += 1
+    #             break
+    #         reward += -abs(PLAYER_SETTING.RADIUS_LIDAR -
+    #                        frontLidar)*eachFrontPenalty
 
-        for leftLidar in leftLidars:
-            if leftLidar == INT_INFINITY:
-                reward += 1
-                break
-            reward += -abs(PLAYER_SETTING.RADIUS_LIDAR -
-                           leftLidar)*eachLeftPenalty
+    #     for leftLidar in leftLidars:
+    #         if leftLidar == INT_INFINITY:
+    #             reward += 1
+    #             break
+    #         reward += -abs(PLAYER_SETTING.RADIUS_LIDAR -
+    #                        leftLidar)*eachLeftPenalty
 
-        for rightLidar in rightLidars:
-            if rightLidar == INT_INFINITY:
-                reward += 1
-                break
-            reward += -abs(PLAYER_SETTING.RADIUS_LIDAR -
-                           rightLidar)*eachRightPenalty
+    #     for rightLidar in rightLidars:
+    #         if rightLidar == INT_INFINITY:
+    #             reward += 1
+    #             break
+    #         reward += -abs(PLAYER_SETTING.RADIUS_LIDAR -
+    #                        rightLidar)*eachRightPenalty
 
-        ratioLeft = (self.robot.xPos)/(GAME_SETTING.SCREEN_WIDTH)
+    #     ratioLeft = (self.robot.xPos)/(GAME_SETTING.SCREEN_WIDTH)
 
-        if (ratioLeft <= 0.65 and ratioLeft >= 0.45):
-            reward += ratioLeft*0.1
-        else:
-            reward += -ratioLeft*0.15
+    #     if (ratioLeft <= 0.65 and ratioLeft >= 0.45):
+    #         reward += ratioLeft*0.1
+    #     else:
+    #         reward += -ratioLeft*0.15
 
-        return reward
+    #     return reward
 
     def is_done(self):
         if ((not self.robot.is_alive) or self.robot.is_goal):
@@ -437,7 +490,7 @@ class PyGame2D():
         self.screen.fill(COLOR.BLACK)
         self.screen.blit(self.screen, (0, 0))
         self.clock.tick(GAME_SETTING.FPS)
-        self.lane.draw(screen=self.screen)
+        # self.lane.draw(screen=self.screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
