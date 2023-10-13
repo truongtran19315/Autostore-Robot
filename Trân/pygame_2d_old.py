@@ -2,12 +2,17 @@ import cv2
 import numpy as np
 import math
 import random
+from obstacles import Obstacles
+from const import *
+from utils import *
 
-ENV_HEIGHT = 700
-ENV_WIDTH = 1250
+ENV_HEIGHT = 720
+ENV_WIDTH = 1280
 BLUE = (255, 0, 0)
 RED = (0, 0, 255)
 GREEN = (0, 255, 0)
+
+INFINITY = 99999
 
 FORWARD_ACC = 0 # accelerate forward
 BACKWARD_ACC = 1 # 
@@ -15,29 +20,9 @@ LEFT_ACC = 2
 RIGHT_ACC = 3
 STOP = 4
 
-class PLAYER_SETTING:
-    RADIUS_OBJECT = 10
-    RADIUS_LIDAR = 100  # From the border of the circle
 
-    INITIAL_X = ENV_WIDTH//2
-    INITIAL_Y = ENV_HEIGHT - 20
+    
 
-    MAX_FORWARD_VELO = 100
-    MAX_ROTATION_VELO = 1
-    MIN_ROTATION_VELO = -MAX_ROTATION_VELO
-
-    ACCELERATION_FORWARD = 5
-    ACCELERATION_ROTATE = 0.05
-
-    CASTED_RAYS = 45
-    CASTED_RAYS = 90
-    FOV = math.pi 
-    HALF_FOV = FOV/2 # pi/2
-    STEP_ANGLE = FOV / CASTED_RAYS 
-
-    Y_GOAL_POSITION = 10
-
-    # MAX_STEP_PER_EPOCH = 5000
 
 class Car():
   def __init__(self, initX, initY, maxForwardVelocity, minRotationVelocity, maxRotationVelocity, accelerationForward, accelerationRotate, radiusObject) -> None:
@@ -93,62 +78,145 @@ class Robot(Car):
       accelerationRotate = PLAYER_SETTING.ACCELERATION_ROTATE,
       radiusObject = PLAYER_SETTING.RADIUS_OBJECT
     )
+    
+    # 360 lidar signal around robot 
+    self.lidarSignals = [INFINITY]*PLAYER_SETTING.CASTED_RAYS # lidar return distance from robot to obstacles in range - return infinity if not have obstacle
+    self.lidarVisualize = [{"source": {"x": self.xPos, "y": self.yPos},
+                            "target": {"x": self.xPos, "y": self.yPos},
+                            "color": COLOR.WHITE
+                            } for x in range(PLAYER_SETTING.CASTED_RAYS)]
   
   def scanLidar(self, obstacles):
-    pass
+    obstaclesInRange = []  #to save obstacles in lidar range
     
-  def checkCollision(self, collisions, lane):
-      pass
+    for obstacle in obstacles.obstacles:
+      distance = Utils.distanceBetweenTwoPoints(
+          self.xPos, self.yPos, obstacle.xCenter, obstacle.yCenter)
+      if obstacle.shape == 'circle':
+        isInRageLidar = distance < obstacle.radius + \
+            PLAYER_SETTING.RADIUS_LIDAR
+      else: 
+        radius = math.sqrt(obstacle.height**2 + obstacle.width**2) / 2  # distance from the center to the point in the corner
+        isInRageLidar = distance < radius + \
+            PLAYER_SETTING.RADIUS_LIDAR
+      if (isInRageLidar == True):
+          obstaclesInRange.append(obstacle)
+    startAngle = 0
+      
+    if (len(obstaclesInRange) == 0):
+      for ray in range(PLAYER_SETTING.CASTED_RAYS):
+        target_x = int(self.xPos - \
+            math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+        target_y = int(self.yPos + \
+            math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+        self.lidarVisualize[ray]["target"] = {
+            "x": target_x,
+            "y": target_y
+        }
+        self.lidarVisualize[ray]["source"] = {
+            "x": self.xPos,
+            "y": self.yPos
+        }
+        self.lidarVisualize[ray]["color"] = COLOR.CYAN
+        self.lidarSignals[ray] = INT_INFINITY
+        startAngle += PLAYER_SETTING.STEP_ANGLE
+    else:
+      for ray in range(PLAYER_SETTING.CASTED_RAYS):
+        target_x = int(self.xPos - \
+            math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+        target_y = int(self.yPos + \
+            math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+        self.lidarVisualize[ray]["target"] = {
+            "x": target_x,
+            "y": target_y
+        }
+        self.lidarVisualize[ray]["source"] = {
+            "x": self.xPos,
+            "y": self.yPos
+        }
+        
+        distance = INT_INFINITY
+        
+        for obstacle in obstaclesInRange:
+          distance = min(distance, Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y))
+        
+        if distance <= PLAYER_SETTING.RADIUS_LIDAR:
+          target_x = int(self.xPos - math.sin(startAngle) * distance)
+          target_y = int(self.yPos + math.cos(startAngle) * distance)
+          self.lidarSignals[ray] = distance
+          self.lidarVisualize[ray]["color"] = COLOR.RED
+          self.lidarVisualize[ray]["target"] = {
+              "x": target_x,
+              "y": target_y
+          }
+        else:
+          self.lidarSignals[ray] = INT_INFINITY
+          self.lidarVisualize[ray]["color"] = COLOR.CYAN
+          self.lidarVisualize[ray]["target"] = {
+              "x": target_x,
+              "y": target_y
+          }
+        
+        startAngle += PLAYER_SETTING.STEP_ANGLE
+    
+  def checkCollision(self, collisions):
+    pass
+  
   def checkAchieveGoal(self):
     pass
-  def draw(self, screen):
-    pass
-      
-class Obstacles(Car):
-  def __init__(self, initX, initY):
-    self.xPos = initX
-    self.yPos = initY
-    
-  def draw(self, screen):
-    radius = random.randint(10, 50)
-    # cv2.circle(image, center_coordinates, radius, color, thickness)
-    cv2.circle(screen, (self.xPos, self.yPos), radius, RED, -1)
-    
-class ObstaclesStatic():
-  def __init__(self, initX, initY) -> None:
-    self.xPos = initX
-    self.yPos = initY
   
   def draw(self, screen):
-    radius = random.randint(10, 50)
-    shape = random.randint(1, 2)
-    if shape == 1:
-      cv2.circle(screen, (self.xPos, self.yPos), radius, GREEN, -1)
-    else:
-      cv2.rectangle(screen, (self.xPos - radius, self.yPos - radius), (self.xPos + radius, self.yPos + radius), GREEN, -1)
+    # cv2.circle(screen, (self.xPos, self.yPos), 370, COLOR.BLUE, -1)
+    
+    for lidarItemVisualize in self.lidarVisualize:
+      color = lidarItemVisualize["color"]
+      srcX = lidarItemVisualize["source"]["x"]
+      srcY = lidarItemVisualize["source"]["y"]
+      targetX = lidarItemVisualize["target"]["x"]
+      targetY = lidarItemVisualize["target"]["y"]
+      cv2.line(screen, (srcX, srcY), (targetX, targetY), color, 1)
       
+    cv2.circle(screen, (self.xPos, self.yPos), self.radiusObject, COLOR.BLUE, -1)
+    # cv2.line(screen, (500, 500), (436, 590), color, 1)
     
       
 class PyGame2D():
-  def __init__(self):
-    # create a black image
-    self.img = np.zeros((ENV_HEIGHT, ENV_WIDTH, 3), dtype = np.uint8)
+  def __init__(self) -> None:
+    self.screen = np.zeros((720, 1280, 3), dtype = np.uint8)  
+    self.obstacles = self._initObstacle()
+    self.robot = Robot()
+  
+  def _initObstacle(self):
+    return Obstacles(self.screen)
     
-    # Draw border
-    # cv2.rectangle(self.img, start_point, end_point, color, thickness)
-    cv2.rectangle(self.img, (0 + 5, 0 + 5), (ENV_WIDTH - 5, ENV_HEIGHT - 5), BLUE, 1)
+  def _obstacleMoves(self):
+    pass   
+  
+  def action(self, action):
+    pass
+  
+  def evaluate(self):
+    pass    
+  
+  def is_done(self):
+    pass
+  
+  def observe(self):
+    pass   
+  
+  def update(self):
+    pass
+  
+  def view(self):  
+    self.robot.scanLidar(self.obstacles)
+    self.robot.draw(self.screen)
+    self.obstacles.generateObstacles(self.screen)
+    # print(self.obstacles.get())
     
-    obstacles = Obstacles(random.randint(5, 100), random.randint(200, 500))
-    obstaclesStatis = ObstaclesStatic(random.randint(50, 150), random.randint(200, 250))
-    
-    obstacles.draw(screen = self.img)
-    obstaclesStatis.draw(screen = self.img)
-
-    # display the image using opencv
-    cv2.imshow('WINDOW', self.img)
+    cv2.imshow('Enviroment', self.screen)
     cv2.waitKey(0)
     
     
     
-    
-PyGame2D()
+game = PyGame2D()
+game.view()

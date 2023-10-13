@@ -2,29 +2,34 @@ import math
 
 
 class GAME_SETTING:
-    SCREEN_WIDTH = 1720
+    SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
     FPS = 60
+    
 class PLAYER_SETTING:
     RADIUS_OBJECT = 10
-    RADIUS_LIDAR = 342  # From the border of the circle
+    RADIUS_LIDAR = 360  # From the border of the circle
 
     INITIAL_X = GAME_SETTING.SCREEN_WIDTH//2
     INITIAL_Y = GAME_SETTING.SCREEN_HEIGHT - 20
 
-    MAX_FORWARD_VELO = 60
-    MAX_ROTATION_VELO = 10
+    MAX_FORWARD_VELO = 100
+    MAX_ROTATION_VELO = 1
     MIN_ROTATION_VELO = -MAX_ROTATION_VELO
 
     ACCELERATION_FORWARD = 5
     ACCELERATION_ROTATE = 0.05
 
+    CASTED_RAYS = 45
     CASTED_RAYS = 90
-    FOV = math.pi
-    HALF_FOV = FOV/2
-    STEP_ANGLE = FOV / CASTED_RAYS
+    CASTED_RAYS = 360 # number of lidar ray - 360 per round - 1 per 1 degree
+    PI = math.pi 
+    HALF_PI = PI/2 # pi/2
+    STEP_ANGLE = 2 * PI / CASTED_RAYS 
 
     Y_GOAL_POSITION = 10
+
+    # MAX_STEP_PER_EPOCH = 5000
 
 class LANE_SETTING:
     WIDTH_OF_LANE_BORDER = 3
