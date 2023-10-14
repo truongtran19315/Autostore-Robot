@@ -123,13 +123,14 @@ class Robot(Car):
     else:
       for ray in range(PLAYER_SETTING.CASTED_RAYS):
         target_x = int(self.xPos - \
-            math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+          math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
         target_y = int(self.yPos + \
-            math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-        self.lidarVisualize[ray]["target"] = {
-            "x": target_x,
-            "y": target_y
-        }
+          math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+        
+        # self.lidarVisualize[ray]["target"] = {
+        #     "x": target_x,
+        #     "y": target_y
+        # }
         self.lidarVisualize[ray]["source"] = {
             "x": self.xPos,
             "y": self.yPos
