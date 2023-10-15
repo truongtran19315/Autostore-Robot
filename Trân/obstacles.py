@@ -33,6 +33,12 @@ class RectangleObstacles(StaticObstacles):
     yEnd = self.yCenter + self.height//2
     cv2.rectangle(screen, (xStart, yStart), (xEnd, yEnd), COLOR.GREEN, -1)
     
+    # topLeft = [self.xCenter - self.width//2, self.yCenter - self.height//2]
+    # topRight = [self.xCenter + self.width//2, self.yCenter - self.height//2]
+    # botLeft = [self.xCenter - self.width//2, self.yCenter + self.height//2]
+    # botRight = [self.xCenter + self.width//2, self.yCenter + self.height//2]
+    # cv2.line(screen, (topLeft[0], topLeft[1]), (botLeft[0], botLeft[1]), (214,5,6), 10)
+    
 class Obstacles():
   def __init__(self, screen) -> None:
     
@@ -50,6 +56,8 @@ class Obstacles():
                             [680, 407, 7],
                             [427, 608, 13],
                             [1222, 442, 95]]
+    # self.circleObstaclesArr = []
+    
     self.circleObstacles = [] # to save all circle obstacles
     for obstacle in self.circleObstaclesArr:
       circle = CircleObstacles(obstacle[0], obstacle[1], obstacle[2])
@@ -68,6 +76,8 @@ class Obstacles():
                               [100, 104, 41, 26],
                               [101, 712, 35, 37],
                               [867, 471, 40, 22]]
+    # self.rectangleObstaclesArr = [[729, 178, 34, 29]]
+    # self.rectangleObstaclesArr = [[867, 471, 40, 22]]
     self.rectangleObstacles = [] # to save all rectangle obstacles
     for obstacle in self.rectangleObstaclesArr:
       rectangle = RectangleObstacles(obstacle[0], obstacle[1], obstacle[2], obstacle[3])

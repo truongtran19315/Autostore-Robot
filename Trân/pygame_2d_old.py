@@ -122,6 +122,8 @@ class Robot(Car):
         startAngle += PLAYER_SETTING.STEP_ANGLE
     else:
       for ray in range(PLAYER_SETTING.CASTED_RAYS):
+        # if ray == 0:
+        #   a = 1
         target_x = int(self.xPos - \
           math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
         target_y = int(self.yPos + \
@@ -157,7 +159,10 @@ class Robot(Car):
               "x": target_x,
               "y": target_y
           }
-        
+          
+        # if ray == 295:
+        #   self.lidarVisualize[ray]["color"] = COLOR.BLUE
+        #   print(Utils.getDistanceFromObstaclea(obstacle, self.xPos, self.yPos, target_x, target_y))
         startAngle += PLAYER_SETTING.STEP_ANGLE
     
   def checkCollision(self, collisions):
@@ -202,17 +207,18 @@ class PyGame2D():
   def is_done(self):
     pass
   
-  def observe(self):
+  def observe(self): 
     pass   
   
-  def update(self):
+  def update(self): 
     pass
   
   def view(self):  
+    self.obstacles.generateObstacles(self.screen)
     self.robot.scanLidar(self.obstacles)
     self.robot.draw(self.screen)
-    self.obstacles.generateObstacles(self.screen)
     # print(self.obstacles.get())
+    # cv2.circle(self.screen, (564, 96), 10, COLOR.CYAN, -1)
     
     cv2.imshow('Enviroment', self.screen)
     cv2.waitKey(0)

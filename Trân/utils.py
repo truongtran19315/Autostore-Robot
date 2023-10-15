@@ -19,10 +19,8 @@ class Utils:
 	def findLinePassTwoPoints(xPointA, yPointA, xPointB, yPointB):
 		# y = ax + b
 		if (xPointB - xPointA) == 0:
-			# xPointB += 0.00001
-			a = 0
-		else:
-			a = (yPointB - yPointA) / (xPointB - xPointA)
+			xPointB += 0.00001
+		a = (yPointB - yPointA) / (xPointB - xPointA)
 		b = yPointA - a * xPointA
 		return a, b
 
@@ -70,7 +68,7 @@ class Utils:
 				pass
 			elif numberOfSolution == EQUATION.ONE_SOLUTION:
 				y1 = a*x1 + b
-				if (x1 > xSource and x1 < xTarget) or (x1 < xSource and x1 > xTarget):
+				if (x1 >= xSource and x1 <= xTarget) or (x1 <= xSource and x1 >= xTarget):
 						d = Utils.distanceBetweenTwoPoints(xSource, ySource, x1, y1)
 				# print('ONE_SOLUTION')
 				# print("---> ", x1, a*x1 + b)
@@ -79,8 +77,8 @@ class Utils:
 				# print('TWO_SOLUTION')
 				y1 = a*x1 + b
 				y2 = a*x2 + b
-				if ((x1 > xSource and x1 < xTarget) or (x1 < xSource and x1 > xTarget)) \
-						or ((x2 > xSource and x2 < xTarget) or (x2 < xSource and x2 > xTarget)):
+				if ((x1 >= xSource and x1 <= xTarget) or (x1 <= xSource and x1 >= xTarget)) \
+						or ((x2 >= xSource and x2 <= xTarget) or (x2 <= xSource and x2 >= xTarget)):
 						d = Utils.distanceBetweenTwoPoints(xSource, ySource, x1, y1)
 						d = min(d, Utils.distanceBetweenTwoPoints(xSource, ySource, x2, y2))
 				# print("---> ", x1, a*x1 + b)
@@ -100,9 +98,13 @@ class Utils:
 			topRight = [obstacle.xCenter + obstacle.width//2, obstacle.yCenter - obstacle.height//2]
 			botLeft = [obstacle.xCenter - obstacle.width//2, obstacle.yCenter + obstacle.height//2]
 			botRight = [obstacle.xCenter + obstacle.width//2, obstacle.yCenter + obstacle.height//2]
-			
+   
+	
+			# left, bot, right, top		
+			# x1Point = topLeft[0] # phương trình đường thẳng song song với trục tung x = a
 			a1, b1 = Utils.findLinePassTwoPoints(topLeft[0], topLeft[1], botLeft[0], botLeft[1])
-			a2, b2 = Utils.findLinePassTwoPoints(botLeft[0], botLeft[1], botRight[0], botRight[1])
+			a2, b2 = Utils.findLinePassTwoPoints(botLeft[0], botLeft[1], botRight[0], botRight[1]) # a = 0, b = y
+			# x3Point = topRight[0]
 			a3, b3 = Utils.findLinePassTwoPoints(topRight[0], topRight[1], botRight[0], botRight[1])
 			a4, b4 = Utils.findLinePassTwoPoints(topLeft[0], topLeft[1], topRight[0], topRight[1])
    
@@ -123,36 +125,37 @@ class Utils:
 				if a - a1 != 0:
 					x1Point = (b1 - b) / (a - a1)
 					y1Point = (a*b1 - a1*b) / (a - a1)
-					if y1Point == x1Point * a1 + b1 and y1Point > topLeft[1] and y1Point < botLeft[1] \
+					# print(x1Point, y1Point)
+					# print(y1Point == x1Point * a1 + b1)
+					if y1Point > topLeft[1] and y1Point < botLeft[1] \
        				and ((x1Point > xSource and x1Point < xTarget) or (x1Point < xSource and x1Point > xTarget)):
+						# print(x1Point, y1Point, topLeft[1], botLeft[1], xSource, ySource, xTarget, yTarget)
 						d =  min(d, Utils.distanceBetweenTwoPoints(xSource, ySource, x1Point, y1Point))
 				
 				if a - a2 != 0:
 					x2Point = (b2 - b) / (a - a2)
-					y2Point = (a*b2 - a2*b) / (a - a2)
-					if x2Point > botLeft[0] and x2Point < botRight[0] and y2Point == x2Point * a2 + b2 \
+					y2Point = b2
+					if x2Point > botLeft[0] and x2Point < botRight[0] \
        				and ((x2Point > xSource and x2Point < xTarget) or (x2Point < xSource and x2Point > xTarget)):
 						d =  min(d, Utils.distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point))
 				
 				if a - a3 != 0:
 					x3Point = (b3 - b) / (a - a3)
 					y3Point = (a*b3 - a3*b) / (a - a3)
-					if y3Point == x3Point * a3 + b3 and y3Point > topRight[1] and y3Point < botRight[1] \
+					if y3Point >= topRight[1] and y3Point <= botRight[1] \
        				and ((x3Point > xSource and x3Point < xTarget) or (x3Point < xSource and x3Point > xTarget)):
 						d =  min(d, Utils.distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point))
 				
 				if a - a4 != 0:
 					x4Point = (b4 - b) / (a - a4)
-					y4Point = (a*b4 - a4*b) / (a - a4)                      
-					if x4Point > topLeft[0] and x4Point < topRight[0] and y4Point == x4Point * a4 + b4 \
+					y4Point = b4                     
+					if x4Point > topLeft[0] and x4Point < topRight[0] \
        				and ((x4Point > xSource and x4Point < xTarget) or (x4Point < xSource and x4Point > xTarget)):
 						d =  min(d, Utils.distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point))
       
+		# print(d)
 		return d
-									
-			
-			
-			
+		
 
 	@staticmethod
 	def verifyLine(a, b, x, y):
