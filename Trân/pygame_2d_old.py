@@ -20,10 +20,6 @@ LEFT_ACC = 2
 RIGHT_ACC = 3
 STOP = 4
 
-
-    
-
-
 class Car():
   def __init__(self, initX, initY, maxForwardVelocity, minRotationVelocity, maxRotationVelocity, accelerationForward, accelerationRotate, radiusObject) -> None:
     self.xPos, self.yPos = initX, initY
@@ -142,7 +138,11 @@ class Robot(Car):
         
         for obstacle in obstaclesInRange:
           distance = min(distance, Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y))
-        
+          if ray == 0:
+            print("distance 0: ", distance)
+          elif ray == 180:
+            print("distance 180: ", distance)
+          
         if distance <= PLAYER_SETTING.RADIUS_LIDAR:
           target_x = int(self.xPos - math.sin(startAngle) * distance)
           target_y = int(self.yPos + math.cos(startAngle) * distance)
@@ -160,9 +160,6 @@ class Robot(Car):
               "y": target_y
           }
           
-        # if ray == 295:
-        #   self.lidarVisualize[ray]["color"] = COLOR.BLUE
-        #   print(Utils.getDistanceFromObstaclea(obstacle, self.xPos, self.yPos, target_x, target_y))
         startAngle += PLAYER_SETTING.STEP_ANGLE
     
   def checkCollision(self, collisions):
@@ -219,6 +216,7 @@ class PyGame2D():
     self.robot.draw(self.screen)
     # print(self.obstacles.get())
     # cv2.circle(self.screen, (564, 96), 10, COLOR.CYAN, -1)
+    print(self.robot.xPos, self.robot.yPos)
     
     cv2.imshow('Enviroment', self.screen)
     cv2.waitKey(0)

@@ -56,7 +56,7 @@ class Obstacles():
                             [680, 407, 7],
                             [427, 608, 13],
                             [1222, 442, 95]]
-    # self.circleObstaclesArr = []
+    # self.circleObstaclesArr = [[468, 347, 97]]
     
     self.circleObstacles = [] # to save all circle obstacles
     for obstacle in self.circleObstaclesArr:
@@ -78,6 +78,7 @@ class Obstacles():
                               [867, 471, 40, 22]]
     # self.rectangleObstaclesArr = [[729, 178, 34, 29]]
     # self.rectangleObstaclesArr = [[867, 471, 40, 22]]
+    # self.rectangleObstaclesArr = []
     self.rectangleObstacles = [] # to save all rectangle obstacles
     for obstacle in self.rectangleObstaclesArr:
       rectangle = RectangleObstacles(obstacle[0], obstacle[1], obstacle[2], obstacle[3])

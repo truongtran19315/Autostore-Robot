@@ -10,11 +10,17 @@ class PLAYER_SETTING:
     RADIUS_OBJECT = 10
     RADIUS_LIDAR = 360  # From the border of the circle
 
-    # INITIAL_X = GAME_SETTING.SCREEN_WIDTH//2
-    # INITIAL_Y = GAME_SETTING.SCREEN_HEIGHT//2
+    INITIAL_X = GAME_SETTING.SCREEN_WIDTH//2
+    INITIAL_Y = GAME_SETTING.SCREEN_HEIGHT//2
     
     INITIAL_X = random.randint(15, 1265)
     INITIAL_Y = random.randint(15, 705)
+    
+    # INITIAL_X = 603
+    # INITIAL_Y = 384
+    
+    # INITIAL_X = 830
+    # INITIAL_Y = 200
 
     MAX_FORWARD_VELO = 100
     MAX_ROTATION_VELO = 1
