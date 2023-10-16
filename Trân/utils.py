@@ -227,21 +227,29 @@ class Utils:
 	def inputUser(game):
 		keys = pygame.key.get_pressed()
 		# Rotate left ()
+		print(keys[pygame.K_w])
 		if keys[pygame.K_a]:
-				game.action(ACTIONS.TURN_LEFT_ACCELERATION)
+			game.action(ACTIONS.TURN_LEFT_ACCELERATION)
+			# return ACTIONS.TURN_LEFT_ACCELERATION
 		# Rotate right ()
 		elif keys[pygame.K_d]:
-				game.action(ACTIONS.TURN_RIGHT_ACCELERATION)
+			game.action(ACTIONS.TURN_RIGHT_ACCELERATION)
+			# return ACTIONS.TURN_RIGHT_ACCELERATION
 		# Increase forward velocity
 		elif keys[pygame.K_w]:
-				game.action(ACTIONS.FORWARD_ACCELERATION)
+			print("FORWARD")
+			game.action(ACTIONS.FORWARD_ACCELERATION)
+			# return ACTIONS.FORWARD_ACCELERATION
 		elif keys[pygame.K_x]:
-				game.action(ACTIONS.BACKWARD_ACCELERATION)
+			game.action(ACTIONS.BACKWARD_ACCELERATION)
+			# return ACTIONS.BACKWARD_ACCELERATION
 		# Stop
 		elif keys[pygame.K_s]:
-				game.action(ACTIONS.STOP)
+			game.action(ACTIONS.STOP)
+			# return ACTIONS.STOP
 		else:
-				game.action(ACTIONS.DO_NOTHING)
+			game.action(ACTIONS.DO_NOTHING)
+			# return ACTIONS.DO_NOTHING
 					
 	@staticmethod
 	def debugError(params):

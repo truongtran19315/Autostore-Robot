@@ -5,6 +5,7 @@ import random
 from obstacles import Obstacles
 from const import *
 from utils import *
+import pygame
 
 ENV_HEIGHT = 720
 ENV_WIDTH = 1280
@@ -31,35 +32,93 @@ class Car():
     self.currRotationVelocity = 0  # rotate left < 0, rotate right > 0
 
     self.currAngle = math.pi / 2
+    self.currAngle = math.pi 
     self.accelerationForward = accelerationForward
     self.accelerationRotate = accelerationRotate
 
     self.radiusObject = radiusObject
     
-  def move(self, action): # t = 1
-    if action == FORWARD_ACC:
-      if self.currentForwardVelocity != self.maxForwardVelocity:
-        self.currentForwardVelocity = self.currentForwardVelocity + self.accelerationForward
-      if self.currentForwardVelocity >= self.maxForwardVelocity:
-        self.currentForwardVelocity = self.maxForwardVelocity
-    elif action == BACKWARD_ACC:
-      if self.currentForwardVelocity != 0:
-        self.currentForwardVelocity = self.currentForwardVelocity + self.accelerationForward
-      if self.currentForwardVelocity <= 0:
-        self.currentForwardVelocity = 0
-    elif action == LEFT_ACC:
-      if self.currRotationVelocity != self.minRotationVelocity:
-        self.currRotationVelocity = self.currRotationVelocity + self.accelerationRotate
-      if self.currRotationVelocity <= self.minRotationVelocity:
-        self.currRotationVelocity = self.minRotationVelocity
-    elif action == RIGHT_ACC:
-      if self.currRotationVelocity != self.maxRotationVelocity:
-        self.currRotationVelocity = self.currRotationVelocity + self.accelerationRotate
-      if self.currRotationVelocity >= self.maxRotationVelocity:
-        self.currRotationVelocity = self.maxRotationVelocity
-    elif action == STOP:
+  # def move(self, action): # t = 1
+  #   if action == ACTIONS.FORWARD_ACCELERATION:
+  #     if self.currentForwardVelocity != self.maxForwardVelocity:
+  #       self.currentForwardVelocity = self.currentForwardVelocity + self.accelerationForward
+  #     if self.currentForwardVelocity >= self.maxForwardVelocity:
+  #       self.currentForwardVelocity = self.maxForwardVelocity
+  #   elif action == ACTIONS.BACKWARD_ACCELERATION:
+  #     if self.currentForwardVelocity != 0:
+  #       self.currentForwardVelocity = self.currentForwardVelocity + self.accelerationForward
+  #     if self.currentForwardVelocity <= 0:
+  #       self.currentForwardVelocity = 0
+  #   elif action == ACTIONS.TURN_LEFT_ACCELERATION:
+  #     if self.currRotationVelocity != self.minRotationVelocity:
+  #       self.currRotationVelocity = self.currRotationVelocity + self.accelerationRotate
+  #     if self.currRotationVelocity <= self.minRotationVelocity:
+  #       self.currRotationVelocity = self.minRotationVelocity
+  #   elif action == ACTIONS.TURN_RIGHT_ACCELERATION:
+  #     if self.currRotationVelocity != self.maxRotationVelocity:
+  #       self.currRotationVelocity = self.currRotationVelocity + self.accelerationRotate
+  #     if self.currRotationVelocity >= self.maxRotationVelocity:
+  #       self.currRotationVelocity = self.maxRotationVelocity
+  #   elif action == ACTIONS.STOP:
+  #     self.currentForwardVelocity = 0
+  #     self.currRotationVelocity = 0
+  #   else:
+  #     pass
+    
+  #   # Calculate the position base on velocity per frame
+  #   dt = float(1/GAME_SETTING.FPS)
+
+  #   self.currAngle += (self.currRotationVelocity*dt)
+
+  #   # Prevent car go to the opposite way
+  #   if (self.currAngle < 0):
+  #       self.currAngle = 2*math.pi - abs(self.currAngle)
+  #   elif (self.currAngle > 2*math.pi):
+  #       self.currAngle = abs(self.currAngle - 2*math.pi)
+
+  #   # Update the new position based on the velocity
+  #   self.yPos += int (math.cos(self.currAngle) * \
+  #       self.currentForwardVelocity * dt)
+  #   self.xPos += int (-math.sin(self.currAngle) * \
+  #       self.currentForwardVelocity * dt)
+  
+  def move(self, action):
+    if action == ACTIONS.FORWARD_ACCELERATION:
+      self.currentForwardVelocity = min(
+      self.currentForwardVelocity + self.accelerationForward, self.maxForwardVelocity)
+    elif action == ACTIONS.BACKWARD_ACCELERATION:
+      self.currentForwardVelocity = max(
+      self.currentForwardVelocity - self.accelerationForward, 0)
+    elif action == ACTIONS.TURN_LEFT_ACCELERATION:
+      self.currRotationVelocity = max(
+      self.currRotationVelocity - self.accelerationRotate, self.minRotationVelocity)
+    elif action == ACTIONS.TURN_RIGHT_ACCELERATION:
+      self.currRotationVelocity = min(
+      self.currRotationVelocity + self.accelerationRotate, self.maxRotationVelocity)
+    elif action == ACTIONS.STOP:
       self.currentForwardVelocity = 0
       self.currRotationVelocity = 0
+    elif action == ACTIONS.DO_NOTHING:
+      pass
+
+    # Calculate the position base on velocity per frame
+    dt = float(1/GAME_SETTING.FPS)
+
+    self.currAngle += (self.currRotationVelocity*dt)
+
+    # Prevent car go to the opposite way
+    if (self.currAngle < 0):
+      self.currAngle = 2*math.pi - abs(self.currAngle)
+    elif (self.currAngle > 2*math.pi):
+      self.currAngle = abs(self.currAngle - 2*math.pi)
+
+    # Update the new position based on the velocity
+    self.yPos += int(math.cos(self.currAngle) * \
+      self.currentForwardVelocity * dt)
+    self.xPos += int(-math.sin(self.currAngle) * \
+      self.currentForwardVelocity * dt)
+    
+    print("current position: ", self.xPos, self.yPos, action)
       
     
 class Robot(Car):
@@ -138,10 +197,10 @@ class Robot(Car):
         
         for obstacle in obstaclesInRange:
           distance = min(distance, Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y))
-          if ray == 0:
-            print("distance 0: ", distance)
-          elif ray == 180:
-            print("distance 180: ", distance)
+          # if ray == 0:
+          #   print("distance 0: ", distance)
+          # elif ray == 180:
+          #   print("distance 180: ", distance)
           
         if distance <= PLAYER_SETTING.RADIUS_LIDAR:
           target_x = int(self.xPos - math.sin(startAngle) * distance)
@@ -179,6 +238,12 @@ class Robot(Car):
       targetY = lidarItemVisualize["target"]["y"]
       cv2.line(screen, (srcX, srcY), (targetX, targetY), color, 1)
       
+      
+    target_x = int(self.xPos - \
+        math.sin(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+    target_y = int(self.yPos + \
+        math.cos(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+    cv2.line(screen, (self.xPos, self.yPos), (target_x, target_y), COLOR.RED, 1)
     cv2.circle(screen, (self.xPos, self.yPos), self.radiusObject, COLOR.BLUE, -1)
     # cv2.line(screen, (500, 500), (436, 590), color, 1)
     
@@ -188,6 +253,7 @@ class PyGame2D():
     self.screen = np.zeros((720, 1280, 3), dtype = np.uint8)  
     self.obstacles = self._initObstacle()
     self.robot = Robot()
+    pygame.init()
   
   def _initObstacle(self):
     return Obstacles(self.screen)
@@ -196,7 +262,11 @@ class PyGame2D():
     pass   
   
   def action(self, action):
-    pass
+    self.robot.move(action=action)
+    # self._obstacleMoves()
+    # self.robot.checkCollision(collisions=self.obstacles, lane=self.lane)
+    self.robot.scanLidar(obstacles=self.obstacles)
+    # self.robot.checkAchieveGoal()
   
   def evaluate(self):
     pass    
@@ -211,8 +281,14 @@ class PyGame2D():
     pass
   
   def view(self):  
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        pygame.quit()
+        exit()
+      elif event.type == pygame.KEYDOWN:
+        print('KEY pressed is ' + str(event.key) + '.')
     self.obstacles.generateObstacles(self.screen)
-    self.robot.scanLidar(self.obstacles)
+    # self.robot.scanLidar(self.obstacles)
     self.robot.draw(self.screen)
     # print(self.obstacles.get())
     # cv2.circle(self.screen, (564, 96), 10, COLOR.CYAN, -1)
@@ -224,4 +300,11 @@ class PyGame2D():
     
     
 game = PyGame2D()
-game.view()
+while True:
+    Utils.inputUser(game)
+    
+    game.view()
+    pass
+
+# Utils.inputUser(game)
+# game.view()
