@@ -24,20 +24,14 @@ class RectangleObstacles(StaticObstacles):
     self.height = height
     self.width = width 
     
-  def draw(self, screen):
+  def draw(self, screen, color):
     
     xStart = self.xCenter - self.width//2
     yStart = self.yCenter - self.height//2
     
     xEnd = self.xCenter + self.width//2
     yEnd = self.yCenter + self.height//2
-    cv2.rectangle(screen, (xStart, yStart), (xEnd, yEnd), COLOR.GREEN, -1)
-    
-    # topLeft = [self.xCenter - self.width//2, self.yCenter - self.height//2]
-    # topRight = [self.xCenter + self.width//2, self.yCenter - self.height//2]
-    # botLeft = [self.xCenter - self.width//2, self.yCenter + self.height//2]
-    # botRight = [self.xCenter + self.width//2, self.yCenter + self.height//2]
-    # cv2.line(screen, (topLeft[0], topLeft[1]), (botLeft[0], botLeft[1]), (214,5,6), 10)
+    cv2.rectangle(screen, (xStart, yStart), (xEnd, yEnd), color, -1)
     
 class Obstacles():
   def __init__(self, screen) -> None:
@@ -56,7 +50,6 @@ class Obstacles():
                             [680, 407, 7],
                             [427, 608, 13],
                             [1222, 442, 95]]
-    # self.circleObstaclesArr = [[468, 347, 97]]
     
     self.circleObstacles = [] # to save all circle obstacles
     for obstacle in self.circleObstaclesArr:
@@ -76,13 +69,21 @@ class Obstacles():
                               [100, 104, 41, 26],
                               [101, 712, 35, 37],
                               [867, 471, 40, 22]]
-    # self.rectangleObstaclesArr = [[729, 178, 34, 29]]
-    # self.rectangleObstaclesArr = [[867, 471, 40, 22]]
-    # self.rectangleObstaclesArr = []
     self.rectangleObstacles = [] # to save all rectangle obstacles
     for obstacle in self.rectangleObstaclesArr:
       rectangle = RectangleObstacles(obstacle[0], obstacle[1], obstacle[2], obstacle[3])
       self.rectangleObstacles.append(rectangle)
+      self.obstacles.append(rectangle)
+    
+    # x, y height, width - 1280x720
+    self.wallArr = [[12, 360, 700, 4],
+                  [640, 708, 4, 1260],
+                  [1268, 360, 700, 4],
+                  [640, 8, 4, 1260]]
+    self.wall = []
+    for obstacle in self.wallArr:
+      rectangle = RectangleObstacles(obstacle[0], obstacle[1], obstacle[2], obstacle[3])
+      self.wall.append(rectangle)
       self.obstacles.append(rectangle)
   
   def generateObstacles(self, screen):
@@ -90,7 +91,10 @@ class Obstacles():
       circle.draw(screen)
       
     for rectangle in self.rectangleObstacles:
-      rectangle.draw(screen)
+      rectangle.draw(screen, COLOR.GREEN)
+      
+    for rectangle in self.wall:
+      rectangle.draw(screen, COLOR.RED)
       
 
 # img = np.zeros((720, 1280, 3), dtype = np.uint8)      

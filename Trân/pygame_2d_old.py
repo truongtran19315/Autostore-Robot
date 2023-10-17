@@ -5,6 +5,7 @@ import random
 from obstacles import Obstacles
 from const import *
 from utils import *
+import time
 
 ENV_HEIGHT = 720
 ENV_WIDTH = 1280
@@ -220,10 +221,10 @@ class Robot(Car):
       
       
     target_x = int(self.xPos - \
-        math.sin(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+        math.sin(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3)
     target_y = int(self.yPos + \
-        math.cos(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-    cv2.line(screen, (self.xPos, self.yPos), (target_x, target_y), (255, 255, 255), 1)
+        math.cos(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3)
+    cv2.line(screen, (self.xPos, self.yPos), (target_x, target_y), COLOR.WHITE, 5)
     cv2.circle(screen, (self.xPos, self.yPos), self.radiusObject, COLOR.BLUE, -1)
     
       
@@ -243,7 +244,16 @@ class PyGame2D():
     self.robot.move(action=action)
     # self._obstacleMoves()
     # self.robot.checkCollision(collisions=self.obstacles, lane=self.lane)
+    
+    start_time = time.time()
+    
     self.robot.scanLidar(obstacles=self.obstacles)
+    
+    end_time = time.time()
+    
+    elapsed_time = end_time - start_time
+    print ("elapsed_time:{0}".format(elapsed_time) + "[sec]")
+
     # self.robot.checkAchieveGoal()
   
   def evaluate(self):
