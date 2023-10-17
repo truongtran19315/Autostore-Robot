@@ -19,7 +19,7 @@ v_epsilon_decay = v_epsilon / (c_end_ep_epsilon_decay - c_start_ep_epsilon_decay
 
 
 q_table_size = [20, 20]
-q_table_segment_size = (env.observation_space.high - env.observation_space.low) / q_table_size
+q_table_segment_size = (env.observation_space.high - env.observation_space.low) / q_table_size 
 
 
 # Hàm chuyển đổi từ real state về q_state
@@ -48,7 +48,7 @@ for ep in range(c_no_of_eps):
         show_now = False
 
     while not done:
-        if np.random.random() > v_epsilon:
+        if np.random.random() > v_epsilon:  # Thăm dò (Exploit learned values)
             # Lấy argmax Q value của current_state
             action = np.argmax(q_table[current_state])
         else:
