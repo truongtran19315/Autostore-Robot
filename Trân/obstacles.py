@@ -1,6 +1,7 @@
 import cv2
 from const import *
 import numpy as np
+import math
 
 class StaticObstacles():
   def __init__(self, xCenter, yCenter, shape) -> None:
@@ -23,6 +24,7 @@ class RectangleObstacles(StaticObstacles):
     
     self.height = height
     self.width = width 
+    self.radius = math.sqrt(self.height**2 + self.width**2) / 2  # distance from the center to the point in the corner
     
   def draw(self, screen, color):
     

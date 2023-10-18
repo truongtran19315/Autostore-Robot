@@ -51,7 +51,7 @@ class Car():
         self.currentForwardVelocity = self.maxForwardVelocity
     elif action == ACTIONS.BACKWARD_ACCELERATION:
       if self.currentForwardVelocity != 0:
-        self.currentForwardVelocity = self.currentForwardVelocity + self.accelerationForward
+        self.currentForwardVelocity = self.currentForwardVelocity - self.accelerationForward
       if self.currentForwardVelocity <= 0:
         self.currentForwardVelocity = 0
     elif action == ACTIONS.TURN_LEFT_ACCELERATION:
@@ -95,11 +95,7 @@ class Car():
       self.xPos += int(self.xStep)
       self.xStep = 0
     
-    print("current position: ", self.xPos, self.yPos, " action: ", action, " current angle: ", self.currAngle, math.cos(self.currAngle))
-    # print("action: ", action)
-    # print("current forward velocity: ", self.currentForwardVelocity)
-    # print("current rotate velocity: ", self.currRotationVelocity)
-    # print("current angle: ", self.currAngle)
+    # print(self.xPos, self.yPos, " current angle: ", self.currAngle, self.currentForwardVelocity)
       
     
 class Robot(Car):
@@ -128,79 +124,76 @@ class Robot(Car):
     for obstacle in obstacles.obstacles:
       distance = Utils.distanceBetweenTwoPoints(
           self.xPos, self.yPos, obstacle.xCenter, obstacle.yCenter)
-      if obstacle.shape == 'circle':
-        isInRageLidar = distance < obstacle.radius + \
-            PLAYER_SETTING.RADIUS_LIDAR
-      else: 
-        radius = math.sqrt(obstacle.height**2 + obstacle.width**2) / 2  # distance from the center to the point in the corner
-        isInRageLidar = distance < radius + \
-            PLAYER_SETTING.RADIUS_LIDAR
+      isInRageLidar = distance < obstacle.radius + \
+          PLAYER_SETTING.RADIUS_LIDAR
       if (isInRageLidar == True):
           obstaclesInRange.append(obstacle)
+          
     startAngle = 0
       
-    if (len(obstaclesInRange) == 0):
-      for ray in range(PLAYER_SETTING.CASTED_RAYS):
-        target_x = int(self.xPos - \
-            math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-        target_y = int(self.yPos + \
-            math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-        self.lidarVisualize[ray]["target"] = {
-            "x": target_x,
-            "y": target_y
-        }
-        self.lidarVisualize[ray]["source"] = {
-            "x": self.xPos,
-            "y": self.yPos
-        }
-        self.lidarVisualize[ray]["color"] = COLOR.CYAN
-        self.lidarSignals[ray] = INT_INFINITY
-        startAngle += PLAYER_SETTING.STEP_ANGLE
-    else:
-      for ray in range(PLAYER_SETTING.CASTED_RAYS):
-        # if ray == 0:
-        #   a = 1
-        target_x = int(self.xPos - \
-          math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-        target_y = int(self.yPos + \
-          math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+    # if (len(obstaclesInRange) == 0):
+    #   for ray in range(PLAYER_SETTING.CASTED_RAYS):
+    #     target_x = int(self.xPos - \
+    #         math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+    #     target_y = int(self.yPos + \
+    #         math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+    #     self.lidarVisualize[ray]["target"] = {
+    #         "x": target_x,
+    #         "y": target_y
+    #     }
+    #     self.lidarVisualize[ray]["source"] = {
+    #         "x": self.xPos,
+    #         "y": self.yPos
+    #     }
+    #     self.lidarVisualize[ray]["color"] = COLOR.CYAN
+    #     self.lidarSignals[ray] = INT_INFINITY
+    #     startAngle += PLAYER_SETTING.STEP_ANGLE
+    # else:
+    for ray in range(PLAYER_SETTING.CASTED_RAYS):
+      target_x = int(self.xPos - \
+        math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+      target_y = int(self.yPos + \
+        math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+      
+      # self.lidarVisualize[ray]["target"] = {
+      #     "x": target_x,
+      #     "y": target_y
+      # }
+      self.lidarVisualize[ray]["source"] = {
+          "x": self.xPos,
+          "y": self.yPos
+      }
+      
+      distance = INT_INFINITY
+      x = INT_INFINITY
+      y = INT_INFINITY
+      
+      for obstacle in obstaclesInRange:
+        d, x, y = Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y)
+        if d < distance:
+          distance = d
+          target_x = x
+          target_y = y
         
+      if distance <= PLAYER_SETTING.RADIUS_LIDAR:
+        # target_x = int(self.xPos - math.sin(startAngle) * distance)
+        # target_y = int(self.yPos + math.cos(startAngle) * distance)
+        self.lidarSignals[ray] = distance
+        self.lidarVisualize[ray]["color"] = COLOR.RED
         # self.lidarVisualize[ray]["target"] = {
         #     "x": target_x,
         #     "y": target_y
         # }
-        self.lidarVisualize[ray]["source"] = {
-            "x": self.xPos,
-            "y": self.yPos
-        }
+      else:
+        self.lidarSignals[ray] = INT_INFINITY
+        self.lidarVisualize[ray]["color"] = COLOR.CYAN
+      
+      self.lidarVisualize[ray]["target"] = {
+          "x": target_x,
+          "y": target_y
+      }
         
-        distance = INT_INFINITY
-        
-        for obstacle in obstaclesInRange:
-          distance = min(distance, Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y))
-          # if ray == 0:
-          #   print("distance 0: ", distance)
-          # elif ray == 180:
-          #   print("distance 180: ", distance)
-          
-        if distance <= PLAYER_SETTING.RADIUS_LIDAR:
-          target_x = int(self.xPos - math.sin(startAngle) * distance)
-          target_y = int(self.yPos + math.cos(startAngle) * distance)
-          self.lidarSignals[ray] = distance
-          self.lidarVisualize[ray]["color"] = COLOR.RED
-          self.lidarVisualize[ray]["target"] = {
-              "x": target_x,
-              "y": target_y
-          }
-        else:
-          self.lidarSignals[ray] = INT_INFINITY
-          self.lidarVisualize[ray]["color"] = COLOR.CYAN
-          self.lidarVisualize[ray]["target"] = {
-              "x": target_x,
-              "y": target_y
-          }
-          
-        startAngle += PLAYER_SETTING.STEP_ANGLE
+      startAngle += PLAYER_SETTING.STEP_ANGLE
     
   def checkCollision(self, collisions):
     pass
@@ -233,6 +226,16 @@ class PyGame2D():
     self.screen = screen
     self.obstacles = self._initObstacle()
     self.robot = Robot()
+    self.n = 0
+    self.totalTime = 0
+    self.minTime = INT_INFINITY
+    self.maxTime = 0
+    self.saveMin = {"screen": self.screen,
+                    "action": -1,
+                    "robot": self.robot}
+    self.saveMax = {"screen": self.screen,
+                    "action": -1,
+                    "robot": self.robot}
   
   def _initObstacle(self):
     return Obstacles(self.screen)
@@ -244,7 +247,7 @@ class PyGame2D():
     self.robot.move(action=action)
     # self._obstacleMoves()
     # self.robot.checkCollision(collisions=self.obstacles, lane=self.lane)
-    
+    self.n += 1
     start_time = time.time()
     
     self.robot.scanLidar(obstacles=self.obstacles)
@@ -252,7 +255,22 @@ class PyGame2D():
     end_time = time.time()
     
     elapsed_time = end_time - start_time
-    print ("elapsed_time:{0}".format(elapsed_time) + "[sec]")
+    
+    self.totalTime += elapsed_time
+    mediumTime = self.totalTime / self.n
+    if elapsed_time < self.minTime:
+      self.minTime = elapsed_time
+      self.saveMin["screen"] = self.screen
+      self.saveMin["action"] = action
+      self.saveMin["robot"] = self.robot
+      
+    if elapsed_time > self.maxTime:
+      self.maxTime = elapsed_time
+      self.saveMax["screen"] = self.screen
+      self.saveMax["action"] = action
+      self.saveMax["robot"] = self.robot
+    
+    print (mediumTime, self.minTime, self.maxTime, self.n)
 
     # self.robot.checkAchieveGoal()
   
@@ -274,7 +292,6 @@ class PyGame2D():
     self.robot.draw(screen)
     # print(self.obstacles.get())
     # cv2.circle(self.screen, (564, 96), 10, COLOR.CYAN, -1)
-    print(self.robot.xPos, self.robot.yPos)
     
     cv2.imshow('Enviroment', screen)
     # cv2.waitKey(0)
@@ -285,7 +302,11 @@ game = PyGame2D(screen)
 # game.view()
 while True:
     screen = np.zeros((720, 1280, 3), dtype = np.uint8)  
-    Utils.inputUser(game)   
+    a = Utils.inputUser(game)   
+    if a == False:
+      cv2.imshow('min', game.saveMin["screen"])
+      cv2.waitKey(0)
+      break
     game.view(screen)
     pass
 
