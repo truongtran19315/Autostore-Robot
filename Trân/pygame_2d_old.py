@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import math
 import random
-from obstacles import Obstacles
+from obstacles import Obstacles, Goal
 from const import *
 from utils import *
 import time
@@ -111,6 +111,9 @@ class Robot(Car):
       radiusObject = PLAYER_SETTING.RADIUS_OBJECT
     )
     
+    
+    self.isAlive = True
+    self.achieveGoal = False
     # 360 lidar signal around robot 
     self.lidarSignals = [INFINITY]*PLAYER_SETTING.CASTED_RAYS # lidar return distance from robot to obstacles in range - return infinity if not have obstacle
     self.lidarVisualize = [{"source": {"x": self.xPos, "y": self.yPos},
@@ -120,6 +123,7 @@ class Robot(Car):
   
   def scanLidar(self, obstacles):
     obstaclesInRange = []  #to save obstacles in lidar range
+    minDistance = INT_INFINITY
     
     for obstacle in obstacles.obstacles:
       distance = Utils.distanceBetweenTwoPoints(
@@ -131,34 +135,12 @@ class Robot(Car):
           
     startAngle = 0
       
-    # if (len(obstaclesInRange) == 0):
-    #   for ray in range(PLAYER_SETTING.CASTED_RAYS):
-    #     target_x = int(self.xPos - \
-    #         math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-    #     target_y = int(self.yPos + \
-    #         math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-    #     self.lidarVisualize[ray]["target"] = {
-    #         "x": target_x,
-    #         "y": target_y
-    #     }
-    #     self.lidarVisualize[ray]["source"] = {
-    #         "x": self.xPos,
-    #         "y": self.yPos
-    #     }
-    #     self.lidarVisualize[ray]["color"] = COLOR.CYAN
-    #     self.lidarSignals[ray] = INT_INFINITY
-    #     startAngle += PLAYER_SETTING.STEP_ANGLE
-    # else:
     for ray in range(PLAYER_SETTING.CASTED_RAYS):
       target_x = int(self.xPos - \
         math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
       target_y = int(self.yPos + \
         math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
       
-      # self.lidarVisualize[ray]["target"] = {
-      #     "x": target_x,
-      #     "y": target_y
-      # }
       self.lidarVisualize[ray]["source"] = {
           "x": self.xPos,
           "y": self.yPos
@@ -174,16 +156,12 @@ class Robot(Car):
           distance = d
           target_x = x
           target_y = y
+          
+      minDistance = min(distance, minDistance)
         
       if distance <= PLAYER_SETTING.RADIUS_LIDAR:
-        # target_x = int(self.xPos - math.sin(startAngle) * distance)
-        # target_y = int(self.yPos + math.cos(startAngle) * distance)
         self.lidarSignals[ray] = distance
         self.lidarVisualize[ray]["color"] = COLOR.RED
-        # self.lidarVisualize[ray]["target"] = {
-        #     "x": target_x,
-        #     "y": target_y
-        # }
       else:
         self.lidarSignals[ray] = INT_INFINITY
         self.lidarVisualize[ray]["color"] = COLOR.CYAN
@@ -195,11 +173,16 @@ class Robot(Car):
         
       startAngle += PLAYER_SETTING.STEP_ANGLE
     
-  def checkCollision(self, collisions):
-    pass
+    return minDistance
+    
+  def checkCollision(self, distance):
+    if distance < self.radiusObject:
+      self.isAlive = False
   
-  def checkAchieveGoal(self):
-    pass
+  def checkAchieveGoal(self, goal):
+    distance = Utils.distanceBetweenTwoPoints(self.xPos, self.yPos, goal.xCenter, goal.yCenter)
+    if distance < self.radiusObject + goal.radius:
+      self.achieveGoal = True
   
   def draw(self, screen):
     # cv2.circle(screen, (self.xPos, self.yPos), 370, COLOR.BLUE, -1)
@@ -225,6 +208,7 @@ class PyGame2D():
   def __init__(self, screen) -> None:
     self.screen = screen
     self.obstacles = self._initObstacle()
+    self.goal = Goal()
     self.robot = Robot()
     self.n = 0
     self.totalTime = 0
@@ -246,11 +230,10 @@ class PyGame2D():
   def action(self, action):
     self.robot.move(action=action)
     # self._obstacleMoves()
-    # self.robot.checkCollision(collisions=self.obstacles, lane=self.lane)
     self.n += 1
     start_time = time.time()
     
-    self.robot.scanLidar(obstacles=self.obstacles)
+    distance = self.robot.scanLidar(obstacles=self.obstacles)
     
     end_time = time.time()
     
@@ -270,25 +253,36 @@ class PyGame2D():
       self.saveMax["action"] = action
       self.saveMax["robot"] = self.robot
     
-    print (mediumTime, self.minTime, self.maxTime, self.n)
+    print (elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
 
-    # self.robot.checkAchieveGoal()
+    self.robot.checkCollision(distance)
+    self.robot.checkAchieveGoal(self.goal)
   
   def evaluate(self):
     pass    
   
   def is_done(self):
-    pass
+    if ((not self.robot.isAlive) or self.robot.achieveGoal):
+      return True
+    return False
   
   def observe(self): 
-    pass   
+    ratioLeft = (self.robot.xPos)/(GAME_SETTING.SCREEN_WIDTH)
+    alpha = self.robot.currAngle
+    fwVelo = self.robot.currentForwardVelocity
+    rVelo = self.robot.currRotationVelocity
+    lidars = self.robot.lidarSignals
+
+    infoStateVector = np.array([ratioLeft, alpha, fwVelo, rVelo])
+    lidarStateVector = np.array(lidars)
+    return np.concatenate((infoStateVector, lidarStateVector)) 
   
   def update(self): 
     pass
   
   def view(self, screen):  
     self.obstacles.generateObstacles(screen)
-    
+    self.goal.draw(screen)
     self.robot.draw(screen)
     # print(self.obstacles.get())
     # cv2.circle(self.screen, (564, 96), 10, COLOR.CYAN, -1)
@@ -303,11 +297,17 @@ game = PyGame2D(screen)
 while True:
     screen = np.zeros((720, 1280, 3), dtype = np.uint8)  
     a = Utils.inputUser(game)   
+    game.view(screen)
+    if not game.robot.isAlive:
+      print("Oops!!!!!!!!!!")
+      break
+    elif game.robot.achieveGoal:
+      print("Great!!!!!!!!!")
+      break
     if a == False:
       cv2.imshow('min', game.saveMin["screen"])
       cv2.waitKey(0)
       break
-    game.view(screen)
     pass
 
 # Utils.inputUser(game)

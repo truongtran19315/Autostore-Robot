@@ -35,6 +35,15 @@ class RectangleObstacles(StaticObstacles):
     yEnd = self.yCenter + self.height//2
     cv2.rectangle(screen, (xStart, yStart), (xEnd, yEnd), color, -1)
     
+class Goal(StaticObstacles):
+  def __init__(self) -> None:
+    super().__init__(PLAYER_SETTING.GOAL_POSITION["x"], PLAYER_SETTING.GOAL_POSITION["y"], "goal")
+    
+    self.radius = PLAYER_SETTING.GOAL_RADIUS
+    
+  def draw(self, screen):
+    cv2.circle(screen, (self.xCenter, self.yCenter), self.radius, COLOR.PURPLE, -1)
+    
 class Obstacles():
   def __init__(self, screen) -> None:
     
@@ -87,6 +96,7 @@ class Obstacles():
       rectangle = RectangleObstacles(obstacle[0], obstacle[1], obstacle[2], obstacle[3])
       self.wall.append(rectangle)
       self.obstacles.append(rectangle)
+      
   
   def generateObstacles(self, screen):
     for circle in self.circleObstacles:

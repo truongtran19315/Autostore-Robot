@@ -226,16 +226,6 @@ class Utils:
 					xPoint = topRight[0]
 					yPoint = topRight[1]
 			else:
-
-				# if a - a1 != 0:
-				# 	x1Point = (b1 - b) / (a - a1)
-				# 	y1Point = (a*b1 - a1*b) / (a - a1)
-				# 	# print(x1Point, y1Point)
-				# 	# print(y1Point == x1Point * a1 + b1)
-				# 	if y1Point >= topLeft[1] and y1Point <= botLeft[1] \
-       	# 			and ((x1Point >= xSource and x1Point <= xTarget) or (x1Point <= xSource and x1Point >= xTarget)):
-				# 		# print(x1Point, y1Point, topLeft[1], botLeft[1], xSource, ySource, xTarget, yTarget)
-				# 		distance =  min(distance, Utils.distanceBetweenTwoPoints(xSource, ySource, x1Point, y1Point))
     
 				x1Point = topLeft[0]
 				y1Point = a*x1Point + b
@@ -258,13 +248,6 @@ class Utils:
 							distance = d
 							xPoint = x2Point
 							yPoint = y2Point
-				
-				# if a - a3 != 0:
-				# 	x3Point = (b3 - b) / (a - a3)
-				# 	y3Point = (a*b3 - a3*b) / (a - a3)
-				# 	if y3Point >= topRight[1] and y3Point <= botRight[1] \
-       	# 			and ((x3Point >= xSource and x3Point <= xTarget) or (x3Point <= xSource and x3Point >= xTarget)):
-				# 		distance =  min(distance, Utils.distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point))
     
 				x3Point = topRight[0]
 				y3Point = a*x3Point + b

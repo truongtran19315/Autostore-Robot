@@ -19,8 +19,8 @@ class PLAYER_SETTING:
     # INITIAL_X = 603
     # INITIAL_Y = 384
     
-    INITIAL_X = 963
-    INITIAL_Y = 477
+    # INITIAL_X = 963
+    # INITIAL_Y = 477
 
     MAX_FORWARD_VELO = 100
     MAX_ROTATION_VELO = 1
@@ -37,6 +37,8 @@ class PLAYER_SETTING:
     STEP_ANGLE = 2 * PI / CASTED_RAYS 
 
     Y_GOAL_POSITION = 10
+    GOAL_POSITION = {"x": 200, "y": 50}
+    GOAL_RADIUS = 20
 
     # MAX_STEP_PER_EPOCH = 5000
 
@@ -71,6 +73,7 @@ class COLOR:
     BLUE = (255, 0, 0)
     CYAN = (0, 255, 255)
     PINK = (255, 0, 255)
+    PURPLE = (255, 255, 0)
 
 
 # RELATED TO REINFORCEMENT LEARNING
