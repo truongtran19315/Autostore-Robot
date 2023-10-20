@@ -1,5 +1,4 @@
 import gym
-import matplotlib.pyplot as plt 
 
 
 # Tao bien moi truong
