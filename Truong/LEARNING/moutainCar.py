@@ -37,7 +37,6 @@ max_start_state = None
 for ep in range(c_no_of_eps):
     print("Eps = ", ep)
     done = False
-    print(env.reset())
     current_state = convert_state(env.reset()[0])
     ep_reward = 0
     ep_start_state = current_state
@@ -91,13 +90,13 @@ for ep in range(c_no_of_eps):
 print("Max reward = ", max_ep_reward)
 print("Max action list = ", max_ep_action_list)
 
-env.reset()
-env.state = max_start_state
-for action in max_ep_action_list:
-    env.step(action)
-    env.render()
+# env.reset()
+# env.state = max_start_state
+# for action in max_ep_action_list:
+#     env.step(action)
+#     env.render()
 
-done = False
-while not done:
-    _, _, done,_ = env.step(0)
-    env.render()
+# done = False
+# while not done:
+#     _, _, done,_ = env.step(0)
+#     env.render()
