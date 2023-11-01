@@ -139,10 +139,15 @@ class Robot(Car):
     
     # Tính toán vị trí đích của tia quét (target_x và target_y) khi "chạm" vật cản (không phải trung tâm)
     for ray in range(PLAYER_SETTING.CASTED_RAYS):
-      target_x = int(self.xPos - \
-        math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-      target_y = int(self.yPos + \
+      # target_x = int(self.xPos - \
+      #   math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+      # target_y = int(self.yPos + \
+      #   math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+      
+      target_x = int(self.xPos + \
         math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+      target_y = int(self.yPos - \
+        math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
       
       self.lidarVisualize[ray]["source"] = {
           "x": self.xPos,
@@ -173,6 +178,10 @@ class Robot(Car):
           "x": target_x,
           "y": target_y
       }
+      
+      if ray in range(0, 45):
+        self.lidarVisualize[ray]["color"] = COLOR.PURPLE
+        
         
       startAngle += PLAYER_SETTING.STEP_ANGLE
     
@@ -295,20 +304,20 @@ class PyGame2D():
     # cv2.waitKey(0)
     
     
-# screen = np.zeros((720, 1280, 3), dtype = np.uint8)      
-# game = PyGame2D(screen)
-# while True:
-#     screen = np.zeros((720, 1280, 3), dtype = np.uint8)  
-#     a = Utils.inputUser(game)   
-#     game.view(screen)
-#     if not game.robot.isAlive:
-#       print("Oops!!!!!!!!!!")
-#       break
-#     elif game.robot.achieveGoal:
-#       print("Great!!!!!!!!!")
-#       break
-#     if a == False:
-#       cv2.imshow('min', game.saveMin["screen"])
-#       cv2.waitKey(0)
-#       break
-#     pass
+screen = np.zeros((720, 1280, 3), dtype = np.uint8)      
+game = PyGame2D(screen)
+while True:
+    screen = np.zeros((720, 1280, 3), dtype = np.uint8)  
+    a = Utils.inputUser(game)   
+    game.view(screen)
+    if not game.robot.isAlive:
+      print("Oops!!!!!!!!!!")
+      break
+    elif game.robot.achieveGoal:
+      print("Great!!!!!!!!!")
+      break
+    if a == False:
+      cv2.imshow('min', game.saveMin["screen"])
+      cv2.waitKey(0)
+      break
+    pass

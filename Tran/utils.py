@@ -1,6 +1,6 @@
 import pygame
 import math
-from const import *
+from consts import *
 import cv2
 
 
@@ -38,9 +38,22 @@ class Utils:
 			return EQUATION.ONE_SOLUTION, -b/(2*a), -b/(2*a)
 		else:
 			return EQUATION.TWO_SOLUTION, (-b + math.sqrt(delta))/(2*a), (-b - math.sqrt(delta))/(2*a)
+ 
+	@staticmethod
+	def getCosBetweenTwoVector(xSource, ySource, xTarget1, yTarget1, xTarget2, yTarget2):
+		length1 = Utils.distanceBetweenTwoPoints(xSource, ySource, xTarget1, yTarget1)
+		length2 = Utils.distanceBetweenTwoPoints(xSource, ySource, xTarget2, yTarget2)
+		# tich vo huong
+		scalar = (xTarget1 - xSource)*(xTarget2 - xSource) + (yTarget1 - ySource)*(yTarget2 - ySource)
+		return scalar / (length1 * length2)
 	
 	@staticmethod
 	def getDistanceFromObstacle(obstacle, xSource, ySource, xTarget, yTarget): 
+		
+		distance = INT_INFINITY
+		xPoint = INT_INFINITY
+		yPoint = INT_INFINITY
+  
 		# xSource, ySource is the source of the lidar, xTarget, yTarget is the target of the lidar
 		#     # if abs(xTarget - xCenter) < 0.0001:
 		# x = xCenter
@@ -50,10 +63,6 @@ class Utils:
 		# print("42: ", Utils.verifyLine(a, b, xCenter, yCenter))
 		# print("41: ", Utils.verifyLine(a, b, xTarget, yTarget))
 		# print("y = {}x + {}".format(a, b))
-  
-		distance = INT_INFINITY
-		xPoint = INT_INFINITY
-		yPoint = INT_INFINITY
 
 		if obstacle.shape == "circle":
 			if c == True:
@@ -143,32 +152,32 @@ class Utils:
 					# print('---length---')
 					# print(d1, d2)
 	
-		elif obstacle.shape == "rectangle":
+		elif obstacle.shape == "rectangle" or obstacle.shape == "wall":
 				
 			topLeft = [obstacle.xCenter - obstacle.width//2, obstacle.yCenter - obstacle.height//2]
 			topRight = [obstacle.xCenter + obstacle.width//2, obstacle.yCenter - obstacle.height//2]
 			botLeft = [obstacle.xCenter - obstacle.width//2, obstacle.yCenter + obstacle.height//2]
 			botRight = [obstacle.xCenter + obstacle.width//2, obstacle.yCenter + obstacle.height//2]
-   
+	 
 	
 			# left, bot, right, top		
 			# x1Point = topLeft[0] # phương trình đường thẳng song song với trục tung x = a
-			a1, b1, c1 = Utils.findLinePassTwoPoints(topLeft[0], topLeft[1], botLeft[0], botLeft[1])
+			# a1, b1, c1 = Utils.findLinePassTwoPoints(topLeft[0], topLeft[1], botLeft[0], botLeft[1])
 			a2, b2, c2 = Utils.findLinePassTwoPoints(botLeft[0], botLeft[1], botRight[0], botRight[1]) # a = 0, b = y
 			# x3Point = topRight[0]
-			a3, b3, c3 = Utils.findLinePassTwoPoints(topRight[0], topRight[1], botRight[0], botRight[1])
+			# a3, b3, c3 = Utils.findLinePassTwoPoints(topRight[0], topRight[1], botRight[0], botRight[1])
 			a4, b4, c4 = Utils.findLinePassTwoPoints(topLeft[0], topLeft[1], topRight[0], topRight[1])
 
 			# Trường hợp tia thẳng đứng -> chỉ cắt 2 cạnh ngang
 			if c == True:
 				x2Point = xSource
 				y2Point = a2*x2Point + b2
-    
+		
 				x4Point = xSource
 				y4Point = a4*x4Point + b4
-    
+		
 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \
-       				and ((y2Point >= ySource and y2Point <= yTarget) or (y2Point <= ySource and y2Point >= yTarget)):
+			 				and ((y2Point >= ySource and y2Point <= yTarget) or (y2Point <= ySource and y2Point >= yTarget)):
 					d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
 					d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
 					if d1 < d2:
@@ -179,19 +188,19 @@ class Utils:
 						distance = d2
 						xPoint = x4Point
 						yPoint = y4Point
-     
+		 
 			# Trường hợp tia trùng với cạnh
-			elif a == a1 and b == b1:
-				d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
-				d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
-				if d1 < d2:
-					distance = d1
-					xPoint = topLeft[0]
-					yPoint = topLeft[1]
-				else:
-					distance = d2
-					xPoint = botLeft[0]
-					yPoint = botLeft[1]
+			# elif a == a1 and b == b1:
+			# 	d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+			# 	d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+			# 	if d1 < d2:
+			# 		distance = d1
+			# 		xPoint = topLeft[0]
+			# 		yPoint = topLeft[1]
+			# 	else:
+			# 		distance = d2
+			# 		xPoint = botLeft[0]
+			# 		yPoint = botLeft[1]
 			elif a == a2 and b == b2:
 				d1 = distance, Utils.distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
 				d2 = distance, Utils.distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
@@ -203,17 +212,17 @@ class Utils:
 					distance = d2
 					xPoint = botRight[0]
 					yPoint = botRight[1]
-			elif a == a3 and b == b3:
-				d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
-				d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
-				if d1 < d2:
-					distance = d1
-					xPoint = topRight[0]
-					yPoint = topRight[1]
-				else:
-					distance = d2
-					xPoint = botRight[0]
-					yPoint = botRight[1]
+			# elif a == a3 and b == b3:
+			# 	d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+			# 	d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
+			# 	if d1 < d2:
+			# 		distance = d1
+			# 		xPoint = topRight[0]
+			# 		yPoint = topRight[1]
+			# 	else:
+			# 		distance = d2
+			# 		xPoint = botRight[0]
+			# 		yPoint = botRight[1]
 			elif a == a4 and b == b4:
 				d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
 				d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
@@ -226,7 +235,7 @@ class Utils:
 					xPoint = topRight[0]
 					yPoint = topRight[1]
 			else:
-    
+		
 				x1Point = topLeft[0]
 				y1Point = a*x1Point + b
 				# print(x1Point, y1Point)
@@ -238,17 +247,7 @@ class Utils:
 					xPoint = x1Point
 					yPoint = y1Point
 				
-				if a - a2 != 0:
-					x2Point = (b2 - b) / (a - a2)
-					y2Point = b2
-					if x2Point >= botLeft[0] and x2Point <= botRight[0] \
-       				and ((x2Point >= xSource and x2Point <= xTarget) or (x2Point <= xSource and x2Point >= xTarget)):
-						d = Utils.distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
-						if d < distance:
-							distance = d
-							xPoint = x2Point
-							yPoint = y2Point
-    
+		
 				x3Point = topRight[0]
 				y3Point = a*x3Point + b
 				if y3Point >= topRight[1] and y3Point <= botRight[1] \
@@ -259,17 +258,26 @@ class Utils:
 						xPoint = x3Point
 						yPoint = y3Point
 				
-				if a - a4 != 0:
+				if a - a2 != 0 and a - a4 != 0:
+					x2Point = (b2 - b) / (a - a2)
+					y2Point = b2
+					if x2Point >= botLeft[0] and x2Point <= botRight[0] \
+			 				and ((x2Point >= xSource and x2Point <= xTarget) or (x2Point <= xSource and x2Point >= xTarget)):
+						d = Utils.distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
+						if d < distance:
+							distance = d
+							xPoint = x2Point
+							yPoint = y2Point
 					x4Point = (b4 - b) / (a - a4)
 					y4Point = b4                     
 					if x4Point >= topLeft[0] and x4Point <= topRight[0] \
-       				and ((x4Point >= xSource and x4Point <= xTarget) or (x4Point <= xSource and x4Point >= xTarget)):
+			 				and ((x4Point >= xSource and x4Point <= xTarget) or (x4Point <= xSource and x4Point >= xTarget)):
 						d = Utils.distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
 						if d < distance:
 							distance = d
 							xPoint = x4Point
 							yPoint = y4Point
-      
+			
 		# print(d)
 		return distance, int(xPoint), int(yPoint)
 		
@@ -282,7 +290,7 @@ class Utils:
 	@staticmethod
 	def verifyCircle(xCenter, yCenter, radius, x, y):
 		return (x - xCenter)**2 + (y - yCenter)**2 - radius**2
-   
+	 
 	@staticmethod
 	def inputUser(game):
 		key = cv2.waitKey(delay=1)
@@ -304,7 +312,7 @@ class Utils:
 			game.action(ACTIONS.STOP)
 		else:
 			game.action(ACTIONS.DO_NOTHING)
-  	
+		
 		return True
 					
 	@staticmethod

@@ -1,7 +1,7 @@
 import math
 import pygame
 from sys import exit
-from const import *
+from consts import *
 from utils import *
 import random
 import numpy as np
