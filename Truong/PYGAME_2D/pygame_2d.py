@@ -139,10 +139,10 @@ class Robot(Car):
     
     # Tính toán vị trí đích của tia quét (target_x và target_y) khi "chạm" vật cản (không phải trung tâm)
     for ray in range(PLAYER_SETTING.CASTED_RAYS):
-      target_x = int(self.xPos - \
-        math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-      target_y = int(self.yPos + \
+      target_x = int(self.xPos + \
         math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+      target_y = int(self.yPos - \
+        math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
       
       self.lidarVisualize[ray]["source"] = {
           "x": self.xPos,
@@ -154,7 +154,7 @@ class Robot(Car):
       y = INT_INFINITY
       
       for obstacle in obstaclesInRange:
-        d, x, y = Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y)
+        (d, x, y) = Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y)
         if d < distance:
           distance = d
           target_x = x
@@ -184,7 +184,7 @@ class Robot(Car):
   
   def checkAchieveGoal(self, goal):
     distance = Utils.distanceBetweenTwoPoints(self.xPos, self.yPos, goal.xCenter, goal.yCenter)
-    if distance < self.radiusObject + goal.radius:  #! trường hợp <= ??
+    if distance < self.radiusObject + goal.radius:  
       self.achieveGoal = True
   
   def draw(self, screen):
@@ -293,6 +293,18 @@ class PyGame2D():
     
     cv2.imshow('Enviroment', screen)
     # cv2.waitKey(0)
+    
+  def convert_lenLidar(self):
+    self.robot.lidarSignals = np.array(self.robot.lidarSignals)
+    self.robot.lidarSignals[self.robot.lidarSignals <= 120] = 2
+    self.robot.lidarSignals[(self.robot.lidarSignals > 120) & (self.robot.lidarSignals <= 240)] = 1
+    self.robot.lidarSignals[(self.robot.lidarSignals > 240) & (self.robot.lidarSignals <= 360)] = 0
+    self.robot.lidarSignals[self.robot.lidarSignals > 360] = INT_INFINITY
+    
+  def convert_ObstacleDetectionArea(self):
+    self.convert_lenLidar()
+    
+    
     
     
 # screen = np.zeros((720, 1280, 3), dtype = np.uint8)      
