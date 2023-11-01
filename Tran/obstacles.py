@@ -1,13 +1,34 @@
 import cv2
-from const import *
+from consts import *
 import numpy as np
 import math
 
 class StaticObstacles():
-  def __init__(self, xCenter, yCenter, shape) -> None:
+  def __init__(self, xCenter, yCenter, shape, height=None, width=None, radius=None) -> None:
     self.xCenter = xCenter
     self.yCenter = yCenter
+    self.height = height
+    self.width = width
     self.shape = shape
+    if self.shape == 'circle' or self.shape == 'goal':
+      self.radius = radius
+    else:
+      self.radius = math.sqrt(self.height**2 + self.width**2) / 2  # distance from the center to the point in the corner
+      
+  def draw(self, screen):
+    if self.shape == 'circle':
+      cv2.circle(screen, (self.xCenter, self.yCenter), self.radius, COLOR.GREEN, -1)
+    else:
+      xStart = self.xCenter - self.width//2
+      yStart = self.yCenter - self.height//2
+      
+      xEnd = self.xCenter + self.width//2
+      yEnd = self.yCenter + self.height//2
+      if self.shape == 'rectangle':
+        cv2.rectangle(screen, (xStart, yStart), (xEnd, yEnd), COLOR.GREEN, -1)
+      else: 
+        cv2.rectangle(screen, (xStart, yStart), (xEnd, yEnd), COLOR.RED, -1)
+      
     
 class CircleObstacles(StaticObstacles):
   def __init__(self, xCenter, yCenter, radius) -> None:
@@ -37,9 +58,7 @@ class RectangleObstacles(StaticObstacles):
     
 class Goal(StaticObstacles):
   def __init__(self) -> None:
-    super().__init__(PLAYER_SETTING.GOAL_POSITION["x"], PLAYER_SETTING.GOAL_POSITION["y"], "goal")
-    
-    self.radius = PLAYER_SETTING.GOAL_RADIUS
+    super().__init__(xCenter=PLAYER_SETTING.GOAL_POSITION["x"], yCenter=PLAYER_SETTING.GOAL_POSITION["y"], shape="goal", radius=PLAYER_SETTING.GOAL_RADIUS)
     
   def draw(self, screen):
     cv2.circle(screen, (self.xCenter, self.yCenter), self.radius, COLOR.PURPLE, -1)
@@ -64,7 +83,7 @@ class Obstacles():
     
     self.circleObstacles = [] # to save all circle obstacles
     for obstacle in self.circleObstaclesArr:
-      circle = CircleObstacles(obstacle[0], obstacle[1], obstacle[2])
+      circle = StaticObstacles(xCenter=obstacle[0], yCenter=obstacle[1], radius=obstacle[2], shape='circle')
       self.circleObstacles.append(circle)
       self.obstacles.append(circle)
       
@@ -82,7 +101,7 @@ class Obstacles():
                               [867, 471, 40, 22]]
     self.rectangleObstacles = [] # to save all rectangle obstacles
     for obstacle in self.rectangleObstaclesArr:
-      rectangle = RectangleObstacles(obstacle[0], obstacle[1], obstacle[2], obstacle[3])
+      rectangle = StaticObstacles(xCenter=obstacle[0], yCenter=obstacle[1], height=obstacle[2], width=obstacle[3], shape='rectangle')
       self.rectangleObstacles.append(rectangle)
       self.obstacles.append(rectangle)
     
@@ -93,20 +112,14 @@ class Obstacles():
                   [640, 8, 4, 1260]]
     self.wall = []
     for obstacle in self.wallArr:
-      rectangle = RectangleObstacles(obstacle[0], obstacle[1], obstacle[2], obstacle[3])
+      rectangle = StaticObstacles(xCenter=obstacle[0], yCenter=obstacle[1], height=obstacle[2], width=obstacle[3], shape='wall')
       self.wall.append(rectangle)
       self.obstacles.append(rectangle)
       
   
   def generateObstacles(self, screen):
-    for circle in self.circleObstacles:
-      circle.draw(screen)
-      
-    for rectangle in self.rectangleObstacles:
-      rectangle.draw(screen, COLOR.GREEN)
-      
-    for rectangle in self.wall:
-      rectangle.draw(screen, COLOR.RED)
+    for obstacle in self.obstacles:
+      obstacle.draw(screen)
       
 
 # img = np.zeros((720, 1280, 3), dtype = np.uint8)      

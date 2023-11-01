@@ -3,7 +3,7 @@ import numpy as np
 import math
 import random
 from obstacles import Obstacles, Goal
-from const import *
+from consts import *
 from utils import *
 import time
 
@@ -120,6 +120,9 @@ class Robot(Car):
                             "target": {"x": self.xPos, "y": self.yPos},
                             "color": COLOR.WHITE
                             } for x in range(PLAYER_SETTING.CASTED_RAYS)]
+    # self.test = {2: [],
+    #              1: [],
+    #              0: []}
   
   def scanLidar(self, obstacles):
     obstaclesInRange = []  #to save obstacles in lidar range
@@ -172,8 +175,13 @@ class Robot(Car):
       }
         
       startAngle += PLAYER_SETTING.STEP_ANGLE
+      
+      
     
     return minDistance
+  
+  def distanceConvert():
+    pass
     
   def checkCollision(self, distance):
     if distance < self.radiusObject:
@@ -211,6 +219,7 @@ class PyGame2D():
     self.goal = Goal()
     self.robot = Robot()
     self.n = 0
+    self.elapsed_time = 0
     self.totalTime = 0
     self.minTime = INT_INFINITY
     self.maxTime = 0
@@ -276,9 +285,6 @@ class PyGame2D():
     infoStateVector = np.array([ratioLeft, alpha, fwVelo, rVelo])
     lidarStateVector = np.array(lidars)
     return np.concatenate((infoStateVector, lidarStateVector)) 
-  
-  def update(self): 
-    pass
   
   def view(self, screen):  
     self.obstacles.generateObstacles(screen)
