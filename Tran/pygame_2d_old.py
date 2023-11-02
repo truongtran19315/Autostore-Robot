@@ -240,11 +240,11 @@ class PyGame2D():
     self.robot.move(action=action)
     # self._obstacleMoves()
     self.n += 1
-    start_time = time.time()
+    start_time = time.time() * 1000
     
     distance = self.robot.scanLidar(obstacles=self.obstacles)
     
-    end_time = time.time()
+    end_time = time.time() * 1000
     
     elapsed_time = end_time - start_time
     

@@ -38,14 +38,6 @@ class Utils:
 			return EQUATION.ONE_SOLUTION, -b/(2*a), -b/(2*a)
 		else:
 			return EQUATION.TWO_SOLUTION, (-b + math.sqrt(delta))/(2*a), (-b - math.sqrt(delta))/(2*a)
- 
-	@staticmethod
-	def getCosBetweenTwoVector(xSource, ySource, xTarget1, yTarget1, xTarget2, yTarget2):
-		length1 = Utils.distanceBetweenTwoPoints(xSource, ySource, xTarget1, yTarget1)
-		length2 = Utils.distanceBetweenTwoPoints(xSource, ySource, xTarget2, yTarget2)
-		# tich vo huong
-		scalar = (xTarget1 - xSource)*(xTarget2 - xSource) + (yTarget1 - ySource)*(yTarget2 - ySource)
-		return scalar / (length1 * length2)
 	
 	@staticmethod
 	def getDistanceFromObstacle(obstacle, xSource, ySource, xTarget, yTarget): 
