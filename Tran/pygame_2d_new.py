@@ -1,7 +1,7 @@
 import math
 import pygame
 from sys import exit
-from const import *
+from consts import *
 from utils import *
 import random
 import numpy as np
@@ -10,6 +10,7 @@ import cv2
 
 
 ObstacleTest = pygame.Rect(300, 600, 500, 1000)
+
 
 class Car():
     def __init__(self, initX, initY, maxForwardVelocity, minRotationVelocity, maxRotationVelocity, accelerationForward, accelerationRotate, radiusObject) -> None:
@@ -267,20 +268,20 @@ class CircleObject():
         self.yPos = initY
         self.xCenter = initX
         self.yCenter = initY
-        self.radius = radius    
-    
+        self.radius = radius
+
     def isObstacles(self, x, y):
         # if (self.xPos - x) ** 2 + (self.yPos - y) ** 2 >= self.radius ** 2:
         #     return True
         # return False
         return self.radius
-    
+
     def draw(self, screen):
         pygame.draw.circle(
             screen, COLOR.BLUE, (self.xPos, self.yPos), self.radius
         )
-        
-        
+
+
 class RectangleObject():
     def __init__(self, initX, initY, height, width) -> None:
         self.xPos = initX
@@ -288,23 +289,22 @@ class RectangleObject():
         self.xCenter = initX + width // 2
         self.yCenter = initY + height // 2
         self.height = height
-        self.width = width    
-    
+        self.width = width
+
     def isObstacles(self, x, y):
         # if x >= self.xPos and x <= self.xPos + self.width and y >= self.yPos and y <= self.yPos + self.height:
         #     return True
         # return False
         cos = abs(y - self.yCenter) / Utils.distanceBetweenTwoPoints(
-                self.xCenter, self.yCenter, x, y)
+            self.xCenter, self.yCenter, x, y)
         return (self.height // 2) / cos
-    
+
     def draw(self, screen):
         rect = pygame.Rect(self.xPos, self.yPos, self.width, self.height)
         pygame.draw.rect(
             screen, COLOR.BLUE, rect
         )
-            
-            
+
 
 class PyGame2D():
     def __init__(self) -> None:
@@ -322,20 +322,20 @@ class PyGame2D():
         numOfObstacles = OBSTACLE_SETTING.MAX_INSTANCES
         obstacles = []
         for _ in range(numOfObstacles):
-            if random.randint(1, 2) == 1:    #Circle
+            if random.randint(1, 2) == 1:  # Circle
                 obstacleInstance = CircleObject(
                     initX=random.randint(5, GAME_SETTING.SCREEN_WIDTH - 5),
                     initY=random.randint(5, GAME_SETTING.SCREEN_HEIGHT - 5),
                     radius=random.randint(10, 50)
                 )
-            else: 
+            else:
                 obstacleInstance = RectangleObject(
                     initX=random.randint(5, GAME_SETTING.SCREEN_WIDTH - 5),
                     initY=random.randint(5, GAME_SETTING.SCREEN_HEIGHT - 5),
                     height=random.randint(10, 50),
                     width=random.randint(10, 50),
                 )
-                
+
             obstacles.append(obstacleInstance)
         return obstacles
 
