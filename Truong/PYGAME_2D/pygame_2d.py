@@ -290,9 +290,56 @@ class PyGame2D():
         rVelo = self.robot.currRotationVelocity
         lidars = self.robot.lidarSignals
 
-        infoStateVector = np.array([ratioLeft, alpha, fwVelo, rVelo])
-        lidarStateVector = np.array(lidars)
-        # chuyen gia tri
+        # TODO
+        #! chuyen gia tri tia lidar
+        bin_lidarsignal = np.linspace(0, 360, num=N_LIDARSIGNAL, endpoint=True)
+        bin_lidarsignal = np.delete(bin_lidarsignal, 0)
+        lidars = np.digitize(lidars, bin_lidarsignal)
+        lidars[lidars == 3] = INFINITY
+        temp_lidars = lidars
+
+        bin_lidarspace = np.array([45, 135, 180])
+        lidars = np.array_split(temp_lidars, bin_lidarspace)
+
+        # dis_lidars = {"0": (np.amin(lidars[0]), lidars[0]),
+        #               "1": (np.amin(lidars[1]), lidars[1]),
+        #               "2": (np.amin(lidars[2]), lidars[2]),
+        #               "3": INFINITY}
+        section_lidars_min = [np.amin(lidars[0]), np.amin(
+            lidars[1]), np.amin(lidars[2]), INFINITY]
+
+        #! chuyen doi state vector
+        high, low = 1, 0
+        alpha_space = 0, 2*math.pi
+        fwVelo_space = -PLAYER_SETTING.MAX_FORWARD_VELO, PLAYER_SETTING.MAX_FORWARD_VELO
+        rVelo_space = PLAYER_SETTING.MIN_ROTATION_VELO, PLAYER_SETTING.MAX_ROTATION_VELO
+
+        lowState = np.array(
+            [alpha_space[0], fwVelo_space[0], rVelo_space[0]], dtype=float)
+        upState = np.array(
+            [alpha_space[1], fwVelo_space[1], rVelo_space[1]], dtype=float)
+
+        infoState_shape = (ALPHA_SPACE, FWVELO_SPACE, RVELO_SPACE)
+
+        bins = []
+        for i in range(3):
+            item = np.linspace(
+                lowState[i],
+                upState[i],
+                num=infoState_shape[i],
+                endpoint=False)
+            item = np.delete(item, 0)
+            bins.append(item)
+            print(bins[i])
+
+        def get_discrete_state(s):
+            new_s = []
+            for i in range(3):
+                new_s.append(np.digitize(s[i], bins[i]))
+            return new_s
+
+        infoStateVector = np.array(get_discrete_state(alpha, fwVelo, rVelo))
+        lidarStateVector = np.array(section_lidars_min)
         return np.concatenate((infoStateVector, lidarStateVector))
 
     def update(self):
@@ -321,20 +368,20 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-game = PyGame2D(screen)
-while True:
-    screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-    a = Utils.inputUser(game)
-    game.view(screen)
-    if not game.robot.isAlive:
-        print("Oops!!!!!!!!!!")
-        break
-    elif game.robot.achieveGoal:
-        print("Great!!!!!!!!!")
-        break
-    if a == False:
-        cv2.imshow('min', game.saveMin["screen"])
-        cv2.waitKey(0)
-        break
-    pass
+# screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+# game = PyGame2D(screen)
+# while True:
+#     screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+#     a = Utils.inputUser(game)
+#     game.view(screen)
+#     if not game.robot.isAlive:
+#         print("Oops!!!!!!!!!!")
+#         break
+#     elif game.robot.achieveGoal:
+#         print("Great!!!!!!!!!")
+#         break
+#     if a == False:
+#         cv2.imshow('min', game.saveMin["screen"])
+#         cv2.waitKey(0)
+#         break
+#     pass
