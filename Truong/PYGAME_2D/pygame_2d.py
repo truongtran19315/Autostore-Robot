@@ -292,6 +292,7 @@ class PyGame2D():
 
         infoStateVector = np.array([ratioLeft, alpha, fwVelo, rVelo])
         lidarStateVector = np.array(lidars)
+        # chuyen gia tri
         return np.concatenate((infoStateVector, lidarStateVector))
 
     def update(self):
