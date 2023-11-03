@@ -24,13 +24,13 @@ cpdef tuple findLinePassTwoPoints(double xPointA, double yPointA, double xPointB
 cpdef tuple findSolOfEquation(double a, double b, double c):
 	# aX^2 + bX + c = 0
 	cdef double delta = b**2 - 4*a*c
-	# print("delta: ", delta)
+	#print("delta: ", delta)
 	if delta < 0:
 		return EQUATION.NO_SOLUTION, 0, 0
-	if delta == 0:
+	elif delta == 0:
 		return EQUATION.ONE_SOLUTION, -b/(2*a), -b/(2*a)
 	else:
-		return EQUATION.TWO_SOLUTION, (-b + math.sqrt(delta))/(2*a), (-b - math.sqrt(delta))/(2*a)
+		return EQUATION.TWO_SOLUTION, (-b + sqrt(delta))/(2*a), (-b - sqrt(delta))/(2*a)
 
 @cython.cdivision(True)
 cpdef tuple getDistanceFromObstacle(obstacle, double xSource, double ySource, double xTarget, double yTarget): 
