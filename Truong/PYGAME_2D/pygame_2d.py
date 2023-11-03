@@ -161,8 +161,9 @@ class Robot(Car):
             y = INT_INFINITY
 
             for obstacle in obstaclesInRange:
-                (d, x, y) = Utils.getDistanceFromObstacle(
+                d, x, y = Utils.getDistanceFromObstacle(
                     obstacle, self.xPos, self.yPos, target_x, target_y)
+
                 if d < distance:
                     distance = d
                     target_x = x
@@ -270,12 +271,13 @@ class PyGame2D():
             self.saveMax["action"] = action
             self.saveMax["robot"] = self.robot
 
-        print(elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
+        # print(elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
 
         self.robot.checkCollision(distance)
         self.robot.checkAchieveGoal(self.goal)
 
     def evaluate(self):
+        return 1  # ! test
         pass
 
     def is_done(self):
@@ -292,21 +294,14 @@ class PyGame2D():
 
         # TODO
         #! chuyen gia tri tia lidar
-        bin_lidarsignal = np.linspace(0, 360, num=N_LIDARSIGNAL, endpoint=True)
+        bin_lidarsignal = np.linspace(
+            0, 360, num=LENGTH_LIDARSIGNAL, endpoint=True)
         bin_lidarsignal = np.delete(bin_lidarsignal, 0)
-        lidars = np.digitize(lidars, bin_lidarsignal)
-        lidars[lidars == 3] = INFINITY
-        temp_lidars = lidars
+        lidars_digitized = np.digitize(lidars, bin_lidarsignal)
 
         bin_lidarspace = np.array([45, 135, 180])
-        lidars = np.array_split(temp_lidars, bin_lidarspace)
-
-        # dis_lidars = {"0": (np.amin(lidars[0]), lidars[0]),
-        #               "1": (np.amin(lidars[1]), lidars[1]),
-        #               "2": (np.amin(lidars[2]), lidars[2]),
-        #               "3": INFINITY}
-        section_lidars_min = [np.amin(lidars[0]), np.amin(
-            lidars[1]), np.amin(lidars[2]), INFINITY]
+        lidars_sections = np.array_split(lidars_digitized, bin_lidarspace)
+        section_lidars_min = [np.amin(section) for section in lidars_sections]
 
         #! chuyen doi state vector
         high, low = 1, 0
@@ -330,15 +325,13 @@ class PyGame2D():
                 endpoint=False)
             item = np.delete(item, 0)
             bins.append(item)
-            print(bins[i])
 
-        def get_discrete_state(s):
-            new_s = []
-            for i in range(3):
-                new_s.append(np.digitize(s[i], bins[i]))
-            return new_s
+        s = (alpha, fwVelo, rVelo)
+        infoStateVector = []
+        for i in range(3):
+            infoStateVector.append(np.digitize(s[i], bins[i]))
 
-        infoStateVector = np.array(get_discrete_state(alpha, fwVelo, rVelo))
+        infoStateVector = np.array(infoStateVector)
         lidarStateVector = np.array(section_lidars_min)
         return np.concatenate((infoStateVector, lidarStateVector))
 
