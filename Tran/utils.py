@@ -271,7 +271,7 @@ class Utils:
 							yPoint = y4Point
 			
 		# print(d)
-		return distance, int(xPoint), int(yPoint)
+		return distance, xPoint, yPoint
 		
 
 	@staticmethod

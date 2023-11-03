@@ -253,5 +253,5 @@ cpdef tuple getDistanceFromObstacle(obstacle, double xSource, double ySource, do
 						yPoint = y4Point
 	
 	# print(d)
-	return distance, int(xPoint), int(yPoint)
+	return distance, xPoint, yPoint
 		

@@ -3150,13 +3150,13 @@ static PyObject *__pyx_pf_11cythonUtils_6getDistanceFromObstacle(CYTHON_UNUSED P
             __pyx_v_yPoint = __pyx_t_7;
 </pre><pre class="cython line score-0">&#xA0;<span class="">254</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">255</span>: 	# print(d)</pre>
-<pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">256</span>: 	return distance, int(xPoint), int(yPoint)</pre>
-<pre class='cython code score-21 '>  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
+<pre class="cython line score-27" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">256</span>: 	return distance, xPoint, yPoint</pre>
+<pre class='cython code score-27 '>  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
   __pyx_t_3 = <span class='py_c_api'>PyFloat_FromDouble</span>(__pyx_v_distance);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 256, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-  __pyx_t_5 = <span class='pyx_c_api'>__Pyx_PyInt_FromDouble</span>(__pyx_v_xPoint);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 256, __pyx_L1_error)</span>
+  __pyx_t_5 = <span class='py_c_api'>PyFloat_FromDouble</span>(__pyx_v_xPoint);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 256, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_5);
-  __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyInt_FromDouble</span>(__pyx_v_yPoint);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 256, __pyx_L1_error)</span>
+  __pyx_t_4 = <span class='py_c_api'>PyFloat_FromDouble</span>(__pyx_v_yPoint);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 256, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_4);
   __pyx_t_1 = <span class='py_c_api'>PyTuple_New</span>(3);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
