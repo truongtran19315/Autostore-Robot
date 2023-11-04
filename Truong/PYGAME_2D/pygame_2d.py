@@ -201,7 +201,7 @@ class Robot(Car):
             self.xPos, self.yPos, goal.xCenter, goal.yCenter)
         if distance < self.radiusObject + goal.radius:
             self.achieveGoal = True
-        return distance
+        # return distance
 
     def draw(self, screen):
         # cv2.circle(screen, (self.xPos, self.yPos), 370, COLOR.BLUE, -1)
