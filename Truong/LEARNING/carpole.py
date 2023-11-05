@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import gym
 import random
 import math
@@ -19,14 +20,17 @@ for i in range(4):
     # print(bins[i])
 
 # define function to convert to discrete state
+
+
 def get_discrete_state(s):
     new_s = []
     for i in range(4):
         new_s.append(np.digitize(s[i], bins[i]))
     return new_s
 
+
 q_table = np.zeros(new_observation_shape + (env.action_space.n,))
-# print(q_table)
+print(q_table)
 
 gamma = 0.99
 alpha = 0.1
@@ -34,6 +38,8 @@ epsilon = 1
 epsilon_decay = epsilon / 4000
 
 # pick up action from q-table with greedy exploration
+
+
 def pick_sample(s, episode_num):
     # get optimal action,
     # but with greedy exploration (to prevent picking up same values in the first stage)
@@ -42,6 +48,7 @@ def pick_sample(s, episode_num):
     else:
         a = np.random.randint(0, env.action_space.n)
     return a
+
 
 env = gym.make("CartPole-v1")
 reward_records = []
@@ -59,7 +66,8 @@ for i in range(1000):
 
         # Update Q-Table
         maxQ = np.max(q_table[tuple(s_dis_next)])
-        q_table[tuple(s_dis)][a] += alpha * (r + gamma * maxQ - q_table[tuple(s_dis)][a])
+        q_table[tuple(s_dis)][a] += alpha * \
+            (r + gamma * maxQ - q_table[tuple(s_dis)][a])
 
         s_dis = s_dis_next
         total_reward += r
@@ -76,7 +84,6 @@ print("\nDone")
 env.close()
 
 
-import matplotlib.pyplot as plt
 # Generate recent 50 interval average
 average_reward = []
 for idx in range(len(reward_records)):
@@ -89,4 +96,3 @@ for idx in range(len(reward_records)):
 # Plot
 plt.plot(reward_records)
 plt.plot(average_reward)
-

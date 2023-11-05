@@ -1,4 +1,6 @@
-from pygame_2d import *
+import pygame_2d
+from const import *
+import numpy as np
 
 screen = np.zeros((720, 1280, 3), dtype=np.uint8)
 
@@ -10,6 +12,18 @@ epsilon_decay = epsilon / 4000
 n_epsilondes = 10000
 
 
+game = pygame_2d.PyGame2D(screen=screen)
+
+
+lidarspace_shape = tuple([LENGTH_LIDARSIGNAL] * SECTIONS_LIDARSPACE)
+new_observation_shape = (ALPHA_SPACE, FWVELO_SPACE,
+                         RVELO_SPACE) + lidarspace_shape
+q_table = np.zeros(new_observation_shape + (ACTION_SPACE,))  # ! random
+
+print(q_table.shape)
+print(game.observe())
+
+
 def pick_sample(state):
     if np.random.random() > epsilon:
         action = np.argmax(q_table[tuple(state)])
@@ -18,22 +32,22 @@ def pick_sample(state):
     return action
 
 
-game = PyGame2D(screen=screen)
-new_observation_shape = game.observe().shape
-
-q_table = np.zeros(new_observation_shape + ACTION_SPACE)
-
-
 reward_records = []
 for i in range(n_epsilondes):
     done = False
     total_reward = 0
     state = game.observe()
 
-    while not done:
-        action = pick_sample(state, i)
+    stepcounter = 50
+    while (not done) and (stepcounter < 50):
+        stepcounter += 1
+
+        action = pick_sample(state)
         game.action(action)
-        next_state, reward, done = game.observe(), game.evaluate(), game.is_done()
+
+        next_state = game.observe()
+        reward = game.evaluate()
+        done = game.is_done()
 
         # Update Q-Table
         maxQ = np.max(q_table[tuple(next_state)])

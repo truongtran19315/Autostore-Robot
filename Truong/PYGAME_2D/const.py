@@ -113,8 +113,8 @@ INT_INFINITY = 99999
 
 
 #! observe/ chuyen gia tri
-N_LIDARSIGNAL = 3   # 0,1,2
-N_SAPCELIDAR = 3    # 0,1,2
+LENGTH_LIDARSIGNAL = 4   # 0,1,2,3
+SECTIONS_LIDARSPACE = 4  # ! chia lidar thành 4 vùng 0,1,2,3
 
 # set các khoảng rời rạc
 ALPHA_SPACE = 20
