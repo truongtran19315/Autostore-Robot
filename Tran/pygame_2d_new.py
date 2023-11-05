@@ -102,7 +102,6 @@ class Robot(Car):
   def scanLidar(self, obstacles):
     obstaclesInRange = []  #to save obstacles in lidar range
     minDistance = INT_INFINITY
-    minRay = 999
     
     for obstacle in obstacles.obstacles:
       distance = Utils.distanceBetweenTwoPoints(
@@ -125,24 +124,22 @@ class Robot(Car):
           "x": self.xPos,
           "y": self.yPos
       }
-      
+          
       distance = INT_INFINITY
       x = INT_INFINITY
       y = INT_INFINITY
-      
+        
       for obstacle in obstaclesInRange:
         d, x, y = cythonUtils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y)
         # d, x, y = Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y)
+        
         if d < distance:
           distance = d
           target_x = x
           target_y = y
-          
+  
       minDistance = min(distance, minDistance)
-      if minDistance == distance:
-        minRay = ray
-        print(minDistance, minRay)
-        
+    
       if distance <= PLAYER_SETTING.RADIUS_LIDAR:
         self.lidarSignals[ray] = distance
         self.lidarVisualize[ray]["color"] = COLOR.RED
@@ -154,17 +151,13 @@ class Robot(Car):
           "x": target_x,
           "y": target_y
       }
-      
-      if ray == 0 or ray == 180:
-        print(ray, target_x, target_y)
-        self.lidarVisualize[ray]["color"] = (255,23,12)
         
       startAngle += PLAYER_SETTING.STEP_ANGLE
       if startAngle > 2*PLAYER_SETTING.PI:
         startAngle = startAngle - 2*PLAYER_SETTING.PI
       
       
-    print(minDistance, minRay)
+    # print(minDistance, minRay)
     return minDistance
   
   def distanceConvert():
@@ -191,7 +184,6 @@ class Robot(Car):
       targetX = int(lidarItemVisualize["target"]["x"])
       targetY = int(lidarItemVisualize["target"]["y"])
       cv2.line(screen, (srcX, srcY), (targetX, targetY), color, 1)
-      
       
     target_x = int(self.xPos + \
         math.cos(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3)
@@ -253,7 +245,7 @@ class PyGame2D():
       self.saveMax["action"] = action
       self.saveMax["robot"] = self.robot
     
-    # print (elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
+    print (elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
 
     self.robot.checkCollision(distance)
     self.robot.checkAchieveGoal(self.goal)

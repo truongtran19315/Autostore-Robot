@@ -20,7 +20,10 @@ class PLAYER_SETTING:
     # INITIAL_Y = 384
     
     INITIAL_X = 980
-    INITIAL_Y = 677
+    INITIAL_Y = 507
+    
+    # INITIAL_X = 1005
+    # INITIAL_Y = 491
 
     MAX_FORWARD_VELO = 100
     MAX_ROTATION_VELO = 1

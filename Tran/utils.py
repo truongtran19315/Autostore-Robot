@@ -3,7 +3,6 @@ import math
 from consts import *
 import cv2
 
-
 class Utils:
 	@staticmethod
 	def blit_rotate_center(win, image, top_left, angle):
@@ -24,7 +23,10 @@ class Utils:
 			xPointB += 0.00001
 			c = True
 		a = (yPointB - yPointA) / (xPointB - xPointA)
+		if a > 5730 or a < -5730: # tan of 89.99 and 90.01 
+			c = True
 		b = yPointA - a * xPointA
+		# print("find line ", a, b, c, maxA)
 		return a, b, c
 
 	@staticmethod
@@ -33,10 +35,13 @@ class Utils:
 		delta = b**2 - 4*a*c
 		# print("delta: ", delta)
 		if delta < 0:
+			# print("0 nghiem ", delta)
 			return EQUATION.NO_SOLUTION, 0, 0
 		if delta == 0:
+			# print("1 nghiem ", delta, (-b)/(2*a), (-b)/(2*a))
 			return EQUATION.ONE_SOLUTION, -b/(2*a), -b/(2*a)
 		else:
+			# print("2 nghiem ", delta, (-b + math.sqrt(delta))/(2*a), (-b - math.sqrt(delta))/(2*a))
 			return EQUATION.TWO_SOLUTION, (-b + math.sqrt(delta))/(2*a), (-b - math.sqrt(delta))/(2*a)
 	
 	@staticmethod
@@ -169,7 +174,8 @@ class Utils:
 				y4Point = a4*x4Point + b4
 		
 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \
-			 				and ((y2Point >= ySource and y2Point <= yTarget) or (y2Point <= ySource and y2Point >= yTarget)):
+			 				and ((y2Point >= ySource and y2Point <= yTarget) or (y2Point <= ySource and y2Point >= yTarget) \
+             						or (y4Point >= ySource and y4Point <= yTarget) or (y4Point <= ySource and y4Point >= yTarget)):
 					d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
 					d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
 					if d1 < d2:
@@ -182,50 +188,29 @@ class Utils:
 						yPoint = y4Point
 		 
 			# Trường hợp tia trùng với cạnh
-			# elif a == a1 and b == b1:
-			# 	d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
-			# 	d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
-			# 	if d1 < d2:
-			# 		distance = d1
-			# 		xPoint = topLeft[0]
-			# 		yPoint = topLeft[1]
-			# 	else:
-			# 		distance = d2
-			# 		xPoint = botLeft[0]
-			# 		yPoint = botLeft[1]
-			elif a == a2 and b == b2:
-				d1 = distance, Utils.distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
-				d2 = distance, Utils.distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
-				if d1 < d2:
-					distance = d1
-					xPoint = botLeft[0]
-					yPoint = botLeft[1]
-				else:
-					distance = d2
-					xPoint = botRight[0]
-					yPoint = botRight[1]
-			# elif a == a3 and b == b3:
-			# 	d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
-			# 	d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
-			# 	if d1 < d2:
-			# 		distance = d1
-			# 		xPoint = topRight[0]
-			# 		yPoint = topRight[1]
-			# 	else:
-			# 		distance = d2
-			# 		xPoint = botRight[0]
-			# 		yPoint = botRight[1]
-			elif a == a4 and b == b4:
-				d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
-				d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
-				if d1 < d2:
-					distance = d1
-					xPoint = topLeft[0]
-					yPoint = topLeft[1]
-				else:
-					distance = d2
-					xPoint = topRight[0]
-					yPoint = topRight[1]
+			elif a == a2:
+				if b == b2:
+					d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+					d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
+					if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+						distance = d1
+						xPoint = botLeft[0]
+						yPoint = botLeft[1]
+					elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+						distance = d2
+						xPoint = botRight[0]
+						yPoint = botRight[1]
+				elif b == b4:
+					d1 = Utils.distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+					d2 = Utils.distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+					if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+						distance = d1
+						xPoint = topLeft[0]
+						yPoint = topLeft[1]
+					elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+						distance = d2
+						xPoint = topRight[0]
+						yPoint = topRight[1]
 			else:
 		
 				x1Point = topLeft[0]
@@ -270,7 +255,7 @@ class Utils:
 							xPoint = x4Point
 							yPoint = y4Point
 			
-		# print(d)
+		# print("distance ", distance, xPoint, yPoint)
 		return distance, xPoint, yPoint
 		
 

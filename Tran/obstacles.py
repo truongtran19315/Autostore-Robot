@@ -80,6 +80,10 @@ class Obstacles():
                             [680, 407, 7],
                             [427, 608, 13],
                             [1222, 442, 95]]
+    # self.circleObstaclesArr = [
+    #                         [771, 503, 59]
+    #                         ]
+    
     
     self.circleObstacles = [] # to save all circle obstacles
     for obstacle in self.circleObstaclesArr:
@@ -99,6 +103,8 @@ class Obstacles():
                               [100, 104, 41, 26],
                               [101, 712, 35, 37],
                               [867, 471, 40, 22]]
+    # self.rectangleObstaclesArr = []
+    
     self.rectangleObstacles = [] # to save all rectangle obstacles
     for obstacle in self.rectangleObstaclesArr:
       rectangle = StaticObstacles(xCenter=obstacle[0], yCenter=obstacle[1], height=obstacle[2], width=obstacle[3], shape='rectangle')
@@ -110,6 +116,8 @@ class Obstacles():
                   [640, 708, 4, 1260],
                   [1268, 360, 700, 4],
                   [640, 8, 4, 1260]]
+    # self.wallArr = []
+    
     self.wall = []
     for obstacle in self.wallArr:
       rectangle = StaticObstacles(xCenter=obstacle[0], yCenter=obstacle[1], height=obstacle[2], width=obstacle[3], shape='wall')

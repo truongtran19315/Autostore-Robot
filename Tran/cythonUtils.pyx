@@ -17,6 +17,8 @@ cpdef tuple findLinePassTwoPoints(double xPointA, double yPointA, double xPointB
 		xPointB += 0.00001
 		c = True
 	cdef double a = (yPointB - yPointA) / (xPointB - xPointA)
+	if a > 5730 or a < -5730: # tan of 89.99 and 90.01 
+		c = True
 	cdef double b = yPointA - a * xPointA
 	return a, b, c
 
@@ -151,7 +153,8 @@ cpdef tuple getDistanceFromObstacle(obstacle, double xSource, double ySource, do
 			y4Point = a4*x4Point + b4
 		
 			if x2Point >= botLeft[0] and x2Point <= botRight[0] \
-				and ((y2Point >= ySource and y2Point <= yTarget) or (y2Point <= ySource and y2Point >= yTarget)):
+					and ((y2Point >= ySource and y2Point <= yTarget) or (y2Point <= ySource and y2Point >= yTarget) \
+								or (y4Point >= ySource and y4Point <= yTarget) or (y4Point <= ySource and y4Point >= yTarget)):
 				d1 = distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
 				d2 = distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
 				if d1 < d2:
@@ -164,50 +167,29 @@ cpdef tuple getDistanceFromObstacle(obstacle, double xSource, double ySource, do
 					yPoint = y4Point
 		
 		# Trường hợp tia trùng với cạnh
-		# elif a == a1 and b == b1:
-		# 	d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
-		# 	d2 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
-		# 	if d1 < d2:
-		# 		distance = d1
-		# 		xPoint = topLeft[0]
-		# 		yPoint = topLeft[1]
-		# 	else:
-		# 		distance = d2
-		# 		xPoint = botLeft[0]
-		# 		yPoint = botLeft[1]
-		elif a == a2 and b == b2:
-			d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
-			d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
-			if d1 < d2:
-				distance = d1
-				xPoint = botLeft[0]
-				yPoint = botLeft[1]
-			else:
-				distance = d2
-				xPoint = botRight[0]
-				yPoint = botRight[1]
-		# elif a == a3 and b == b3:
-		# 	d1 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
-		# 	d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
-		# 	if d1 < d2:
-		# 		distance = d1
-		# 		xPoint = topRight[0]
-		# 		yPoint = topRight[1]
-		# 	else:
-		# 		distance = d2
-		# 		xPoint = botRight[0]
-		# 		yPoint = botRight[1]
-		elif a == a4 and b == b4:
-			d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
-			d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
-			if d1 < d2:
-				distance = d1
-				xPoint = topLeft[0]
-				yPoint = topLeft[1]
-			else:
-				distance = d2
-				xPoint = topRight[0]
-				yPoint = topRight[1]
+		elif a == a2:
+			if b == b2:
+				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+				d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
+				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+					distance = d1
+					xPoint = botLeft[0]
+					yPoint = botLeft[1]
+				elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+					distance = d2
+					xPoint = botRight[0]
+					yPoint = botRight[1]
+			elif b == b4:
+				d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+				d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+					distance = d1
+					xPoint = topLeft[0]
+					yPoint = topLeft[1]
+				elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+					distance = d2
+					xPoint = topRight[0]
+					yPoint = topRight[1]
 		else:
 		
 			x1Point = topLeft[0]
