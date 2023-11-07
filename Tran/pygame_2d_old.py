@@ -136,7 +136,7 @@ class Robot(Car):
       if (isInRageLidar == True):
           obstaclesInRange.append(obstacle)
           
-    startAngle = 0
+    startAngle = self.currAngle
       
     for ray in range(PLAYER_SETTING.CASTED_RAYS):
       target_x = int(self.xPos - \
@@ -175,6 +175,8 @@ class Robot(Car):
       }
         
       startAngle += PLAYER_SETTING.STEP_ANGLE
+      if startAngle > 2*PLAYER_SETTING.PI:
+        startAngle = startAngle - 2*PLAYER_SETTING.PI
       
       
     
