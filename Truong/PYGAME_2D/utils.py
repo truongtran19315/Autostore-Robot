@@ -213,10 +213,10 @@ class Utils:
                     xPoint = botLeft[0]
                     yPoint = botLeft[1]
             elif a == a2 and b == b2:
-                d1 = distance, Utils.distanceBetweenTwoPoints(
-                    xSource, ySource, botLeft[0], botLeft[1])
-                d2 = distance, Utils.distanceBetweenTwoPoints(
-                    xSource, ySource, botRight[0], botRight[1])
+                d1 = min(distance, Utils.distanceBetweenTwoPoints(
+                    xSource, ySource, botLeft[0], botLeft[1]))
+                d2 = min(distance, Utils.distanceBetweenTwoPoints(
+                    xSource, ySource, botRight[0], botRight[1]))
                 if d1 < d2:
                     distance = d1
                     xPoint = botLeft[0]
