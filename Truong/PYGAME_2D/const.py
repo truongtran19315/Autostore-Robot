@@ -120,3 +120,18 @@ SECTIONS_LIDARSPACE = 4  # ! chia lidar thành 4 vùng 0,1,2,3
 ALPHA_SPACE = 20
 FWVELO_SPACE = 4
 RVELO_SPACE = 4
+
+# gamma = 0.99
+# alpha = 0.1
+# epsilon = 1
+# epsilon_decay = epsilon / 4000
+# n_epsilondes = 10000
+
+
+# Định nghĩa các tham số đầu vào
+n_epsilondes = 3  # Số lượng episode
+alpha = 0.1  # Hệ số học
+gamma = 0.9  # Hệ số giảm
+epsilon = 0.9  # Xác suất khám phá
+epsilon_decay = 0.01  # Hệ số giảm epsilon
+epsilon_min = 0.01  # Giá trị nhỏ nhất của epsilon
