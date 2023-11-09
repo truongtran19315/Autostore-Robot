@@ -34,7 +34,7 @@ class Car():
         self.currRotationVelocity = 0  # rotate left < 0, rotate right > 0
 
         self.currAngle = math.pi / 2
-        self.currAngle = math.pi  # ! Truong: vague
+        self.currAngle = math.pi
         self.accelerationForward = accelerationForward
         self.accelerationRotate = accelerationRotate
 
@@ -163,11 +163,13 @@ class Robot(Car):
             for obstacle in obstaclesInRange:
                 d, x, y = Utils.getDistanceFromObstacle(
                     obstacle, self.xPos, self.yPos, target_x, target_y)
-
-                if d < distance:
-                    distance = d
-                    target_x = x
-                    target_y = y
+                try:
+                    if d < distance:
+                        distance = d
+                        target_x = x
+                        target_y = y
+                except:
+                    print("hello")
 
             minDistance = min(distance, minDistance)
 
@@ -199,6 +201,7 @@ class Robot(Car):
             self.xPos, self.yPos, goal.xCenter, goal.yCenter)
         if distance < self.radiusObject + goal.radius:
             self.achieveGoal = True
+        # return distance
 
     def draw(self, screen):
         # cv2.circle(screen, (self.xPos, self.yPos), 370, COLOR.BLUE, -1)
@@ -277,8 +280,15 @@ class PyGame2D():
         self.robot.checkAchieveGoal(self.goal)
 
     def evaluate(self):
-        return 1  # ! test
-        pass
+        reward = 1
+        # if not self.robot.isAlive:
+        #     reward -= 10000
+        # elif self.robot.achieveGoal:
+        #     reward += 10000
+
+        # far_from_goal = self.robot.checkAchieveGoal(self.goal)
+        # reward -= far_from_goal
+        return reward
 
     def is_done(self):
         if ((not self.robot.isAlive) or self.robot.achieveGoal):
