@@ -129,9 +129,11 @@ RVELO_SPACE = 4
 
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 3  # Số lượng episode
+n_epsilondes = 1000  # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.9  # Hệ số giảm
 epsilon = 0.9  # Xác suất khám phá
-epsilon_decay = 0.01  # Hệ số giảm epsilon
-epsilon_min = 0.01  # Giá trị nhỏ nhất của epsilon
+epsilon_decay = 0.0001  # Hệ số giảm epsilon
+epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
+
+base_path = "C:/Users/truon/PROJECTS/PYTHON/do-an-hk231/DATA"
