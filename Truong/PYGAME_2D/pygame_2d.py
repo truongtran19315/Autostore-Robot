@@ -280,14 +280,40 @@ class PyGame2D():
         self.robot.checkAchieveGoal(self.goal)
 
     def evaluate(self):
-        reward = 1
-        # if not self.robot.isAlive:
-        #     reward -= 10000
-        # elif self.robot.achieveGoal:
-        #     reward += 10000
+        reward = 0
+        if not self.robot.isAlive:
+            reward -= 1000
 
-        # far_from_goal = self.robot.checkAchieveGoal(self.goal)
-        # reward -= far_from_goal
+        if self.robot.achieveGoal:
+            reward += 10000
+
+        distance = self.observe()[-4:]
+        if distance[1] == 0:
+            reward -= 150
+            # print('-150 huong thang co do dai = 0')
+        elif distance[1] == 1:
+            reward -= 70
+            # print('-70 huong thang co do dai = 1')
+        elif distance[1] == 2:
+            reward -= 20
+            # print('-20 huong thang co do dai = 2')
+        elif distance[1] > 2:
+            reward += 200
+            # print('+70 huong thang khong co vat can')
+
+        if distance[0] == 0 or distance[2] == 0:
+            reward -= 80
+            # print('-80 huong 2 ben co do dai = 0')
+        elif distance[0] == 1 or distance[2] == 1:
+            reward -= 40
+            # print('-40 huong 2 ben co do dai = 1')
+        elif distance[0] == 2 or distance[2] == 2:
+            reward -= 15
+            # print('-15 huong 2 ben co do dai = 2')
+        elif distance[0] > 2 or distance[2] > 2:
+            reward += 180
+            # print('+180 huong 2 ben khong co vat can')
+
         return reward
 
     def is_done(self):
@@ -371,20 +397,20 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-# screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-# game = PyGame2D(screen)
-# while True:
-#     screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-#     a = Utils.inputUser(game)
-#     game.view(screen)
-#     if not game.robot.isAlive:
-#         print("Oops!!!!!!!!!!")
-#         break
-#     elif game.robot.achieveGoal:
-#         print("Great!!!!!!!!!")
-#         break
-#     if a == False:
-#         cv2.imshow('min', game.saveMin["screen"])
-#         cv2.waitKey(0)
-#         break
-#     pass
+screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+game = PyGame2D(screen)
+while True:
+    screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+    a = Utils.inputUser(game)
+    game.view(screen)
+    if not game.robot.isAlive:
+        print("Oops!!!!!!!!!!")
+        break
+    elif game.robot.achieveGoal:
+        print("Great!!!!!!!!!")
+        break
+    if a == False:
+        cv2.imshow('min', game.saveMin["screen"])
+        cv2.waitKey(0)
+        break
+    pass
