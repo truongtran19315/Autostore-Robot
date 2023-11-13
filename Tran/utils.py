@@ -269,28 +269,32 @@ class Utils:
 		return (x - xCenter)**2 + (y - yCenter)**2 - radius**2
 	 
 	@staticmethod
-	def inputUser(game):
+	def inputUser():
 		key = cv2.waitKey(delay=1)
-		if key == ord('r'):
-			return False
 		# Rotate left ()
 		if key == ord('a'):
-			game.action(ACTIONS.TURN_LEFT_ACCELERATION)
+			# game.action(ACTIONS.TURN_LEFT_ACCELERATION)
+			return ACTIONS.TURN_LEFT_ACCELERATION
 		# Rotate right ()
 		elif key == ord('d'):
-			game.action(ACTIONS.TURN_RIGHT_ACCELERATION)
+			# game.action(ACTIONS.TURN_RIGHT_ACCELERATION)
+			return ACTIONS.TURN_RIGHT_ACCELERATION
 		# Increase forward velocity
 		elif key == ord('w'):
-			game.action(ACTIONS.FORWARD_ACCELERATION)
+			# game.action(ACTIONS.FORWARD_ACCELERATION)
+			return ACTIONS.FORWARD_ACCELERATION
 		elif key == ord('x'):
-			game.action(ACTIONS.BACKWARD_ACCELERATION)
+			# game.action(ACTIONS.BACKWARD_ACCELERATION)
+			return ACTIONS.BACKWARD_ACCELERATION
 		# Stop
 		elif key == ord('s'):
-			game.action(ACTIONS.STOP)
+			# game.action(ACTIONS.STOP)
+			return ACTIONS.STOP
+		elif key == 27:
+			return 27
 		else:
-			game.action(ACTIONS.DO_NOTHING)
-		
-		return True
+			# game.action(ACTIONS.DO_NOTHING)
+			return ACTIONS.DO_NOTHING
 					
 	@staticmethod
 	def debugError(params):

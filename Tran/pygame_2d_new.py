@@ -111,7 +111,7 @@ class Robot(Car):
       if (isInRageLidar == True):
           obstaclesInRange.append(obstacle)
           
-    startAngle = self.currAngle
+    startAngle = self.currAngle - PLAYER_SETTING.HALF_PI
       
     for ray in range(PLAYER_SETTING.CASTED_RAYS):
       target_x = self.xPos + \
@@ -201,6 +201,11 @@ class PyGame2D():
     self.obstacles = self._initObstacle()
     self.goal = Goal()
     self.robot = Robot()
+    
+    self.recordVideo = cv2.VideoWriter('Tran/recordVideo.avi',  
+                         cv2.VideoWriter_fourcc(*'MJPG'), 
+                         GAME_SETTING.FPS, 
+                         (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT)) 
     self.n = 0
     self.elapsed_time = 0
     self.totalTime = 0
@@ -280,33 +285,41 @@ class PyGame2D():
     lidarStateVector = np.array(lidars)
     return np.concatenate((infoStateVector, lidarStateVector)) 
   
-  def view(self, screen):  
+  def record(self, screen, input):
+    if input == 27:
+      self.recordVideo.release() 
+      cv2.imwrite("Tran/recordMin.jpg", self.saveMin["screen"])
+      cv2.imwrite("Tran/recordMax.jpg", self.saveMax["screen"])
+    else:
+      self.recordVideo.write(screen) 
+  
+  def view(self, screen, input):  
+    self.screen = screen
     self.obstacles.generateObstacles(screen)
     self.goal.draw(screen)
     self.robot.draw(screen)
     # print(self.obstacles.get())
     # cv2.circle(self.screen, (564, 96), 10, COLOR.CYAN, -1)
-    
+    self.record(screen, input)
     cv2.imshow('Enviroment', screen)
-    # cv2.waitKey(0)
-    
+    # cv2.waitKey(0)  
     
 screen = np.zeros((720, 1280, 3), dtype = np.uint8)      
 game = PyGame2D(screen)
 # game.view()
 while True:
     screen = np.zeros((720, 1280, 3), dtype = np.uint8)  
-    a = Utils.inputUser(game)   
-    game.view(screen)
+    input = Utils.inputUser()  
+    game.action(input) 
     if not game.robot.isAlive:
       print("Oops!!!!!!!!!!")
-      break
+      input = 27
     elif game.robot.achieveGoal:
       print("Great!!!!!!!!!")
-      break
-    if a == False:
-      cv2.imshow('min', game.saveMin["screen"])
-      cv2.waitKey(0)
+      input = 27
+    game.view(screen, input)
+    if input == 27:
+      cv2.destroyAllWindows()
       break
     pass
 
