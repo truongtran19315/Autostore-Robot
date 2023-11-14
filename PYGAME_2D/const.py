@@ -1,5 +1,6 @@
 import math
 import random
+import os
 
 
 class GAME_SETTING:
@@ -136,5 +137,6 @@ epsilon = 0.9  # Xác suất khám phá
 epsilon_decay = 0.0001  # Hệ số giảm epsilon
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
-base_path = "C:/Users/truon/PROJECTS/PYTHON/do-an-hk231/DATA"
+# base_path = "C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\PYGAME_2D\\DATA"
+base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
 COUNTER = 100
