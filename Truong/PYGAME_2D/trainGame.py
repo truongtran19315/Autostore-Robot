@@ -21,17 +21,20 @@ else:
 
 
 print(f"Shape of Q-table: {q_table.shape}")
-print(q_table)
+# print(q_table)
 print(f"Init state:  {game.reset()}")
 print("Start training....")
 
 
 for i in range(n_epsilondes):
+    print(f"Epsilon {i} :")
+    game.reset()
     reward_records = game.run_episode(q_table)
 
     with open(q_table_path, "wb") as f:
         pickle.dump(q_table, f)
-    print(f" Step {i} -- Q-table saved to: {q_table_path}")
+    print(f"Q-table saved to: {q_table_path}")
+    print("---------------------------------")
 
 
 folder_path_done = folder_path + "_DONE"

@@ -1,8 +1,6 @@
 import pygame_2d
 from const import *
 import numpy as np
-import os
-import pickle
 from logVersion import *
 
 
@@ -27,7 +25,7 @@ class Game:
             action = np.random.randint(0, ACTION_SPACE)
         return action
 
-    def run_episode(self, q_table, couter=100):
+    def run_episode(self, q_table, couter=COUNTER):
         done = False
         total_reward = 0
         state = self.game.observe()
@@ -45,12 +43,13 @@ class Game:
             total_reward += reward
 
             couter -= 1
-            print(f"Couter: {couter} -- reward: {reward}")
+            # print(f"Couter: {couter} -- reward: {reward}")
 
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
 
         reward_records.append(total_reward)
+        print(f"Total reward : {reward}")
         return reward_records
 
     def reset(self):

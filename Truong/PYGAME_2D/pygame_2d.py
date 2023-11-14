@@ -4,23 +4,9 @@ import math
 import random
 from obstacles import Obstacles, Goal
 from const import *
-from utils import *
+from utils import Utils
+import cythonUtils
 import time
-
-ENV_HEIGHT = 720
-ENV_WIDTH = 1280
-BLUE = (255, 0, 0)
-RED = (0, 0, 255)
-GREEN = (0, 255, 0)
-
-ZERO = 0
-INFINITY = 99999
-
-FORWARD_ACC = 0  # accelerate forward
-BACKWARD_ACC = 1
-LEFT_ACC = 2
-RIGHT_ACC = 3
-STOP = 4
 
 
 class Car():
@@ -34,12 +20,9 @@ class Car():
         self.currRotationVelocity = 0  # rotate left < 0, rotate right > 0
 
         self.currAngle = math.pi / 2
-        self.currAngle = math.pi
+        # self.currAngle = math.pi
         self.accelerationForward = accelerationForward
         self.accelerationRotate = accelerationRotate
-
-        self.xStep = 0
-        self.yStep = 0
 
         self.radiusObject = radiusObject
 
@@ -55,15 +38,17 @@ class Car():
             if self.currentForwardVelocity <= 0:
                 self.currentForwardVelocity = 0
         elif action == ACTIONS.TURN_LEFT_ACCELERATION:
-            if self.currRotationVelocity != self.minRotationVelocity:
-                self.currRotationVelocity = self.currRotationVelocity - self.accelerationRotate
-            if self.currRotationVelocity <= self.minRotationVelocity:
-                self.currRotationVelocity = self.minRotationVelocity
-        elif action == ACTIONS.TURN_RIGHT_ACCELERATION:
             if self.currRotationVelocity != self.maxRotationVelocity:
-                self.currRotationVelocity = self.currRotationVelocity + self.accelerationRotate
+                self.currRotationVelocity = round(
+                    self.currRotationVelocity + self.accelerationRotate, 2)
             if self.currRotationVelocity >= self.maxRotationVelocity:
                 self.currRotationVelocity = self.maxRotationVelocity
+        elif action == ACTIONS.TURN_RIGHT_ACCELERATION:
+            if self.currRotationVelocity != self.minRotationVelocity:
+                self.currRotationVelocity = round(
+                    self.currRotationVelocity - self.accelerationRotate, 2)
+            if self.currRotationVelocity <= self.minRotationVelocity:
+                self.currRotationVelocity = self.minRotationVelocity
         elif action == ACTIONS.STOP:
             self.currentForwardVelocity = 0
             self.currRotationVelocity = 0
@@ -83,19 +68,12 @@ class Car():
             self.currAngle = abs(self.currAngle - 2*math.pi)
 
         # Update the new position based on the velocity
-        self.yStep += math.cos(self.currAngle) * \
+        self.xPos += math.cos(self.currAngle) * \
             self.currentForwardVelocity * dt
-        self.xStep += -math.sin(self.currAngle) * \
+        self.yPos += -math.sin(self.currAngle) * \
             self.currentForwardVelocity * dt
 
-        if self.yStep >= 1 or self.yStep <= -1:
-            self.yPos += int(self.yStep)
-            self.yStep = 0
-        if self.xStep >= 1 or self.xStep <= -1:
-            self.xPos += int(self.xStep)
-            self.xStep = 0
-
-        # print(self.xPos, self.yPos, " current angle: ", self.currAngle, self.currentForwardVelocity)
+        # print(self.xPos, self.yPos, " current angle: ", self.currAngle, self.currentForwardVelocity, self.currRotationVelocity)
 
 
 class Robot(Car):
@@ -114,42 +92,35 @@ class Robot(Car):
         self.isAlive = True
         self.achieveGoal = False
         # 360 lidar signal around robot
-        # khởi tạo list (360) chứa độ dài tia lidar tới vật cản
-        self.lidarSignals = [INFINITY]*PLAYER_SETTING.CASTED_RAYS
-        # khởi tạo 360 đối tượng tia lidar tới vật cản, màu trắng
+        # lidar return distance from robot to obstacles in range - return infinity if not have obstacle
+        self.lidarSignals = [INT_INFINITY]*PLAYER_SETTING.CASTED_RAYS
         self.lidarVisualize = [{"source": {"x": self.xPos, "y": self.yPos},
                                 "target": {"x": self.xPos, "y": self.yPos},
                                 "color": COLOR.WHITE
                                 } for x in range(PLAYER_SETTING.CASTED_RAYS)]
+        # self.test = {2: [],
+        #              1: [],
+        #              0: []}
 
     def scanLidar(self, obstacles):
-        # Tạo một danh sách rỗng để lưu trữ các vật cản nằm trong phạm vi quét của lidar.
-        obstaclesInRange = []
-        minDistance = INT_INFINITY  # lưu khoảng cách tới vật cản gần nhất
+        obstaclesInRange = []  # to save obstacles in lidar range
+        minDistance = INT_INFINITY
 
-        # Duyệt qua ds các vật cản và kiểm trả xem khoảng cách có nằm trong phạm vi quét của lidar hay không
         for obstacle in obstacles.obstacles:
             distance = Utils.distanceBetweenTwoPoints(
                 self.xPos, self.yPos, obstacle.xCenter, obstacle.yCenter)
             isInRageLidar = distance < obstacle.radius + \
                 PLAYER_SETTING.RADIUS_LIDAR
             if (isInRageLidar == True):
-                # nếu có thì thêm vật cản này vào danh sách 'obstaclesInRange'
                 obstaclesInRange.append(obstacle)
 
-        startAngle = 0  # Khởi tạo góc bắt đầu cho tín hiệu lidar là 0 độ
+        startAngle = self.currAngle - PLAYER_SETTING.HALF_PI
 
-        # Tính toán vị trí đích của tia quét (target_x và target_y) khi "chạm" vật cản (không phải trung tâm)
         for ray in range(PLAYER_SETTING.CASTED_RAYS):
-            # target_x = int(self.xPos - \
-            #   math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-            # target_y = int(self.yPos + \
-            #   math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-
-            target_x = int(self.xPos +
-                           math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
-            target_y = int(self.yPos -
-                           math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR)
+            target_x = self.xPos + \
+                math.cos(startAngle) * PLAYER_SETTING.RADIUS_LIDAR
+            target_y = self.yPos - \
+                math.sin(startAngle) * PLAYER_SETTING.RADIUS_LIDAR
 
             self.lidarVisualize[ray]["source"] = {
                 "x": self.xPos,
@@ -161,15 +132,14 @@ class Robot(Car):
             y = INT_INFINITY
 
             for obstacle in obstaclesInRange:
-                d, x, y = Utils.getDistanceFromObstacle(
+                d, x, y = cythonUtils.getDistanceFromObstacle(
                     obstacle, self.xPos, self.yPos, target_x, target_y)
-                try:
-                    if d < distance:
-                        distance = d
-                        target_x = x
-                        target_y = y
-                except:
-                    print("hello")
+                # d, x, y = Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y)
+
+                if d < distance:
+                    distance = d
+                    target_x = x
+                    target_y = y
 
             minDistance = min(distance, minDistance)
 
@@ -185,15 +155,18 @@ class Robot(Car):
                 "y": target_y
             }
 
-            if ray in range(0, 45):
-                self.lidarVisualize[ray]["color"] = COLOR.PURPLE
-
             startAngle += PLAYER_SETTING.STEP_ANGLE
+            if startAngle > 2*PLAYER_SETTING.PI:
+                startAngle = startAngle - 2*PLAYER_SETTING.PI
 
+        # print(minDistance, minRay)
         return minDistance
 
+    def distanceConvert():
+        pass
+
     def checkCollision(self, distance):
-        if distance < self.radiusObject:
+        if distance <= self.radiusObject:
             self.isAlive = False
 
     def checkAchieveGoal(self, goal):
@@ -201,26 +174,29 @@ class Robot(Car):
             self.xPos, self.yPos, goal.xCenter, goal.yCenter)
         if distance < self.radiusObject + goal.radius:
             self.achieveGoal = True
-        # return distance
+
+        return distance
 
     def draw(self, screen):
         # cv2.circle(screen, (self.xPos, self.yPos), 370, COLOR.BLUE, -1)
 
         for lidarItemVisualize in self.lidarVisualize:
             color = lidarItemVisualize["color"]
-            srcX = lidarItemVisualize["source"]["x"]
-            srcY = lidarItemVisualize["source"]["y"]
-            targetX = lidarItemVisualize["target"]["x"]
-            targetY = lidarItemVisualize["target"]["y"]
+            srcX = int(lidarItemVisualize["source"]["x"])
+            srcY = int(lidarItemVisualize["source"]["y"])
+            targetX = int(lidarItemVisualize["target"]["x"])
+            targetY = int(lidarItemVisualize["target"]["y"])
             cv2.line(screen, (srcX, srcY), (targetX, targetY), color, 1)
 
-        target_x = int(self.xPos -
-                       math.sin(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3)
-        target_y = int(self.yPos +
+        target_x = int(self.xPos +
                        math.cos(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3)
-        cv2.line(screen, (self.xPos, self.yPos),
+        target_y = int(self.yPos -
+                       math.sin(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3)
+        xSource = int(self.xPos)
+        ySource = int(self.yPos)
+        cv2.line(screen, (xSource, ySource),
                  (target_x, target_y), COLOR.WHITE, 5)
-        cv2.circle(screen, (self.xPos, self.yPos),
+        cv2.circle(screen, (xSource, ySource),
                    self.radiusObject, COLOR.BLUE, -1)
 
 
@@ -230,11 +206,11 @@ class PyGame2D():
         self.obstacles = self._initObstacle()
         self.goal = Goal()
         self.robot = Robot()
-        self.n = 0  # Đếm số lần thực hiện hành động
+        self.n = 0
+        self.elapsed_time = 0
         self.totalTime = 0
         self.minTime = INT_INFINITY
         self.maxTime = 0
-        # Lưu trữ thông tin về trạng thái màn hình, hành động và trạng thái của robot khi thời gian thực hiện hành động tối thiểu và tối đa.
         self.saveMin = {"screen": self.screen,
                         "action": -1,
                         "robot": self.robot}
@@ -371,9 +347,6 @@ class PyGame2D():
         lidarStateVector = np.array(section_lidars_min)
         return np.concatenate((infoStateVector, lidarStateVector))
 
-    def update(self):
-        pass
-
     def view(self, screen):
         self.obstacles.generateObstacles(screen)
         self.goal.draw(screen)
@@ -397,20 +370,20 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-game = PyGame2D(screen)
-while True:
-    screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-    a = Utils.inputUser(game)
-    game.view(screen)
-    if not game.robot.isAlive:
-        print("Oops!!!!!!!!!!")
-        break
-    elif game.robot.achieveGoal:
-        print("Great!!!!!!!!!")
-        break
-    if a == False:
-        cv2.imshow('min', game.saveMin["screen"])
-        cv2.waitKey(0)
-        break
-    pass
+# screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+# game = PyGame2D(screen)
+# while True:
+#     screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+#     a = Utils.inputUser(game)
+#     game.view(screen)
+#     if not game.robot.isAlive:
+#         print("Oops!!!!!!!!!!")
+#         break
+#     elif game.robot.achieveGoal:
+#         print("Great!!!!!!!!!")
+#         break
+#     if a == False:
+#         cv2.imshow('min', game.saveMin["screen"])
+#         cv2.waitKey(0)
+#         break
+#     pass
