@@ -38,11 +38,11 @@ for i in range(n_epsilondes):
     plt.draw()
     plt.pause(0.1)
     plt.savefig(diagram_path)
-    print(f"Diagram saved to: {diagram_path}")
+    # print(f"Diagram saved to: {diagram_path}")
 
     with open(q_table_path, "wb") as f:
         pickle.dump(q_table, f)
-    print(f"Q-table saved to: {q_table_path}")
+    # print(f"Q-table saved to: {q_table_path}")
     print("-----------------------------------------------------")
 
 

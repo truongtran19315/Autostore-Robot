@@ -40,13 +40,14 @@ class Game:
         total_reward = 0
         state = self.game.observe()
         reward_records = []
-
+        action_records = []
         prev_state = None
         state_count_change = 0
+        print(f"Start Real Posion: {self.get_RealPosion()}")
         while not done and couter > 0:
             action = self.pick_sample(state, q_table)
+            action_records.append(action)
             next_state, reward, done = self.step(action)
-
             maxQ = np.max(q_table[tuple(next_state)])
             q_table[tuple(state)][action] += self.alpha * (reward +
                                                            self.gamma * maxQ - q_table[tuple(state)][action])
@@ -59,14 +60,16 @@ class Game:
             total_reward += reward
             reward_records.append(reward)
             couter -= 1
+        print(f"End Real Posion: {self.get_RealPosion()}")
 
         self.record_state_change.append(state_count_change)
 
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
-        print(f"Total reward each epsilon : {reward}")
-        print(f"List record reward epsilon : {reward_records}")
 
+        print(f"List record action: {action_records}")
+        print(f"Total reward each epsilon : {total_reward}")
+        # print(f"List record reward: {reward_records}")
         return total_reward
 
     def reset(self):
@@ -105,6 +108,8 @@ class Game:
         #     input = -1
         self.game.view(1)
 
+    def get_RealPosion(self):
+        return self.game.robot.xPos, self.game.robot.yPos
 
 # screen = np.zeros((720, 1280, 3), dtype=np.uint8)
 # game = Game(screen)
