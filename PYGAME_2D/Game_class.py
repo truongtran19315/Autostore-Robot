@@ -6,7 +6,7 @@ from logVersion import *
 import matplotlib.pyplot as plt
 import math
 from matplotlib.animation import FuncAnimation
-plt.ion()
+# plt.ion()
 
 
 class Game:
@@ -35,7 +35,7 @@ class Game:
             action = np.random.randint(0, ACTION_SPACE)
         return action
 
-    def run_episode(self, q_table, couter=COUNTER):
+    def run_episode(self, q_table, counter=COUNTER):
         done = False
         total_reward = 0
         state = self.game.observe()
@@ -44,7 +44,7 @@ class Game:
         prev_state = None
         state_count_change = 0
         print(f"Start Real Posion: {self.get_RealPosion()}")
-        while not done and couter > 0:
+        while not done and counter > 0:
             action = self.pick_sample(state, q_table)
             action_records.append(action)
             next_state, reward, done = self.step(action)
@@ -59,7 +59,7 @@ class Game:
             state = next_state
             total_reward += reward
             reward_records.append(reward)
-            couter -= 1
+            counter -= 1
         print(f"End Real Posion: {self.get_RealPosion()}")
 
         self.record_state_change.append(state_count_change)
@@ -67,7 +67,7 @@ class Game:
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
 
-        print(f"List record action: {action_records}")
+        # print(f"List record action: {action_records}")
         print(f"Total reward each epsilon : {total_reward}")
         # print(f"List record reward: {reward_records}")
         return total_reward
