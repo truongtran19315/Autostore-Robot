@@ -211,12 +211,6 @@ class PyGame2D():
     self.totalTime = 0
     self.minTime = INT_INFINITY
     self.maxTime = 0
-    self.saveMin = {"screen": self.screen,
-                    "action": -1,
-                    "robot": self.robot}
-    self.saveMax = {"screen": self.screen,
-                    "action": -1,
-                    "robot": self.robot}
   
   def _initObstacle(self):
     return Obstacles(self.screen)
@@ -238,18 +232,7 @@ class PyGame2D():
     
     self.totalTime += elapsed_time
     mediumTime = self.totalTime / self.n
-    if elapsed_time < self.minTime:
-      self.minTime = elapsed_time
-      self.saveMin["screen"] = self.screen
-      self.saveMin["action"] = action
-      self.saveMin["robot"] = self.robot
-      
-    if elapsed_time > self.maxTime:
-      self.maxTime = elapsed_time
-      self.saveMax["screen"] = self.screen
-      self.saveMax["action"] = action
-      self.saveMax["robot"] = self.robot
-    
+
     print (elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
 
     self.robot.checkCollision(distance)
@@ -288,13 +271,10 @@ class PyGame2D():
   def record(self, screen, input):
     if input == 27:
       self.recordVideo.release() 
-      cv2.imwrite("Tran/recordMin.jpg", self.saveMin["screen"])
-      cv2.imwrite("Tran/recordMax.jpg", self.saveMax["screen"])
     else:
       self.recordVideo.write(screen) 
   
   def view(self, screen, input):  
-    self.screen = screen
     self.obstacles.generateObstacles(screen)
     self.goal.draw(screen)
     self.robot.draw(screen)
@@ -303,6 +283,8 @@ class PyGame2D():
     self.record(screen, input)
     cv2.imshow('Enviroment', screen)
     # cv2.waitKey(0)  
+    
+    self.screen = screen
     
 screen = np.zeros((720, 1280, 3), dtype = np.uint8)      
 game = PyGame2D(screen)

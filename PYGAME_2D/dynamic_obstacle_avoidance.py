@@ -2,7 +2,7 @@ import gym
 from gym import spaces
 import numpy as np
 from pygame_2d import PyGame2D
-from const import *
+from consts import *
 
 
 class DynamicObstacleAvoidance(gym.Env):

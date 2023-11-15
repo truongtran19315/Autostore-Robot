@@ -1,5 +1,5 @@
 import cv2
-from const import *
+from consts import *
 import numpy as np
 import math
 
@@ -76,7 +76,7 @@ class Goal(StaticObstacles):
 
 
 class Obstacles():
-    def __init__(self, screen) -> None:
+    def __init__(self) -> None:
 
         self.obstacles = []  # to save all obstacles
 

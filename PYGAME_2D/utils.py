@@ -1,6 +1,6 @@
 import pygame
 import math
-from const import *
+from consts import *
 import cv2
 
 
@@ -312,7 +312,7 @@ class Utils:
         elif key == ord('s'):
             # game.action(ACTIONS.STOP)
             return ACTIONS.STOP
-        elif key == 27:
+        elif key == 27 or (key & 0xFF == 'q'):
             return 27
         else:
             # game.action(ACTIONS.DO_NOTHING)

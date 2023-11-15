@@ -1,4 +1,4 @@
-from const import *
+from consts import *
 from obstacles import *
 cimport cython
 from libc.math cimport sqrt
@@ -167,31 +167,29 @@ cpdef tuple getDistanceFromObstacle(obstacle, double xSource, double ySource, do
 					yPoint = y4Point
 		
 		# Trường hợp tia trùng với cạnh
-		elif a == a2:
-			if b == b2:
-				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
-				d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
-				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
-					distance = d1
-					xPoint = botLeft[0]
-					yPoint = botLeft[1]
-				elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
-					distance = d2
-					xPoint = botRight[0]
-					yPoint = botRight[1]
-			elif b == b4:
-				d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
-				d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
-				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
-					distance = d1
-					xPoint = topLeft[0]
-					yPoint = topLeft[1]
-				elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
-					distance = d2
-					xPoint = topRight[0]
-					yPoint = topRight[1]
-		else:
-		
+		elif a == a2 and b == b2:
+			d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+			d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
+			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+				distance = d1
+				xPoint = botLeft[0]
+				yPoint = botLeft[1]
+			elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+				distance = d2
+				xPoint = botRight[0]
+				yPoint = botRight[1]
+		elif a == a2 and b == b4:
+			d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+			d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+				distance = d1
+				xPoint = topLeft[0]
+				yPoint = topLeft[1]
+			elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+				distance = d2
+				xPoint = topRight[0]
+				yPoint = topRight[1]
+		else:	
 			x1Point = topLeft[0]
 			y1Point = a*x1Point + b
 			# print(x1Point, y1Point)

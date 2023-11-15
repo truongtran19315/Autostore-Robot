@@ -3,7 +3,7 @@ import numpy as np
 import math
 import random
 from obstacles import Obstacles, Goal
-from const import *
+from consts import *
 from utils import Utils
 import cythonUtils
 import time
@@ -99,9 +99,6 @@ class Robot(Car):
                                 "target": {"x": self.xPos, "y": self.yPos},
                                 "color": COLOR.WHITE
                                 } for x in range(PLAYER_SETTING.CASTED_RAYS)]
-        # self.test = {2: [],
-        #              1: [],
-        #              0: []}
 
     def scanLidar(self, obstacles):
         obstaclesInRange = []  # to save obstacles in lidar range
@@ -203,10 +200,11 @@ class Robot(Car):
 
 class PyGame2D():
     def __init__(self, screen) -> None:
-        self.screen = screen
+        self.env = screen
         self.obstacles = self._initObstacle()
         self.goal = Goal()
         self.robot = Robot()
+        self.generateEnvironment()
 
         self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
         self.recordVideo = cv2.VideoWriter(self.videoFile_path,
@@ -218,15 +216,9 @@ class PyGame2D():
         self.totalTime = 0
         self.minTime = INT_INFINITY
         self.maxTime = 0
-        self.saveMin = {"screen": self.screen,
-                        "action": -1,
-                        "robot": self.robot}
-        self.saveMax = {"screen": self.screen,
-                        "action": -1,
-                        "robot": self.robot}
 
     def _initObstacle(self):
-        return Obstacles(self.screen)
+        return Obstacles()
 
     def _obstacleMoves(self):
         pass
@@ -245,17 +237,6 @@ class PyGame2D():
 
         self.totalTime += elapsed_time
         mediumTime = self.totalTime / self.n
-        if elapsed_time < self.minTime:
-            self.minTime = elapsed_time
-            self.saveMin["screen"] = self.screen
-            self.saveMin["action"] = action
-            self.saveMin["robot"] = self.robot
-
-        if elapsed_time > self.maxTime:
-            self.maxTime = elapsed_time
-            self.saveMax["screen"] = self.screen
-            self.saveMax["action"] = action
-            self.saveMax["robot"] = self.robot
 
         # print(elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
 
@@ -357,15 +338,17 @@ class PyGame2D():
     def record(self, screen, input):
         if input == 27:
             self.recordVideo.release()
-            cv2.imwrite("Tran/recordMin.jpg", self.saveMin["screen"])
-            cv2.imwrite("Tran/recordMax.jpg", self.saveMax["screen"])
         else:
             self.recordVideo.write(screen)
+            
+    def generateEnvironment(self):
+        self.obstacles.generateObstacles(self.env)
+        self.goal.draw(self.env)
+        
 
-    def view(self, screen, input):
-        self.screen = screen
-        self.obstacles.generateObstacles(screen)
-        self.goal.draw(screen)
+    def view(self, input):
+        # self.screen = screen
+        screen = self.env.copy()
         self.robot.draw(screen)
         # print(self.obstacles.get())
         # cv2.circle(self.screen, (564, 96), 10, COLOR.CYAN, -1)
@@ -386,24 +369,21 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-# screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-# game = PyGame2D(screen)
-# # game.view()
-# while True:
-#     screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-#     input = Utils.inputUser()
-#     game.action(input)
-#     if not game.robot.isAlive:
-#         print("Oops!!!!!!!!!!")
-#         input = 27
-#     elif game.robot.achieveGoal:
-#         print("Great!!!!!!!!!")
-#         input = 27
-#     game.view(screen, input)
-#     if input == 27:
-#         cv2.destroyAllWindows()
-#         break
-#     pass
+screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+game = PyGame2D(screen)
+# game.view()
+while True:
+    input = Utils.inputUser()
+    game.action(input)
+    if not game.robot.isAlive:
+        print("Oops!!!!!!!!!!")
+        input = 27
+    elif game.robot.achieveGoal:
+        print("Great!!!!!!!!!")
+        input = 27
+    game.view(input)
+    if input == 27:
+        cv2.destroyAllWindows()
+        break
+    pass
 
-# # Utils.inputUser(game)
-# # game.view()

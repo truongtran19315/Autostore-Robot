@@ -1,5 +1,5 @@
 import pygame_2d
-from const import *
+from consts import *
 import numpy as np
 from logVersion import *
 import matplotlib.pyplot as plt
