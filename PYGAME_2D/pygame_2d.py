@@ -7,6 +7,7 @@ from const import *
 from utils import Utils
 import cythonUtils
 import time
+from logVersion import getlogVersion
 
 
 class Car():
@@ -207,7 +208,9 @@ class PyGame2D():
         self.goal = Goal()
         self.robot = Robot()
 
-        self.recordVideo = cv2.VideoWriter('Tran/recordVideo.avi',
+        self.video_path = os.path.join(
+            getlogVersion(base_path), 'recordVideo.avi')
+        self.recordVideo = cv2.VideoWriter(self.video_path,
                                            cv2.VideoWriter_fourcc(*'MJPG'),
                                            GAME_SETTING.FPS,
                                            (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
