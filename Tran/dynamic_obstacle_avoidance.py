@@ -1,8 +1,8 @@
 import gym
 from gym import spaces
 import numpy as np
-from pygame_2d_old import PyGame2D
-from const import *
+from pygame_2d import PyGame2D
+from consts import *
 
 
 class DynamicObstacleAvoidance(gym.Env):
@@ -17,13 +17,17 @@ class DynamicObstacleAvoidance(gym.Env):
         rVelo = (PLAYER_SETTING.MIN_ROTATION_VELO,
                  PLAYER_SETTING.MAX_ROTATION_VELO)
 
-        lowerBoundLidar = np.full((PLAYER_SETTING.CASTED_RAYS,), 0, dtype=float)
-        upperBoundLidar = np.full((PLAYER_SETTING.CASTED_RAYS,), INT_INFINITY, dtype=float)
+        lowerBoundLidar = np.full(
+            (PLAYER_SETTING.CASTED_RAYS,), 0, dtype=float)
+        upperBoundLidar = np.full(
+            (PLAYER_SETTING.CASTED_RAYS,), INT_INFINITY, dtype=float)
 
-        lowerBound = np.array([ratioLeft[0], alpha[0], fwVelo[0], rVelo[0]], dtype=float)
+        lowerBound = np.array(
+            [ratioLeft[0], alpha[0], fwVelo[0], rVelo[0]], dtype=float)
         lowerBound = np.concatenate((lowerBound, lowerBoundLidar))
 
-        upperBound = np.array([ratioLeft[1], alpha[1], fwVelo[1], rVelo[1]], dtype=float)
+        upperBound = np.array(
+            [ratioLeft[1], alpha[1], fwVelo[1], rVelo[1]], dtype=float)
         upperBound = np.concatenate((upperBound, upperBoundLidar))
 
         self.observation_space = spaces.Box(
@@ -37,7 +41,7 @@ class DynamicObstacleAvoidance(gym.Env):
         obs = self.pygame.observe()
         return obs
 
-    def step(self, action):        
+    def step(self, action):
         self.pygame.action(action)
         obs = self.pygame.observe()
         reward = self.pygame.evaluate()

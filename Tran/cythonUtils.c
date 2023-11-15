@@ -5307,561 +5307,559 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
     /* "cythonUtils.pyx":170
  * 
  * 		# Trng hp tia trng vi cnh
- * 		elif a == a2:             # <<<<<<<<<<<<<<
- * 			if b == b2:
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+ * 		elif a == a2 and b == b2:             # <<<<<<<<<<<<<<
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
  */
     __pyx_t_3 = PyObject_RichCompare(__pyx_v_a, __pyx_v_a2, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
-    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_6 < 0))) __PYX_ERR(0, 170, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 170, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (__pyx_t_9) {
+    } else {
+      __pyx_t_6 = __pyx_t_9;
+      goto __pyx_L52_bool_binop_done;
+    }
+    __pyx_t_3 = PyObject_RichCompare(__pyx_v_b, __pyx_v_b2, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 170, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_6 = __pyx_t_9;
+    __pyx_L52_bool_binop_done:;
     if (__pyx_t_6) {
 
       /* "cythonUtils.pyx":171
  * 		# Trng hp tia trng vi cnh
- * 		elif a == a2:
- * 			if b == b2:             # <<<<<<<<<<<<<<
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
+ * 		elif a == a2 and b == b2:
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])             # <<<<<<<<<<<<<<
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
  */
-      __pyx_t_3 = PyObject_RichCompare(__pyx_v_b, __pyx_v_b2, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 171, __pyx_L1_error)
-      __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_6 < 0))) __PYX_ERR(0, 171, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 171, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 171, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 171, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 171, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_2 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_7, __pyx_t_8, 0); if (unlikely(__pyx_t_2 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 171, __pyx_L1_error)
+      __pyx_v_d1 = __pyx_t_2;
+
+      /* "cythonUtils.pyx":172
+ * 		elif a == a2 and b == b2:
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])             # <<<<<<<<<<<<<<
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d1
+ */
+      __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_7 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_2, __pyx_t_8, 0); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L1_error)
+      __pyx_v_d2 = __pyx_t_7;
+
+      /* "cythonUtils.pyx":173
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
+ * 				distance = d1
+ * 				xPoint = botLeft[0]
+ */
+      __pyx_t_9 = (__pyx_v_d1 < __pyx_v_d2);
+      if (__pyx_t_9) {
+      } else {
+        __pyx_t_6 = __pyx_t_9;
+        goto __pyx_L55_bool_binop_done;
+      }
+      __pyx_t_3 = PyFloat_FromDouble(__pyx_v_d1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_PLAYER_SETTING); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_RADIUS_LIDAR); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_5 = PyObject_RichCompare(__pyx_t_3, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 173, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_6 = __pyx_t_9;
+      __pyx_L55_bool_binop_done:;
       if (__pyx_t_6) {
-
-        /* "cythonUtils.pyx":172
- * 		elif a == a2:
- * 			if b == b2:
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])             # <<<<<<<<<<<<<<
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
- */
-        __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_2 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_7, __pyx_t_8, 0); if (unlikely(__pyx_t_2 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L1_error)
-        __pyx_v_d1 = __pyx_t_2;
-
-        /* "cythonUtils.pyx":173
- * 			if b == b2:
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])             # <<<<<<<<<<<<<<
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d1
- */
-        __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 173, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 173, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_7 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_2, __pyx_t_8, 0); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 173, __pyx_L1_error)
-        __pyx_v_d2 = __pyx_t_7;
 
         /* "cythonUtils.pyx":174
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
- * 					distance = d1
- * 					xPoint = botLeft[0]
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d1             # <<<<<<<<<<<<<<
+ * 				xPoint = botLeft[0]
+ * 				yPoint = botLeft[1]
  */
-        __pyx_t_9 = (__pyx_v_d1 < __pyx_v_d2);
-        if (__pyx_t_9) {
-        } else {
-          __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L54_bool_binop_done;
-        }
-        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_d1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_PLAYER_SETTING); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 174, __pyx_L1_error)
+        __pyx_v_distance = __pyx_v_d1;
+
+        /* "cythonUtils.pyx":175
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d1
+ * 				xPoint = botLeft[0]             # <<<<<<<<<<<<<<
+ * 				yPoint = botLeft[1]
+ * 			elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+ */
+        __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 175, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_RADIUS_LIDAR); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 174, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
+        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 175, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_5 = PyObject_RichCompare(__pyx_t_3, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 174, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 174, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_6 = __pyx_t_9;
-        __pyx_L54_bool_binop_done:;
-        if (__pyx_t_6) {
+        __pyx_v_xPoint = __pyx_t_7;
 
-          /* "cythonUtils.pyx":175
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d1             # <<<<<<<<<<<<<<
- * 					xPoint = botLeft[0]
- * 					yPoint = botLeft[1]
+        /* "cythonUtils.pyx":176
+ * 				distance = d1
+ * 				xPoint = botLeft[0]
+ * 				yPoint = botLeft[1]             # <<<<<<<<<<<<<<
+ * 			elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d2
  */
-          __pyx_v_distance = __pyx_v_d1;
-
-          /* "cythonUtils.pyx":176
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d1
- * 					xPoint = botLeft[0]             # <<<<<<<<<<<<<<
- * 					yPoint = botLeft[1]
- * 				elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
- */
-          __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 176, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_5);
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 176, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-          __pyx_v_xPoint = __pyx_t_7;
-
-          /* "cythonUtils.pyx":177
- * 					distance = d1
- * 					xPoint = botLeft[0]
- * 					yPoint = botLeft[1]             # <<<<<<<<<<<<<<
- * 				elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d2
- */
-          __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 177, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_5);
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 177, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-          __pyx_v_yPoint = __pyx_t_7;
-
-          /* "cythonUtils.pyx":174
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
- * 					distance = d1
- * 					xPoint = botLeft[0]
- */
-          goto __pyx_L53;
-        }
-
-        /* "cythonUtils.pyx":178
- * 					xPoint = botLeft[0]
- * 					yPoint = botLeft[1]
- * 				elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
- * 					distance = d2
- * 					xPoint = botRight[0]
- */
-        __pyx_t_9 = (__pyx_v_d1 > __pyx_v_d2);
-        if (__pyx_t_9) {
-        } else {
-          __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L56_bool_binop_done;
-        }
-        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_d2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 178, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 176, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_PLAYER_SETTING); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 178, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_RADIUS_LIDAR); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 178, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = PyObject_RichCompare(__pyx_t_5, __pyx_t_3, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 178, __pyx_L1_error)
+        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 176, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 178, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_6 = __pyx_t_9;
-        __pyx_L56_bool_binop_done:;
-        if (__pyx_t_6) {
+        __pyx_v_yPoint = __pyx_t_7;
 
-          /* "cythonUtils.pyx":179
- * 					yPoint = botLeft[1]
- * 				elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d2             # <<<<<<<<<<<<<<
- * 					xPoint = botRight[0]
- * 					yPoint = botRight[1]
+        /* "cythonUtils.pyx":173
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
+ * 				distance = d1
+ * 				xPoint = botLeft[0]
  */
-          __pyx_v_distance = __pyx_v_d2;
-
-          /* "cythonUtils.pyx":180
- * 				elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d2
- * 					xPoint = botRight[0]             # <<<<<<<<<<<<<<
- * 					yPoint = botRight[1]
- * 			elif b == b4:
- */
-          __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_botRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 180, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 180, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __pyx_v_xPoint = __pyx_t_7;
-
-          /* "cythonUtils.pyx":181
- * 					distance = d2
- * 					xPoint = botRight[0]
- * 					yPoint = botRight[1]             # <<<<<<<<<<<<<<
- * 			elif b == b4:
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
- */
-          __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_botRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 181, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 181, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __pyx_v_yPoint = __pyx_t_7;
-
-          /* "cythonUtils.pyx":178
- * 					xPoint = botLeft[0]
- * 					yPoint = botLeft[1]
- * 				elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
- * 					distance = d2
- * 					xPoint = botRight[0]
- */
-        }
-        __pyx_L53:;
-
-        /* "cythonUtils.pyx":171
- * 		# Trng hp tia trng vi cnh
- * 		elif a == a2:
- * 			if b == b2:             # <<<<<<<<<<<<<<
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
- */
-        goto __pyx_L52;
+        goto __pyx_L54;
       }
 
-      /* "cythonUtils.pyx":182
- * 					xPoint = botRight[0]
- * 					yPoint = botRight[1]
- * 			elif b == b4:             # <<<<<<<<<<<<<<
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+      /* "cythonUtils.pyx":177
+ * 				xPoint = botLeft[0]
+ * 				yPoint = botLeft[1]
+ * 			elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
+ * 				distance = d2
+ * 				xPoint = botRight[0]
  */
-      __pyx_t_4 = PyObject_RichCompare(__pyx_v_b, __pyx_v_b4, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 182, __pyx_L1_error)
-      __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_6 < 0))) __PYX_ERR(0, 182, __pyx_L1_error)
+      __pyx_t_9 = (__pyx_v_d1 > __pyx_v_d2);
+      if (__pyx_t_9) {
+      } else {
+        __pyx_t_6 = __pyx_t_9;
+        goto __pyx_L57_bool_binop_done;
+      }
+      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_d2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 177, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_PLAYER_SETTING); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 177, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_RADIUS_LIDAR); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_4 = PyObject_RichCompare(__pyx_t_5, __pyx_t_3, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 177, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 177, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_6 = __pyx_t_9;
+      __pyx_L57_bool_binop_done:;
       if (__pyx_t_6) {
 
-        /* "cythonUtils.pyx":183
- * 					yPoint = botRight[1]
- * 			elif b == b4:
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])             # <<<<<<<<<<<<<<
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+        /* "cythonUtils.pyx":178
+ * 				yPoint = botLeft[1]
+ * 			elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d2             # <<<<<<<<<<<<<<
+ * 				xPoint = botRight[0]
+ * 				yPoint = botRight[1]
  */
-        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 183, __pyx_L1_error)
+        __pyx_v_distance = __pyx_v_d2;
+
+        /* "cythonUtils.pyx":179
+ * 			elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d2
+ * 				xPoint = botRight[0]             # <<<<<<<<<<<<<<
+ * 				yPoint = botRight[1]
+ * 		elif a == a2 and b == b4:
+ */
+        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_botRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 179, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
+        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 179, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 183, __pyx_L1_error)
+        __pyx_v_xPoint = __pyx_t_7;
+
+        /* "cythonUtils.pyx":180
+ * 				distance = d2
+ * 				xPoint = botRight[0]
+ * 				yPoint = botRight[1]             # <<<<<<<<<<<<<<
+ * 		elif a == a2 and b == b4:
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+ */
+        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_botRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 180, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
+        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 180, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_2 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_7, __pyx_t_8, 0); if (unlikely(__pyx_t_2 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
-        __pyx_v_d1 = __pyx_t_2;
+        __pyx_v_yPoint = __pyx_t_7;
 
-        /* "cythonUtils.pyx":184
- * 			elif b == b4:
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])             # <<<<<<<<<<<<<<
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d1
- */
-        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 184, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 184, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 184, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 184, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_7 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_2, __pyx_t_8, 0); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 184, __pyx_L1_error)
-        __pyx_v_d2 = __pyx_t_7;
-
-        /* "cythonUtils.pyx":185
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
- * 					distance = d1
- * 					xPoint = topLeft[0]
- */
-        __pyx_t_9 = (__pyx_v_d1 < __pyx_v_d2);
-        if (__pyx_t_9) {
-        } else {
-          __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L59_bool_binop_done;
-        }
-        __pyx_t_4 = PyFloat_FromDouble(__pyx_v_d1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 185, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_PLAYER_SETTING); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 185, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_RADIUS_LIDAR); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 185, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = PyObject_RichCompare(__pyx_t_4, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 185, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 185, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_6 = __pyx_t_9;
-        __pyx_L59_bool_binop_done:;
-        if (__pyx_t_6) {
-
-          /* "cythonUtils.pyx":186
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d1             # <<<<<<<<<<<<<<
- * 					xPoint = topLeft[0]
- * 					yPoint = topLeft[1]
- */
-          __pyx_v_distance = __pyx_v_d1;
-
-          /* "cythonUtils.pyx":187
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d1
- * 					xPoint = topLeft[0]             # <<<<<<<<<<<<<<
- * 					yPoint = topLeft[1]
- * 				elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
- */
-          __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 187, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 187, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          __pyx_v_xPoint = __pyx_t_7;
-
-          /* "cythonUtils.pyx":188
- * 					distance = d1
- * 					xPoint = topLeft[0]
- * 					yPoint = topLeft[1]             # <<<<<<<<<<<<<<
- * 				elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d2
- */
-          __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 188, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 188, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          __pyx_v_yPoint = __pyx_t_7;
-
-          /* "cythonUtils.pyx":185
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
- * 				if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
- * 					distance = d1
- * 					xPoint = topLeft[0]
- */
-          goto __pyx_L58;
-        }
-
-        /* "cythonUtils.pyx":189
- * 					xPoint = topLeft[0]
- * 					yPoint = topLeft[1]
- * 				elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
- * 					distance = d2
- * 					xPoint = topRight[0]
- */
-        __pyx_t_9 = (__pyx_v_d1 > __pyx_v_d2);
-        if (__pyx_t_9) {
-        } else {
-          __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L61_bool_binop_done;
-        }
-        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_d2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 189, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_PLAYER_SETTING); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 189, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_RADIUS_LIDAR); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 189, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_5 = PyObject_RichCompare(__pyx_t_3, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 189, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 189, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_6 = __pyx_t_9;
-        __pyx_L61_bool_binop_done:;
-        if (__pyx_t_6) {
-
-          /* "cythonUtils.pyx":190
- * 					yPoint = topLeft[1]
- * 				elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d2             # <<<<<<<<<<<<<<
- * 					xPoint = topRight[0]
- * 					yPoint = topRight[1]
- */
-          __pyx_v_distance = __pyx_v_d2;
-
-          /* "cythonUtils.pyx":191
- * 				elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
- * 					distance = d2
- * 					xPoint = topRight[0]             # <<<<<<<<<<<<<<
- * 					yPoint = topRight[1]
- * 		else:
- */
-          __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_5);
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 191, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-          __pyx_v_xPoint = __pyx_t_7;
-
-          /* "cythonUtils.pyx":192
- * 					distance = d2
- * 					xPoint = topRight[0]
- * 					yPoint = topRight[1]             # <<<<<<<<<<<<<<
- * 		else:
- * 
- */
-          __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 192, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_5);
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 192, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-          __pyx_v_yPoint = __pyx_t_7;
-
-          /* "cythonUtils.pyx":189
- * 					xPoint = topLeft[0]
- * 					yPoint = topLeft[1]
- * 				elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
- * 					distance = d2
- * 					xPoint = topRight[0]
- */
-        }
-        __pyx_L58:;
-
-        /* "cythonUtils.pyx":182
- * 					xPoint = botRight[0]
- * 					yPoint = botRight[1]
- * 			elif b == b4:             # <<<<<<<<<<<<<<
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
- * 				d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+        /* "cythonUtils.pyx":177
+ * 				xPoint = botLeft[0]
+ * 				yPoint = botLeft[1]
+ * 			elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
+ * 				distance = d2
+ * 				xPoint = botRight[0]
  */
       }
-      __pyx_L52:;
+      __pyx_L54:;
 
       /* "cythonUtils.pyx":170
  * 
  * 		# Trng hp tia trng vi cnh
- * 		elif a == a2:             # <<<<<<<<<<<<<<
- * 			if b == b2:
- * 				d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+ * 		elif a == a2 and b == b2:             # <<<<<<<<<<<<<<
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, botLeft[0], botLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, botRight[0], botRight[1])
  */
       goto __pyx_L39;
     }
 
-    /* "cythonUtils.pyx":195
+    /* "cythonUtils.pyx":181
+ * 				xPoint = botRight[0]
+ * 				yPoint = botRight[1]
+ * 		elif a == a2 and b == b4:             # <<<<<<<<<<<<<<
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+ */
+    __pyx_t_4 = PyObject_RichCompare(__pyx_v_a, __pyx_v_a2, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 181, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 181, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (__pyx_t_9) {
+    } else {
+      __pyx_t_6 = __pyx_t_9;
+      goto __pyx_L59_bool_binop_done;
+    }
+    __pyx_t_4 = PyObject_RichCompare(__pyx_v_b, __pyx_v_b4, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 181, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 181, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_6 = __pyx_t_9;
+    __pyx_L59_bool_binop_done:;
+    if (__pyx_t_6) {
+
+      /* "cythonUtils.pyx":182
+ * 				yPoint = botRight[1]
+ * 		elif a == a2 and b == b4:
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])             # <<<<<<<<<<<<<<
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+ */
+      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 182, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 182, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 182, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 182, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_2 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_7, __pyx_t_8, 0); if (unlikely(__pyx_t_2 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 182, __pyx_L1_error)
+      __pyx_v_d1 = __pyx_t_2;
+
+      /* "cythonUtils.pyx":183
+ * 		elif a == a2 and b == b4:
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])             # <<<<<<<<<<<<<<
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d1
+ */
+      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 183, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 183, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_7 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_2, __pyx_t_8, 0); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
+      __pyx_v_d2 = __pyx_t_7;
+
+      /* "cythonUtils.pyx":184
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
+ * 				distance = d1
+ * 				xPoint = topLeft[0]
+ */
+      __pyx_t_9 = (__pyx_v_d1 < __pyx_v_d2);
+      if (__pyx_t_9) {
+      } else {
+        __pyx_t_6 = __pyx_t_9;
+        goto __pyx_L62_bool_binop_done;
+      }
+      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_d1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 184, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_PLAYER_SETTING); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 184, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_RADIUS_LIDAR); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 184, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = PyObject_RichCompare(__pyx_t_4, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 184, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 184, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_6 = __pyx_t_9;
+      __pyx_L62_bool_binop_done:;
+      if (__pyx_t_6) {
+
+        /* "cythonUtils.pyx":185
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d1             # <<<<<<<<<<<<<<
+ * 				xPoint = topLeft[0]
+ * 				yPoint = topLeft[1]
+ */
+        __pyx_v_distance = __pyx_v_d1;
+
+        /* "cythonUtils.pyx":186
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d1
+ * 				xPoint = topLeft[0]             # <<<<<<<<<<<<<<
+ * 				yPoint = topLeft[1]
+ * 			elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+ */
+        __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 186, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 186, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_v_xPoint = __pyx_t_7;
+
+        /* "cythonUtils.pyx":187
+ * 				distance = d1
+ * 				xPoint = topLeft[0]
+ * 				yPoint = topLeft[1]             # <<<<<<<<<<<<<<
+ * 			elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d2
+ */
+        __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 187, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 187, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_v_yPoint = __pyx_t_7;
+
+        /* "cythonUtils.pyx":184
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+ * 			if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
+ * 				distance = d1
+ * 				xPoint = topLeft[0]
+ */
+        goto __pyx_L61;
+      }
+
+      /* "cythonUtils.pyx":188
+ * 				xPoint = topLeft[0]
+ * 				yPoint = topLeft[1]
+ * 			elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
+ * 				distance = d2
+ * 				xPoint = topRight[0]
+ */
+      __pyx_t_9 = (__pyx_v_d1 > __pyx_v_d2);
+      if (__pyx_t_9) {
+      } else {
+        __pyx_t_6 = __pyx_t_9;
+        goto __pyx_L64_bool_binop_done;
+      }
+      __pyx_t_3 = PyFloat_FromDouble(__pyx_v_d2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 188, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_PLAYER_SETTING); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 188, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_RADIUS_LIDAR); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 188, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_5 = PyObject_RichCompare(__pyx_t_3, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 188, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 188, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_6 = __pyx_t_9;
+      __pyx_L64_bool_binop_done:;
+      if (__pyx_t_6) {
+
+        /* "cythonUtils.pyx":189
+ * 				yPoint = topLeft[1]
+ * 			elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d2             # <<<<<<<<<<<<<<
+ * 				xPoint = topRight[0]
+ * 				yPoint = topRight[1]
+ */
+        __pyx_v_distance = __pyx_v_d2;
+
+        /* "cythonUtils.pyx":190
+ * 			elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+ * 				distance = d2
+ * 				xPoint = topRight[0]             # <<<<<<<<<<<<<<
+ * 				yPoint = topRight[1]
  * 		else:
- * 
+ */
+        __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 190, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 190, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __pyx_v_xPoint = __pyx_t_7;
+
+        /* "cythonUtils.pyx":191
+ * 				distance = d2
+ * 				xPoint = topRight[0]
+ * 				yPoint = topRight[1]             # <<<<<<<<<<<<<<
+ * 		else:
+ * 			x1Point = topLeft[0]
+ */
+        __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 191, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __pyx_v_yPoint = __pyx_t_7;
+
+        /* "cythonUtils.pyx":188
+ * 				xPoint = topLeft[0]
+ * 				yPoint = topLeft[1]
+ * 			elif d1 > d2  and d2 <= PLAYER_SETTING.RADIUS_LIDAR:             # <<<<<<<<<<<<<<
+ * 				distance = d2
+ * 				xPoint = topRight[0]
+ */
+      }
+      __pyx_L61:;
+
+      /* "cythonUtils.pyx":181
+ * 				xPoint = botRight[0]
+ * 				yPoint = botRight[1]
+ * 		elif a == a2 and b == b4:             # <<<<<<<<<<<<<<
+ * 			d1 = distanceBetweenTwoPoints(xSource, ySource, topLeft[0], topLeft[1])
+ * 			d2 = distanceBetweenTwoPoints(xSource, ySource, topRight[0], topRight[1])
+ */
+      goto __pyx_L39;
+    }
+
+    /* "cythonUtils.pyx":193
+ * 				yPoint = topRight[1]
+ * 		else:
  * 			x1Point = topLeft[0]             # <<<<<<<<<<<<<<
  * 			y1Point = a*x1Point + b
  * 			# print(x1Point, y1Point)
  */
     /*else*/ {
-      __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 195, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 193, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_v_x1Point = __pyx_t_5;
       __pyx_t_5 = 0;
 
-      /* "cythonUtils.pyx":196
- * 
+      /* "cythonUtils.pyx":194
+ * 		else:
  * 			x1Point = topLeft[0]
  * 			y1Point = a*x1Point + b             # <<<<<<<<<<<<<<
  * 			# print(x1Point, y1Point)
  * 			# print(y1Point == x1Point * a1 + b1)
  */
-      __pyx_t_5 = PyNumber_Multiply(__pyx_v_a, __pyx_v_x1Point); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 196, __pyx_L1_error)
+      __pyx_t_5 = PyNumber_Multiply(__pyx_v_a, __pyx_v_x1Point); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 194, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_b); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 196, __pyx_L1_error)
+      __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_b); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 194, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_y1Point = __pyx_t_4;
       __pyx_t_4 = 0;
 
-      /* "cythonUtils.pyx":199
+      /* "cythonUtils.pyx":197
  * 			# print(x1Point, y1Point)
  * 			# print(y1Point == x1Point * a1 + b1)
  * 			if y1Point >= topLeft[1] and y1Point <= botLeft[1] \             # <<<<<<<<<<<<<<
  * 				and ((x1Point >= xSource and x1Point <= xTarget) or (x1Point <= xSource and x1Point >= xTarget)):
  * 				# print(x1Point, y1Point, topLeft[1], botLeft[1], xSource, ySource, xTarget, yTarget)
  */
-      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 199, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = PyObject_RichCompare(__pyx_v_y1Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 199, __pyx_L1_error)
+      __pyx_t_5 = PyObject_RichCompare(__pyx_v_y1Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 199, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       if (__pyx_t_9) {
       } else {
         __pyx_t_6 = __pyx_t_9;
-        goto __pyx_L64_bool_binop_done;
+        goto __pyx_L67_bool_binop_done;
       }
 
-      /* "cythonUtils.pyx":200
+      /* "cythonUtils.pyx":198
  * 			# print(y1Point == x1Point * a1 + b1)
  * 			if y1Point >= topLeft[1] and y1Point <= botLeft[1] \
  * 				and ((x1Point >= xSource and x1Point <= xTarget) or (x1Point <= xSource and x1Point >= xTarget)):             # <<<<<<<<<<<<<<
  * 				# print(x1Point, y1Point, topLeft[1], botLeft[1], xSource, ySource, xTarget, yTarget)
  * 				distance =  distanceBetweenTwoPoints(xSource, ySource, x1Point, y1Point)
  */
-      __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 199, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_4 = PyObject_RichCompare(__pyx_v_y1Point, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 199, __pyx_L1_error)
+      __pyx_t_4 = PyObject_RichCompare(__pyx_v_y1Point, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "cythonUtils.pyx":199
+      /* "cythonUtils.pyx":197
  * 			# print(x1Point, y1Point)
  * 			# print(y1Point == x1Point * a1 + b1)
  * 			if y1Point >= topLeft[1] and y1Point <= botLeft[1] \             # <<<<<<<<<<<<<<
  * 				and ((x1Point >= xSource and x1Point <= xTarget) or (x1Point <= xSource and x1Point >= xTarget)):
  * 				# print(x1Point, y1Point, topLeft[1], botLeft[1], xSource, ySource, xTarget, yTarget)
  */
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 199, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (__pyx_t_9) {
       } else {
         __pyx_t_6 = __pyx_t_9;
-        goto __pyx_L64_bool_binop_done;
+        goto __pyx_L67_bool_binop_done;
       }
 
-      /* "cythonUtils.pyx":200
+      /* "cythonUtils.pyx":198
  * 			# print(y1Point == x1Point * a1 + b1)
  * 			if y1Point >= topLeft[1] and y1Point <= botLeft[1] \
  * 				and ((x1Point >= xSource and x1Point <= xTarget) or (x1Point <= xSource and x1Point >= xTarget)):             # <<<<<<<<<<<<<<
  * 				# print(x1Point, y1Point, topLeft[1], botLeft[1], xSource, ySource, xTarget, yTarget)
  * 				distance =  distanceBetweenTwoPoints(xSource, ySource, x1Point, y1Point)
  */
-      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = PyObject_RichCompare(__pyx_v_x1Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_5 = PyObject_RichCompare(__pyx_v_x1Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       if (!__pyx_t_9) {
-        goto __pyx_L67_next_or;
+        goto __pyx_L70_next_or;
       } else {
       }
-      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_4 = PyObject_RichCompare(__pyx_v_x1Point, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_4 = PyObject_RichCompare(__pyx_v_x1Point, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (!__pyx_t_9) {
       } else {
         __pyx_t_6 = __pyx_t_9;
-        goto __pyx_L64_bool_binop_done;
+        goto __pyx_L67_bool_binop_done;
       }
-      __pyx_L67_next_or:;
-      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_L70_next_or:;
+      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = PyObject_RichCompare(__pyx_v_x1Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_5 = PyObject_RichCompare(__pyx_v_x1Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       if (__pyx_t_9) {
       } else {
         __pyx_t_6 = __pyx_t_9;
-        goto __pyx_L64_bool_binop_done;
+        goto __pyx_L67_bool_binop_done;
       }
-      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_4 = PyObject_RichCompare(__pyx_v_x1Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_4 = PyObject_RichCompare(__pyx_v_x1Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_6 = __pyx_t_9;
-      __pyx_L64_bool_binop_done:;
+      __pyx_L67_bool_binop_done:;
 
-      /* "cythonUtils.pyx":199
+      /* "cythonUtils.pyx":197
  * 			# print(x1Point, y1Point)
  * 			# print(y1Point == x1Point * a1 + b1)
  * 			if y1Point >= topLeft[1] and y1Point <= botLeft[1] \             # <<<<<<<<<<<<<<
@@ -5870,39 +5868,39 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
       if (__pyx_t_6) {
 
-        /* "cythonUtils.pyx":202
+        /* "cythonUtils.pyx":200
  * 				and ((x1Point >= xSource and x1Point <= xTarget) or (x1Point <= xSource and x1Point >= xTarget)):
  * 				# print(x1Point, y1Point, topLeft[1], botLeft[1], xSource, ySource, xTarget, yTarget)
  * 				distance =  distanceBetweenTwoPoints(xSource, ySource, x1Point, y1Point)             # <<<<<<<<<<<<<<
  * 				xPoint = x1Point
  * 				yPoint = y1Point
  */
-        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_x1Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 202, __pyx_L1_error)
-        __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_y1Point); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 202, __pyx_L1_error)
-        __pyx_t_2 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_7, __pyx_t_8, 0); if (unlikely(__pyx_t_2 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_x1Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 200, __pyx_L1_error)
+        __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_y1Point); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 200, __pyx_L1_error)
+        __pyx_t_2 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_7, __pyx_t_8, 0); if (unlikely(__pyx_t_2 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 200, __pyx_L1_error)
         __pyx_v_distance = __pyx_t_2;
 
-        /* "cythonUtils.pyx":203
+        /* "cythonUtils.pyx":201
  * 				# print(x1Point, y1Point, topLeft[1], botLeft[1], xSource, ySource, xTarget, yTarget)
  * 				distance =  distanceBetweenTwoPoints(xSource, ySource, x1Point, y1Point)
  * 				xPoint = x1Point             # <<<<<<<<<<<<<<
  * 				yPoint = y1Point
  * 
  */
-        __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_x1Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 203, __pyx_L1_error)
+        __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_x1Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 201, __pyx_L1_error)
         __pyx_v_xPoint = __pyx_t_2;
 
-        /* "cythonUtils.pyx":204
+        /* "cythonUtils.pyx":202
  * 				distance =  distanceBetweenTwoPoints(xSource, ySource, x1Point, y1Point)
  * 				xPoint = x1Point
  * 				yPoint = y1Point             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_y1Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 204, __pyx_L1_error)
+        __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_y1Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 202, __pyx_L1_error)
         __pyx_v_yPoint = __pyx_t_2;
 
-        /* "cythonUtils.pyx":199
+        /* "cythonUtils.pyx":197
  * 			# print(x1Point, y1Point)
  * 			# print(y1Point == x1Point * a1 + b1)
  * 			if y1Point >= topLeft[1] and y1Point <= botLeft[1] \             # <<<<<<<<<<<<<<
@@ -5911,129 +5909,129 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
       }
 
-      /* "cythonUtils.pyx":207
+      /* "cythonUtils.pyx":205
  * 
  * 
  * 			x3Point = topRight[0]             # <<<<<<<<<<<<<<
  * 			y3Point = a*x3Point + b
  * 			if y3Point >= topRight[1] and y3Point <= botRight[1] \
  */
-      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 207, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 205, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __pyx_v_x3Point = __pyx_t_4;
       __pyx_t_4 = 0;
 
-      /* "cythonUtils.pyx":208
+      /* "cythonUtils.pyx":206
  * 
  * 			x3Point = topRight[0]
  * 			y3Point = a*x3Point + b             # <<<<<<<<<<<<<<
  * 			if y3Point >= topRight[1] and y3Point <= botRight[1] \
  * 				and ((x3Point >= xSource and x3Point <= xTarget) or (x3Point <= xSource and x3Point >= xTarget)):
  */
-      __pyx_t_4 = PyNumber_Multiply(__pyx_v_a, __pyx_v_x3Point); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
+      __pyx_t_4 = PyNumber_Multiply(__pyx_v_a, __pyx_v_x3Point); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 206, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_b); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 208, __pyx_L1_error)
+      __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_b); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 206, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_v_y3Point = __pyx_t_5;
       __pyx_t_5 = 0;
 
-      /* "cythonUtils.pyx":209
+      /* "cythonUtils.pyx":207
  * 			x3Point = topRight[0]
  * 			y3Point = a*x3Point + b
  * 			if y3Point >= topRight[1] and y3Point <= botRight[1] \             # <<<<<<<<<<<<<<
  * 				and ((x3Point >= xSource and x3Point <= xTarget) or (x3Point <= xSource and x3Point >= xTarget)):
  * 				d = distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point)
  */
-      __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 209, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 207, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_4 = PyObject_RichCompare(__pyx_v_y3Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 209, __pyx_L1_error)
+      __pyx_t_4 = PyObject_RichCompare(__pyx_v_y3Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 207, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 209, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 207, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (__pyx_t_9) {
       } else {
         __pyx_t_6 = __pyx_t_9;
-        goto __pyx_L71_bool_binop_done;
+        goto __pyx_L74_bool_binop_done;
       }
 
-      /* "cythonUtils.pyx":210
+      /* "cythonUtils.pyx":208
  * 			y3Point = a*x3Point + b
  * 			if y3Point >= topRight[1] and y3Point <= botRight[1] \
  * 				and ((x3Point >= xSource and x3Point <= xTarget) or (x3Point <= xSource and x3Point >= xTarget)):             # <<<<<<<<<<<<<<
  * 				d = distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point)
  * 				if d < distance:
  */
-      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_botRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 209, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_botRight, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 207, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = PyObject_RichCompare(__pyx_v_y3Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 209, __pyx_L1_error)
+      __pyx_t_5 = PyObject_RichCompare(__pyx_v_y3Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 207, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "cythonUtils.pyx":209
+      /* "cythonUtils.pyx":207
  * 			x3Point = topRight[0]
  * 			y3Point = a*x3Point + b
  * 			if y3Point >= topRight[1] and y3Point <= botRight[1] \             # <<<<<<<<<<<<<<
  * 				and ((x3Point >= xSource and x3Point <= xTarget) or (x3Point <= xSource and x3Point >= xTarget)):
  * 				d = distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point)
  */
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 209, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 207, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       if (__pyx_t_9) {
       } else {
         __pyx_t_6 = __pyx_t_9;
-        goto __pyx_L71_bool_binop_done;
+        goto __pyx_L74_bool_binop_done;
       }
 
-      /* "cythonUtils.pyx":210
+      /* "cythonUtils.pyx":208
  * 			y3Point = a*x3Point + b
  * 			if y3Point >= topRight[1] and y3Point <= botRight[1] \
  * 				and ((x3Point >= xSource and x3Point <= xTarget) or (x3Point <= xSource and x3Point >= xTarget)):             # <<<<<<<<<<<<<<
  * 				d = distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point)
  * 				if d < distance:
  */
-      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_4 = PyObject_RichCompare(__pyx_v_x3Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_4 = PyObject_RichCompare(__pyx_v_x3Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (!__pyx_t_9) {
-        goto __pyx_L74_next_or;
+        goto __pyx_L77_next_or;
       } else {
       }
-      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = PyObject_RichCompare(__pyx_v_x3Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_5 = PyObject_RichCompare(__pyx_v_x3Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       if (!__pyx_t_9) {
       } else {
         __pyx_t_6 = __pyx_t_9;
-        goto __pyx_L71_bool_binop_done;
+        goto __pyx_L74_bool_binop_done;
       }
-      __pyx_L74_next_or:;
-      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_L77_next_or:;
+      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_4 = PyObject_RichCompare(__pyx_v_x3Point, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_4 = PyObject_RichCompare(__pyx_v_x3Point, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (__pyx_t_9) {
       } else {
         __pyx_t_6 = __pyx_t_9;
-        goto __pyx_L71_bool_binop_done;
+        goto __pyx_L74_bool_binop_done;
       }
-      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = PyObject_RichCompare(__pyx_v_x3Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_5 = PyObject_RichCompare(__pyx_v_x3Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 208, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_6 = __pyx_t_9;
-      __pyx_L71_bool_binop_done:;
+      __pyx_L74_bool_binop_done:;
 
-      /* "cythonUtils.pyx":209
+      /* "cythonUtils.pyx":207
  * 			x3Point = topRight[0]
  * 			y3Point = a*x3Point + b
  * 			if y3Point >= topRight[1] and y3Point <= botRight[1] \             # <<<<<<<<<<<<<<
@@ -6042,19 +6040,19 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
       if (__pyx_t_6) {
 
-        /* "cythonUtils.pyx":211
+        /* "cythonUtils.pyx":209
  * 			if y3Point >= topRight[1] and y3Point <= botRight[1] \
  * 				and ((x3Point >= xSource and x3Point <= xTarget) or (x3Point <= xSource and x3Point >= xTarget)):
  * 				d = distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point)             # <<<<<<<<<<<<<<
  * 				if d < distance:
  * 					distance = d
  */
-        __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_x3Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L1_error)
-        __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_y3Point); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L1_error)
-        __pyx_t_7 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_2, __pyx_t_8, 0); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L1_error)
+        __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_x3Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
+        __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_y3Point); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
+        __pyx_t_7 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_2, __pyx_t_8, 0); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
         __pyx_v_d = __pyx_t_7;
 
-        /* "cythonUtils.pyx":212
+        /* "cythonUtils.pyx":210
  * 				and ((x3Point >= xSource and x3Point <= xTarget) or (x3Point <= xSource and x3Point >= xTarget)):
  * 				d = distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point)
  * 				if d < distance:             # <<<<<<<<<<<<<<
@@ -6064,7 +6062,7 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
         __pyx_t_6 = (__pyx_v_d < __pyx_v_distance);
         if (__pyx_t_6) {
 
-          /* "cythonUtils.pyx":213
+          /* "cythonUtils.pyx":211
  * 				d = distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point)
  * 				if d < distance:
  * 					distance = d             # <<<<<<<<<<<<<<
@@ -6073,27 +6071,27 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
           __pyx_v_distance = __pyx_v_d;
 
-          /* "cythonUtils.pyx":214
+          /* "cythonUtils.pyx":212
  * 				if d < distance:
  * 					distance = d
  * 					xPoint = x3Point             # <<<<<<<<<<<<<<
  * 					yPoint = y3Point
  * 
  */
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_x3Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 214, __pyx_L1_error)
+          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_x3Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L1_error)
           __pyx_v_xPoint = __pyx_t_7;
 
-          /* "cythonUtils.pyx":215
+          /* "cythonUtils.pyx":213
  * 					distance = d
  * 					xPoint = x3Point
  * 					yPoint = y3Point             # <<<<<<<<<<<<<<
  * 
  * 			if a - a2 != 0 and a - a4 != 0:
  */
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_y3Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 215, __pyx_L1_error)
+          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_y3Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 213, __pyx_L1_error)
           __pyx_v_yPoint = __pyx_t_7;
 
-          /* "cythonUtils.pyx":212
+          /* "cythonUtils.pyx":210
  * 				and ((x3Point >= xSource and x3Point <= xTarget) or (x3Point <= xSource and x3Point >= xTarget)):
  * 				d = distanceBetweenTwoPoints(xSource, ySource, x3Point, y3Point)
  * 				if d < distance:             # <<<<<<<<<<<<<<
@@ -6102,7 +6100,7 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
         }
 
-        /* "cythonUtils.pyx":209
+        /* "cythonUtils.pyx":207
  * 			x3Point = topRight[0]
  * 			y3Point = a*x3Point + b
  * 			if y3Point >= topRight[1] and y3Point <= botRight[1] \             # <<<<<<<<<<<<<<
@@ -6111,49 +6109,49 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
       }
 
-      /* "cythonUtils.pyx":217
+      /* "cythonUtils.pyx":215
  * 					yPoint = y3Point
  * 
  * 			if a - a2 != 0 and a - a4 != 0:             # <<<<<<<<<<<<<<
  * 				x2Point = (b2 - b) / (a - a2)
  * 				y2Point = b2
  */
-      __pyx_t_5 = PyNumber_Subtract(__pyx_v_a, __pyx_v_a2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 217, __pyx_L1_error)
+      __pyx_t_5 = PyNumber_Subtract(__pyx_v_a, __pyx_v_a2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 215, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_9 = (__Pyx_PyInt_BoolNeObjC(__pyx_t_5, __pyx_int_0, 0, 0)); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 217, __pyx_L1_error)
+      __pyx_t_9 = (__Pyx_PyInt_BoolNeObjC(__pyx_t_5, __pyx_int_0, 0, 0)); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 215, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       if (__pyx_t_9) {
       } else {
         __pyx_t_6 = __pyx_t_9;
-        goto __pyx_L79_bool_binop_done;
+        goto __pyx_L82_bool_binop_done;
       }
-      __pyx_t_5 = PyNumber_Subtract(__pyx_v_a, __pyx_v_a4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 217, __pyx_L1_error)
+      __pyx_t_5 = PyNumber_Subtract(__pyx_v_a, __pyx_v_a4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 215, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_9 = (__Pyx_PyInt_BoolNeObjC(__pyx_t_5, __pyx_int_0, 0, 0)); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 217, __pyx_L1_error)
+      __pyx_t_9 = (__Pyx_PyInt_BoolNeObjC(__pyx_t_5, __pyx_int_0, 0, 0)); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 215, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_6 = __pyx_t_9;
-      __pyx_L79_bool_binop_done:;
+      __pyx_L82_bool_binop_done:;
       if (__pyx_t_6) {
 
-        /* "cythonUtils.pyx":218
+        /* "cythonUtils.pyx":216
  * 
  * 			if a - a2 != 0 and a - a4 != 0:
  * 				x2Point = (b2 - b) / (a - a2)             # <<<<<<<<<<<<<<
  * 				y2Point = b2
  * 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \
  */
-        __pyx_t_5 = PyNumber_Subtract(__pyx_v_b2, __pyx_v_b); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 218, __pyx_L1_error)
+        __pyx_t_5 = PyNumber_Subtract(__pyx_v_b2, __pyx_v_b); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 216, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_4 = PyNumber_Subtract(__pyx_v_a, __pyx_v_a2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 218, __pyx_L1_error)
+        __pyx_t_4 = PyNumber_Subtract(__pyx_v_a, __pyx_v_a2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 216, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 218, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 216, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __pyx_v_x2Point = __pyx_t_3;
         __pyx_t_3 = 0;
 
-        /* "cythonUtils.pyx":219
+        /* "cythonUtils.pyx":217
  * 			if a - a2 != 0 and a - a4 != 0:
  * 				x2Point = (b2 - b) / (a - a2)
  * 				y2Point = b2             # <<<<<<<<<<<<<<
@@ -6163,102 +6161,102 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
         __Pyx_INCREF(__pyx_v_b2);
         __pyx_v_y2Point = __pyx_v_b2;
 
-        /* "cythonUtils.pyx":220
+        /* "cythonUtils.pyx":218
  * 				x2Point = (b2 - b) / (a - a2)
  * 				y2Point = b2
  * 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \             # <<<<<<<<<<<<<<
  * 					and ((x2Point >= xSource and x2Point <= xTarget) or (x2Point <= xSource and x2Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
  */
-        __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_botLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_3, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_3, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (__pyx_t_9) {
         } else {
           __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L82_bool_binop_done;
+          goto __pyx_L85_bool_binop_done;
         }
 
-        /* "cythonUtils.pyx":221
+        /* "cythonUtils.pyx":219
  * 				y2Point = b2
  * 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \
  * 					and ((x2Point >= xSource and x2Point <= xTarget) or (x2Point <= xSource and x2Point >= xTarget)):             # <<<<<<<<<<<<<<
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
  * 					if d < distance:
  */
-        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_botRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_botRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_3 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_3 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "cythonUtils.pyx":220
+        /* "cythonUtils.pyx":218
  * 				x2Point = (b2 - b) / (a - a2)
  * 				y2Point = b2
  * 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \             # <<<<<<<<<<<<<<
  * 					and ((x2Point >= xSource and x2Point <= xTarget) or (x2Point <= xSource and x2Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
  */
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         if (__pyx_t_9) {
         } else {
           __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L82_bool_binop_done;
+          goto __pyx_L85_bool_binop_done;
         }
 
-        /* "cythonUtils.pyx":221
+        /* "cythonUtils.pyx":219
  * 				y2Point = b2
  * 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \
  * 					and ((x2Point >= xSource and x2Point <= xTarget) or (x2Point <= xSource and x2Point >= xTarget)):             # <<<<<<<<<<<<<<
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
  * 					if d < distance:
  */
-        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_3, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_3, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (!__pyx_t_9) {
-          goto __pyx_L85_next_or;
+          goto __pyx_L88_next_or;
         } else {
         }
-        __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_3 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_3 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         if (!__pyx_t_9) {
         } else {
           __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L82_bool_binop_done;
+          goto __pyx_L85_bool_binop_done;
         }
-        __pyx_L85_next_or:;
-        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_L88_next_or:;
+        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_3, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_3, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (__pyx_t_9) {
         } else {
           __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L82_bool_binop_done;
+          goto __pyx_L85_bool_binop_done;
         }
-        __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_3 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_3 = PyObject_RichCompare(__pyx_v_x2Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 221, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_6 = __pyx_t_9;
-        __pyx_L82_bool_binop_done:;
+        __pyx_L85_bool_binop_done:;
 
-        /* "cythonUtils.pyx":220
+        /* "cythonUtils.pyx":218
  * 				x2Point = (b2 - b) / (a - a2)
  * 				y2Point = b2
  * 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \             # <<<<<<<<<<<<<<
@@ -6267,19 +6265,19 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
         if (__pyx_t_6) {
 
-          /* "cythonUtils.pyx":222
+          /* "cythonUtils.pyx":220
  * 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \
  * 					and ((x2Point >= xSource and x2Point <= xTarget) or (x2Point <= xSource and x2Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)             # <<<<<<<<<<<<<<
  * 					if d < distance:
  * 						distance = d
  */
-          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_x2Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 222, __pyx_L1_error)
-          __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_y2Point); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 222, __pyx_L1_error)
-          __pyx_t_2 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_7, __pyx_t_8, 0); if (unlikely(__pyx_t_2 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 222, __pyx_L1_error)
+          __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_x2Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 220, __pyx_L1_error)
+          __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_y2Point); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 220, __pyx_L1_error)
+          __pyx_t_2 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_7, __pyx_t_8, 0); if (unlikely(__pyx_t_2 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 220, __pyx_L1_error)
           __pyx_v_d = __pyx_t_2;
 
-          /* "cythonUtils.pyx":223
+          /* "cythonUtils.pyx":221
  * 					and ((x2Point >= xSource and x2Point <= xTarget) or (x2Point <= xSource and x2Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
  * 					if d < distance:             # <<<<<<<<<<<<<<
@@ -6289,7 +6287,7 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
           __pyx_t_6 = (__pyx_v_d < __pyx_v_distance);
           if (__pyx_t_6) {
 
-            /* "cythonUtils.pyx":224
+            /* "cythonUtils.pyx":222
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
  * 					if d < distance:
  * 						distance = d             # <<<<<<<<<<<<<<
@@ -6298,27 +6296,27 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
             __pyx_v_distance = __pyx_v_d;
 
-            /* "cythonUtils.pyx":225
+            /* "cythonUtils.pyx":223
  * 					if d < distance:
  * 						distance = d
  * 						xPoint = x2Point             # <<<<<<<<<<<<<<
  * 						yPoint = y2Point
  * 				x4Point = (b4 - b) / (a - a4)
  */
-            __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_x2Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 225, __pyx_L1_error)
+            __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_x2Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 223, __pyx_L1_error)
             __pyx_v_xPoint = __pyx_t_2;
 
-            /* "cythonUtils.pyx":226
+            /* "cythonUtils.pyx":224
  * 						distance = d
  * 						xPoint = x2Point
  * 						yPoint = y2Point             # <<<<<<<<<<<<<<
  * 				x4Point = (b4 - b) / (a - a4)
  * 				y4Point = b4
  */
-            __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_y2Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 226, __pyx_L1_error)
+            __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_y2Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 224, __pyx_L1_error)
             __pyx_v_yPoint = __pyx_t_2;
 
-            /* "cythonUtils.pyx":223
+            /* "cythonUtils.pyx":221
  * 					and ((x2Point >= xSource and x2Point <= xTarget) or (x2Point <= xSource and x2Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x2Point, y2Point)
  * 					if d < distance:             # <<<<<<<<<<<<<<
@@ -6327,7 +6325,7 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
           }
 
-          /* "cythonUtils.pyx":220
+          /* "cythonUtils.pyx":218
  * 				x2Point = (b2 - b) / (a - a2)
  * 				y2Point = b2
  * 				if x2Point >= botLeft[0] and x2Point <= botRight[0] \             # <<<<<<<<<<<<<<
@@ -6336,25 +6334,25 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
         }
 
-        /* "cythonUtils.pyx":227
+        /* "cythonUtils.pyx":225
  * 						xPoint = x2Point
  * 						yPoint = y2Point
  * 				x4Point = (b4 - b) / (a - a4)             # <<<<<<<<<<<<<<
  * 				y4Point = b4
  * 				if x4Point >= topLeft[0] and x4Point <= topRight[0] \
  */
-        __pyx_t_3 = PyNumber_Subtract(__pyx_v_b4, __pyx_v_b); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
+        __pyx_t_3 = PyNumber_Subtract(__pyx_v_b4, __pyx_v_b); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 225, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = PyNumber_Subtract(__pyx_v_a, __pyx_v_a4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 227, __pyx_L1_error)
+        __pyx_t_4 = PyNumber_Subtract(__pyx_v_a, __pyx_v_a4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 225, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 227, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 225, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __pyx_v_x4Point = __pyx_t_5;
         __pyx_t_5 = 0;
 
-        /* "cythonUtils.pyx":228
+        /* "cythonUtils.pyx":226
  * 						yPoint = y2Point
  * 				x4Point = (b4 - b) / (a - a4)
  * 				y4Point = b4             # <<<<<<<<<<<<<<
@@ -6364,102 +6362,102 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
         __Pyx_INCREF(__pyx_v_b4);
         __pyx_v_y4Point = __pyx_v_b4;
 
-        /* "cythonUtils.pyx":229
+        /* "cythonUtils.pyx":227
  * 				x4Point = (b4 - b) / (a - a4)
  * 				y4Point = b4
  * 				if x4Point >= topLeft[0] and x4Point <= topRight[0] \             # <<<<<<<<<<<<<<
  * 					and ((x4Point >= xSource and x4Point <= xTarget) or (x4Point <= xSource and x4Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
  */
-        __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 229, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_topLeft, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 227, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 229, __pyx_L1_error)
+        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 227, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 229, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 227, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (__pyx_t_9) {
         } else {
           __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L90_bool_binop_done;
+          goto __pyx_L93_bool_binop_done;
         }
 
-        /* "cythonUtils.pyx":230
+        /* "cythonUtils.pyx":228
  * 				y4Point = b4
  * 				if x4Point >= topLeft[0] and x4Point <= topRight[0] \
  * 					and ((x4Point >= xSource and x4Point <= xTarget) or (x4Point <= xSource and x4Point >= xTarget)):             # <<<<<<<<<<<<<<
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
  * 					if d < distance:
  */
-        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 229, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_topRight, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 227, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 229, __pyx_L1_error)
+        __pyx_t_5 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 227, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "cythonUtils.pyx":229
+        /* "cythonUtils.pyx":227
  * 				x4Point = (b4 - b) / (a - a4)
  * 				y4Point = b4
  * 				if x4Point >= topLeft[0] and x4Point <= topRight[0] \             # <<<<<<<<<<<<<<
  * 					and ((x4Point >= xSource and x4Point <= xTarget) or (x4Point <= xSource and x4Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
  */
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 229, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 227, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         if (__pyx_t_9) {
         } else {
           __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L90_bool_binop_done;
+          goto __pyx_L93_bool_binop_done;
         }
 
-        /* "cythonUtils.pyx":230
+        /* "cythonUtils.pyx":228
  * 				y4Point = b4
  * 				if x4Point >= topLeft[0] and x4Point <= topRight[0] \
  * 					and ((x4Point >= xSource and x4Point <= xTarget) or (x4Point <= xSource and x4Point >= xTarget)):             # <<<<<<<<<<<<<<
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
  * 					if d < distance:
  */
-        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_5, Py_GE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (!__pyx_t_9) {
-          goto __pyx_L93_next_or;
+          goto __pyx_L96_next_or;
         } else {
         }
-        __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_5 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_4, Py_LE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         if (!__pyx_t_9) {
         } else {
           __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L90_bool_binop_done;
+          goto __pyx_L93_bool_binop_done;
         }
-        __pyx_L93_next_or:;
-        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_L96_next_or:;
+        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_xSource); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_4 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (__pyx_t_9) {
         } else {
           __pyx_t_6 = __pyx_t_9;
-          goto __pyx_L90_bool_binop_done;
+          goto __pyx_L93_bool_binop_done;
         }
-        __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xTarget); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_5 = PyObject_RichCompare(__pyx_v_x4Point, __pyx_t_4, Py_GE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_9 < 0))) __PYX_ERR(0, 228, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_6 = __pyx_t_9;
-        __pyx_L90_bool_binop_done:;
+        __pyx_L93_bool_binop_done:;
 
-        /* "cythonUtils.pyx":229
+        /* "cythonUtils.pyx":227
  * 				x4Point = (b4 - b) / (a - a4)
  * 				y4Point = b4
  * 				if x4Point >= topLeft[0] and x4Point <= topRight[0] \             # <<<<<<<<<<<<<<
@@ -6468,19 +6466,19 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
         if (__pyx_t_6) {
 
-          /* "cythonUtils.pyx":231
+          /* "cythonUtils.pyx":229
  * 				if x4Point >= topLeft[0] and x4Point <= topRight[0] \
  * 					and ((x4Point >= xSource and x4Point <= xTarget) or (x4Point <= xSource and x4Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)             # <<<<<<<<<<<<<<
  * 					if d < distance:
  * 						distance = d
  */
-          __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_x4Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 231, __pyx_L1_error)
-          __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_y4Point); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 231, __pyx_L1_error)
-          __pyx_t_7 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_2, __pyx_t_8, 0); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 231, __pyx_L1_error)
+          __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_x4Point); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 229, __pyx_L1_error)
+          __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_y4Point); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 229, __pyx_L1_error)
+          __pyx_t_7 = __pyx_f_11cythonUtils_distanceBetweenTwoPoints(__pyx_v_xSource, __pyx_v_ySource, __pyx_t_2, __pyx_t_8, 0); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 229, __pyx_L1_error)
           __pyx_v_d = __pyx_t_7;
 
-          /* "cythonUtils.pyx":232
+          /* "cythonUtils.pyx":230
  * 					and ((x4Point >= xSource and x4Point <= xTarget) or (x4Point <= xSource and x4Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
  * 					if d < distance:             # <<<<<<<<<<<<<<
@@ -6490,7 +6488,7 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
           __pyx_t_6 = (__pyx_v_d < __pyx_v_distance);
           if (__pyx_t_6) {
 
-            /* "cythonUtils.pyx":233
+            /* "cythonUtils.pyx":231
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
  * 					if d < distance:
  * 						distance = d             # <<<<<<<<<<<<<<
@@ -6499,27 +6497,27 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
             __pyx_v_distance = __pyx_v_d;
 
-            /* "cythonUtils.pyx":234
+            /* "cythonUtils.pyx":232
  * 					if d < distance:
  * 						distance = d
  * 						xPoint = x4Point             # <<<<<<<<<<<<<<
  * 						yPoint = y4Point
  * 
  */
-            __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_x4Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 234, __pyx_L1_error)
+            __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_x4Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 232, __pyx_L1_error)
             __pyx_v_xPoint = __pyx_t_7;
 
-            /* "cythonUtils.pyx":235
+            /* "cythonUtils.pyx":233
  * 						distance = d
  * 						xPoint = x4Point
  * 						yPoint = y4Point             # <<<<<<<<<<<<<<
  * 
  * 	# print(d)
  */
-            __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_y4Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 235, __pyx_L1_error)
+            __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_y4Point); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 233, __pyx_L1_error)
             __pyx_v_yPoint = __pyx_t_7;
 
-            /* "cythonUtils.pyx":232
+            /* "cythonUtils.pyx":230
  * 					and ((x4Point >= xSource and x4Point <= xTarget) or (x4Point <= xSource and x4Point >= xTarget)):
  * 					d = distanceBetweenTwoPoints(xSource, ySource, x4Point, y4Point)
  * 					if d < distance:             # <<<<<<<<<<<<<<
@@ -6528,7 +6526,7 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
           }
 
-          /* "cythonUtils.pyx":229
+          /* "cythonUtils.pyx":227
  * 				x4Point = (b4 - b) / (a - a4)
  * 				y4Point = b4
  * 				if x4Point >= topLeft[0] and x4Point <= topRight[0] \             # <<<<<<<<<<<<<<
@@ -6537,7 +6535,7 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
  */
         }
 
-        /* "cythonUtils.pyx":217
+        /* "cythonUtils.pyx":215
  * 					yPoint = y3Point
  * 
  * 			if a - a2 != 0 and a - a4 != 0:             # <<<<<<<<<<<<<<
@@ -6558,27 +6556,27 @@ static PyObject *__pyx_f_11cythonUtils_getDistanceFromObstacle(PyObject *__pyx_v
   }
   __pyx_L3:;
 
-  /* "cythonUtils.pyx":238
+  /* "cythonUtils.pyx":236
  * 
  * 	# print(d)
  * 	return distance, xPoint, yPoint             # <<<<<<<<<<<<<<
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xPoint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_xPoint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_yPoint); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_yPoint); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_5);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_5)) __PYX_ERR(0, 238, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_5)) __PYX_ERR(0, 236, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_4);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_4)) __PYX_ERR(0, 238, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_4)) __PYX_ERR(0, 236, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_3);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_t_3)) __PYX_ERR(0, 238, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_t_3)) __PYX_ERR(0, 236, __pyx_L1_error);
   __pyx_t_5 = 0;
   __pyx_t_4 = 0;
   __pyx_t_3 = 0;

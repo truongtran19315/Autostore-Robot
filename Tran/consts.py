@@ -1,43 +1,43 @@
 import math
 import random
+import os
+
 
 class GAME_SETTING:
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
     FPS = 60
-    
+
+
 class PLAYER_SETTING:
     RADIUS_OBJECT = 10
-    RADIUS_LIDAR = 360  # From the border of the circle
+    RADIUS_LIDAR = 360  # độ dài của mỗi tia lidar
 
     INITIAL_X = GAME_SETTING.SCREEN_WIDTH//2
     INITIAL_Y = GAME_SETTING.SCREEN_HEIGHT//2
-    
-    INITIAL_X = random.randint(15, 1265)
-    INITIAL_Y = random.randint(15, 705)
-    
+
+    # INITIAL_X = random.randint(15, 1265)
+    # INITIAL_Y = random.randint(15, 705)
+
     # INITIAL_X = 603
     # INITIAL_Y = 384
-    
-    INITIAL_X = 980
-    INITIAL_Y = 507
-    
-    # INITIAL_X = 1005
-    # INITIAL_Y = 491
 
-    MAX_FORWARD_VELO = 100
-    MAX_ROTATION_VELO = 1
+    INITIAL_X = 963
+    INITIAL_Y = 477
+
+    MAX_FORWARD_VELO = 100 * 10
+    MAX_ROTATION_VELO = 1 * 10
     MIN_ROTATION_VELO = -MAX_ROTATION_VELO
 
-    ACCELERATION_FORWARD = 5
-    ACCELERATION_ROTATE = 0.05
+    ACCELERATION_FORWARD = 5 * 10
+    ACCELERATION_ROTATE = 0.05 * 10
 
     CASTED_RAYS = 45
     CASTED_RAYS = 90
-    CASTED_RAYS = 360 # number of lidar ray - 360 per round - 1 per 1 degree
-    PI = math.pi 
-    HALF_PI = PI/2 # pi/2
-    STEP_ANGLE = 2 * PI / CASTED_RAYS 
+    CASTED_RAYS = 360   # số lượng tia lidar
+    PI = math.pi
+    HALF_PI = PI/2  # pi/2
+    STEP_ANGLE = 2 * PI / CASTED_RAYS   # góc mỗi tia lidar
 
     Y_GOAL_POSITION = 10
     GOAL_POSITION = {"x": 200, "y": 50}
@@ -45,18 +45,23 @@ class PLAYER_SETTING:
 
     # MAX_STEP_PER_EPOCH = 5000
 
+
 class LANE_SETTING:
     WIDTH_OF_LANE_BORDER = 3
-    
+
     OUTSIDE_LEFT_PADDING = 150
-    OUTSIDE_RIGHT_PADDING = OUTSIDE_LEFT_PADDING    
+    OUTSIDE_RIGHT_PADDING = OUTSIDE_LEFT_PADDING
     OUTSIDE_TOP_PADDING = 150
     OUTSIDE_BOTTOM_PADDING = OUTSIDE_TOP_PADDING
-    
-    INSIDE_LEFT_PADDING = OUTSIDE_LEFT_PADDING + int(2*PLAYER_SETTING.RADIUS_OBJECT*3)
-    INSIDE_RIGHT_PADDING = INSIDE_LEFT_PADDING 
-    INSIDE_TOP_PADDING = OUTSIDE_TOP_PADDING + int(2*PLAYER_SETTING.RADIUS_OBJECT*3)
-    INSIDE_BOTTOM_PADDING = INSIDE_TOP_PADDING    
+
+    INSIDE_LEFT_PADDING = OUTSIDE_LEFT_PADDING + \
+        int(2*PLAYER_SETTING.RADIUS_OBJECT*3)
+    INSIDE_RIGHT_PADDING = INSIDE_LEFT_PADDING
+    INSIDE_TOP_PADDING = OUTSIDE_TOP_PADDING + \
+        int(2*PLAYER_SETTING.RADIUS_OBJECT*3)
+    INSIDE_BOTTOM_PADDING = INSIDE_TOP_PADDING
+
+
 class OBSTACLE_SETTING:
     MAX_INSTANCES = 15
     RADIUS_OBJECT = 10
@@ -106,3 +111,33 @@ ACTIONS_LIST = [
 ]
 MAX_EPISODE = 100000
 INT_INFINITY = 99999
+
+
+#! observe/ chuyen gia tri
+LENGTH_LIDARSIGNAL = 4   # 0,1,2,3
+SECTIONS_LIDARSPACE = 4  # ! chia lidar thành 4 vùng 0,1,2,3
+
+# set các khoảng rời rạc
+ALPHA_SPACE = 20
+FWVELO_SPACE = 4
+RVELO_SPACE = 4
+
+# gamma = 0.99
+# alpha = 0.1
+# epsilon = 1
+# epsilon_decay = epsilon / 4000
+# n_epsilondes = 10000
+
+
+# Định nghĩa các tham số đầu vào
+n_epsilondes = 1000  # Số lượng episode
+alpha = 0.1  # Hệ số học
+gamma = 0.9  # Hệ số giảm
+epsilon = 0.9  # Xác suất khám phá
+epsilon_decay = 0.0001  # Hệ số giảm epsilon
+epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
+
+# base_path = "C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\PYGAME_2D\\DATA"
+base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
+COUNTER = 1000
+videoPath = os.path.join(base_path, 'recordVideo.avi')
