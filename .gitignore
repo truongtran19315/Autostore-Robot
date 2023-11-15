@@ -3,3 +3,7 @@ Josh/private/
 *.html
 *.pyd
 *.avi
+*.c
+*.exp
+*.obj
+*.lib
