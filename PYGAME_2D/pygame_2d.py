@@ -80,8 +80,8 @@ class Car():
 class Robot(Car):
     def __init__(self) -> None:
         super().__init__(
-            initX=PLAYER_SETTING.INITIAL_X,
-            initY=PLAYER_SETTING.INITIAL_Y,
+            initX=random.randint(900, 1265),
+            initY=random.randint(15, 705),
             maxForwardVelocity=PLAYER_SETTING.MAX_FORWARD_VELO,
             minRotationVelocity=PLAYER_SETTING.MIN_ROTATION_VELO,
             maxRotationVelocity=PLAYER_SETTING.MAX_ROTATION_VELO,
@@ -206,11 +206,11 @@ class PyGame2D():
         self.robot = Robot()
         self.generateEnvironment()
 
-        self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
-        self.recordVideo = cv2.VideoWriter(self.videoFile_path,
-                                           cv2.VideoWriter_fourcc(*'MJPG'),
-                                           GAME_SETTING.FPS,
-                                           (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
+        # self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
+        # self.recordVideo = cv2.VideoWriter(self.videoFile_path,
+        #                                    cv2.VideoWriter_fourcc(*'MJPG'),
+        #                                    GAME_SETTING.FPS,
+        #                                    (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
         self.n = 0
         self.elapsed_time = 0
         self.totalTime = 0
@@ -277,6 +277,9 @@ class PyGame2D():
         elif distance[0] > 2 or distance[2] > 2:
             reward += 180
             # print('+180 huong 2 ben khong co vat can')
+            
+        far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
+        reward -= far_from_goal*10
 
         far_from_goal = self.robot.checkAchieveGoal(self.goal)
         reward -= far_from_goal
@@ -348,10 +351,14 @@ class PyGame2D():
         self.obstacles.generateObstacles(self.env)
         self.goal.draw(self.env)
 
-    def view(self, input):
+    def view(self, counter, action):
         screen = self.env.copy()
         self.robot.draw(screen)
-        self.record(screen, input)
+        action = str(action)
+        cv2.putText(screen, action, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        # self.record(screen, input)
+        
+        return screen
         # cv2.imshow('Enviroment', screen)
         # cv2.waitKey(0)
 

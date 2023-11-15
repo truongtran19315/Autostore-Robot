@@ -7,3 +7,5 @@ Josh/private/
 *.exp
 *.obj
 *.lib
+*.png
+*.pkl

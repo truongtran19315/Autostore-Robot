@@ -40,7 +40,9 @@ class Game:
         total_reward = 0
         state = self.game.observe()
         reward_records = []
-        action_records = []
+        action_records = []        
+        screenRecord = []
+
         prev_state = None
         state_count_change = 0
         print(f"Start Real Posion: {self.get_RealPosion()}")
@@ -48,6 +50,7 @@ class Game:
             action = self.pick_sample(state, q_table)
             action_records.append(action)
             next_state, reward, done = self.step(action)
+            screenRecord.append(self.trackGame(counter, action))
             maxQ = np.max(q_table[tuple(next_state)])
             q_table[tuple(state)][action] += self.alpha * (reward +
                                                            self.gamma * maxQ - q_table[tuple(state)][action])
@@ -66,11 +69,13 @@ class Game:
 
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
+        # print(f"Total reward each epsilon : {reward}")
+        print(f"List record reward epsilon : {reward_records}")
 
         # print(f"List record action: {action_records}")
         print(f"Total reward each epsilon : {total_reward}")
         # print(f"List record reward: {reward_records}")
-        return total_reward
+        return total_reward, screenRecord
 
     def reset(self):
         del self.game
@@ -100,13 +105,15 @@ class Game:
         # axes.set_ylim(0, 1)
         axes.set_xlim(0, step_number)
 
-    def trackGame(self):
+    def trackGame(self, counter, action):
         # key = cv2.waitKey(delay=1)
         # if key == 27 or (key & 0xFF == 'q'):
         #     input = 27
         # else:
         #     input = -1
-        self.game.view(1)
+        screen = self.game.view(counter, action)
+        
+        return screen
 
     def get_RealPosion(self):
         return self.game.robot.xPos, self.game.robot.yPos
