@@ -2,6 +2,10 @@ import pygame_2d
 from const import *
 import numpy as np
 from logVersion import *
+import matplotlib.pyplot as plt
+import math
+from matplotlib.animation import FuncAnimation
+plt.ion()
 
 
 class Game:
@@ -17,6 +21,11 @@ class Game:
         self.epsilon_decay = epsilon_decay
         self.alpha = alpha
         self.gamma = gamma
+        # self.count_state_change = 0
+        self.record_state_change = []
+        self.total_states = ALPHA_SPACE * FWVELO_SPACE * RVELO_SPACE * \
+            math.pow(LENGTH_LIDARSIGNAL, SECTIONS_LIDARSPACE) * ACTION_SPACE
+        self.fig = None
 
     def pick_sample(self, state, q_table):
         if np.random.random() > self.epsilon:
@@ -31,6 +40,8 @@ class Game:
         state = self.game.observe()
         reward_records = []
 
+        prev_state = None
+        state_count_change = 0
         while not done and couter > 0:
             action = self.pick_sample(state, q_table)
             next_state, reward, done = self.step(action)
@@ -39,11 +50,16 @@ class Game:
             q_table[tuple(state)][action] += self.alpha * (reward +
                                                            self.gamma * maxQ - q_table[tuple(state)][action])
 
+            if prev_state is not None and not np.array_equal(prev_state, state):
+                state_count_change += 1
+
+            prev_state = state
             state = next_state
             total_reward += reward
 
             couter -= 1
             # print(f"Couter: {couter} -- reward: {reward}")
+        self.record_state_change.append(state_count_change)
 
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
@@ -67,3 +83,20 @@ class Game:
 
     def render(self):
         self.game.view(self.screen)
+
+    def creat_axes(self, axes, step_number):
+        record_state_change_rate = np.array(
+            self.record_state_change) / self.total_states
+
+        axes.plot(np.arange(0, step_number + 1), record_state_change_rate,
+                  marker='o', linestyle='-', color='b', label='rate states change')
+
+        axes.set_ylabel('states change')
+        axes.set_xlabel('n epsilon')
+        # axes.set_ylim(0, 1)
+        axes.set_xlim(0, step_number)
+
+
+# screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+# game = Game(screen)
+# print(game.total_states)
