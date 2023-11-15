@@ -1,7 +1,5 @@
-<<<<<<< HEAD
-Josh/private/
-__pycache__/
-=======
 Josh/private/
 *.pyc
->>>>>>> 83d09ce2a71dddff89a3990b78f257c167129f97
+*.html
+*.pyd
+*.avi
