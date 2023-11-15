@@ -23,16 +23,15 @@ else:
 
 
 print(f"Shape of Q-table: {q_table.shape}")
-# print(q_table)
 print(f"Init state:  {game.reset()}")
 print("Start training....")
 
 game.fig, axes = plt.subplots()
+reward_records = []
 for i in range(n_epsilondes):
-    state_count_change = 0
     print(f"Epsilon {i} :")
     game.reset()
-    reward_records = game.run_episode(q_table)
+    reward_records.append(game.run_episode(q_table))
 
     # TODO update diagram
     game.creat_axes(axes, i)
@@ -44,7 +43,7 @@ for i in range(n_epsilondes):
     with open(q_table_path, "wb") as f:
         pickle.dump(q_table, f)
     print(f"Q-table saved to: {q_table_path}")
-    print("---------------------------------")
+    print("-----------------------------------------------------")
 
 
 folder_path_done = folder_path + "_DONE"

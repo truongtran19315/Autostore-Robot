@@ -340,20 +340,16 @@ class PyGame2D():
             self.recordVideo.release()
         else:
             self.recordVideo.write(screen)
-            
+
     def generateEnvironment(self):
         self.obstacles.generateObstacles(self.env)
         self.goal.draw(self.env)
-        
 
     def view(self, input):
-        # self.screen = screen
         screen = self.env.copy()
         self.robot.draw(screen)
-        # print(self.obstacles.get())
-        # cv2.circle(self.screen, (564, 96), 10, COLOR.CYAN, -1)
         self.record(screen, input)
-        cv2.imshow('Enviroment', screen)
+        # cv2.imshow('Enviroment', screen)
         # cv2.waitKey(0)
 
     def convert_lenLidar(self):
@@ -369,21 +365,20 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-game = PyGame2D(screen)
-# game.view()
-while True:
-    input = Utils.inputUser()
-    game.action(input)
-    if not game.robot.isAlive:
-        print("Oops!!!!!!!!!!")
-        input = 27
-    elif game.robot.achieveGoal:
-        print("Great!!!!!!!!!")
-        input = 27
-    game.view(input)
-    if input == 27:
-        cv2.destroyAllWindows()
-        break
-    pass
-
+# screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+# game = PyGame2D(screen)
+# # game.view()
+# while True:
+#     input = Utils.inputUser()
+#     game.action(input)
+#     if not game.robot.isAlive:
+#         print("Oops!!!!!!!!!!")
+#         input = 27
+#     elif game.robot.achieveGoal:
+#         print("Great!!!!!!!!!")
+#         input = 27
+#     game.view(input)
+#     if input == 27:
+#         cv2.destroyAllWindows()
+#         break
+#     pass
