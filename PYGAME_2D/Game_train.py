@@ -53,8 +53,8 @@ for i in range(n_epsilondes):
         pickle.dump(q_table, f)
     print(f"Q-table saved to: {q_table_path}")
     print("-----------------------------------------------------")
-    for i in range(COUNTER):
-        recordVideo.write(screenRecord[i])
+    for j in range(COUNTER):
+        recordVideo.write(screenRecord[j])
         
     if cv2.waitKey(1) & 0xFF == 'q':
         recordVideo.release()
