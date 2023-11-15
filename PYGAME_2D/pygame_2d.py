@@ -279,10 +279,7 @@ class PyGame2D():
             # print('+180 huong 2 ben khong co vat can')
             
         far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
-        reward -= far_from_goal*10
-
-        far_from_goal = self.robot.checkAchieveGoal(self.goal)
-        reward -= far_from_goal
+        reward -= far_from_goal*2
 
         return reward
 

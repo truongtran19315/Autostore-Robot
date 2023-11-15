@@ -139,5 +139,5 @@ epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
 # base_path = "C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\PYGAME_2D\\DATA"
 base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
-COUNTER = 1000
+COUNTER = 100
 videoPath = os.path.join(base_path, 'recordVideo.avi')

@@ -70,7 +70,7 @@ class Game:
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
         # print(f"Total reward each epsilon : {reward}")
-        print(f"List record reward epsilon : {reward_records}")
+        # print(f"List record reward epsilon : {reward_records}")
 
         # print(f"List record action: {action_records}")
         print(f"Total reward each epsilon : {total_reward}")

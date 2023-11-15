@@ -5,7 +5,7 @@ import cv2
 
 videoFile_path = getlogVideo_path(getlogVersion(base_path))
 recordVideo = cv2.VideoWriter(videoFile_path,
-                            cv2.VideoWriter_fourcc(*'MJPG'),
+                            cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'),
                             GAME_SETTING.FPS,
                             (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
 
@@ -53,7 +53,7 @@ for i in range(n_epsilondes):
         pickle.dump(q_table, f)
     print(f"Q-table saved to: {q_table_path}")
     print("-----------------------------------------------------")
-    for j in range(COUNTER):
+    for j in range(len(screenRecord)):
         recordVideo.write(screenRecord[j])
         
     if cv2.waitKey(1) & 0xFF == 'q':
