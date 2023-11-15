@@ -43,6 +43,12 @@ class Game:
         action_records = []        
 
         firstPosition = self.get_RealPosion()
+        turn_left = 0
+        turn_right = 0
+        ahead = 0
+        slowdown = 0
+        stop = 0
+        nothing = 0
         
         prev_state = None
         state_count_change = 0
@@ -50,9 +56,23 @@ class Game:
         while not done and counter > 0:
             action = self.pick_sample(state, q_table)
             action_records.append(action)
+            if action == 0:
+                turn_right += 1
+            elif action == 1:
+                turn_left += 1
+            elif action == 2: 
+                stop += 1
+            elif action == 3: 
+                ahead += 1
+            elif action == 4: 
+                slowdown += 1
+            elif action == 5: 
+                nothing += 1
+                
+            
             next_state, reward, done = self.step(action)
             # screenRecord.append(self.trackGame(counter, action))
-            video.write(self.trackGame(counter, action))
+            # video.write(self.trackGame(counter, action))
             cv2.circle(trackPosition, self.get_RealPosion(), PLAYER_SETTING.RADIUS_OBJECT, COLOR.BLUE, 1)
             maxQ = np.max(q_table[tuple(next_state)])
             q_table[tuple(state)][action] += self.alpha * (reward +
@@ -70,6 +90,20 @@ class Game:
         cv2.circle(trackPosition, firstPosition, PLAYER_SETTING.RADIUS_OBJECT, COLOR.RED, 1)
         total_reward_str = 'total reward: ' + str(total_reward)
         cv2.putText(trackPosition, total_reward_str, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        
+        turn_right = 'turn right: ' + str(turn_right)
+        turn_left = 'turn left: ' + str(turn_left)
+        stop = 'stop: ' + str(stop)
+        ahead = 'ahead: ' + str(ahead)
+        slowdown = 'slowdown: ' + str(slowdown)
+        nothing = 'nothing: ' + str(nothing)
+        cv2.putText(trackPosition, turn_right, (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        cv2.putText(trackPosition, turn_left, (50, 500), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        cv2.putText(trackPosition, stop, (50, 550), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        cv2.putText(trackPosition, ahead, (50, 600), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        cv2.putText(trackPosition, slowdown, (50, 650), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        cv2.putText(trackPosition, nothing, (50, 700), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        
         self.record_state_change.append(state_count_change)
 
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:

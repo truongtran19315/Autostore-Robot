@@ -8,6 +8,7 @@ recordVideo = cv2.VideoWriter(videoFile_path,
                             cv2.VideoWriter_fourcc(*'XVID'),
                             GAME_SETTING.FPS,
                             (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
+Video = 1
 
 folder_path = getlogVersion(base_path)
 os.makedirs(folder_path, exist_ok=True)
@@ -47,7 +48,7 @@ for i in range(n_epsilondes):
     
     trackPos = Env.copy()
     
-    reward, recordVideo, trackPosition, done = game.run_episode(q_table, recordVideo, trackPos)
+    reward, _, trackPosition, done = game.run_episode(q_table, Video, trackPos)
     reward_records.append(reward)
     trackPosition_path = getlogPosition_path(getlogVersion(base_path), done)
     compare_to_precious = reward - pre_reward
@@ -55,7 +56,7 @@ for i in range(n_epsilondes):
     compare_to_precious = 'reward - precious reward: ' + str(compare_to_precious)
     cv2.putText(trackPosition, compare_to_precious, (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
     cv2.imwrite(trackPosition_path, trackPosition)
-        
+    recordVideo.write(trackPosition)    
     # TODO update diagram
     if (i % 10 == 0):
         game.creat_axes(axes, i)
