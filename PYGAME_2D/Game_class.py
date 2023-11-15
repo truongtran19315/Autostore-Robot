@@ -1,3 +1,4 @@
+import cv2
 import pygame_2d
 from consts import *
 import numpy as np
@@ -56,17 +57,17 @@ class Game:
             prev_state = state
             state = next_state
             total_reward += reward
-
+            reward_records.append(reward)
             couter -= 1
-            # print(f"Couter: {couter} -- reward: {reward}")
+
         self.record_state_change.append(state_count_change)
 
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
+        print(f"Total reward each epsilon : {reward}")
+        print(f"List record reward epsilon : {reward_records}")
 
-        reward_records.append(total_reward)
-        print(f"Total reward : {reward}")
-        return reward_records
+        return total_reward
 
     def reset(self):
         del self.game
@@ -96,7 +97,15 @@ class Game:
         # axes.set_ylim(0, 1)
         axes.set_xlim(0, step_number)
 
+    def trackGame(self):
+        # key = cv2.waitKey(delay=1)
+        # if key == 27 or (key & 0xFF == 'q'):
+        #     input = 27
+        # else:
+        #     input = -1
+        self.game.view(1)
+
 
 # screen = np.zeros((720, 1280, 3), dtype=np.uint8)
 # game = Game(screen)
-# print(game.total_states)
+# game.trackGame()

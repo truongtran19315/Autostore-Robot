@@ -6,7 +6,7 @@ def getlogVersion(dest_folder):
     current_datetime = datetime.datetime.now()
     folder_name = current_datetime.strftime("%Y-%m-%d")
     allFolder = os.listdir(dest_folder)
-    print(f" Folder : {(allFolder)}")
+    # print(f" Folder : {(allFolder)}")
     version_number = 1
 
     done_folders = [
@@ -26,7 +26,7 @@ def getlogVideo_path(Version_folder):
     current_video_path = 'recordVideo'
     videoRecord_file = [file for file in allfile if "recordVideo" in file]
 
-    if videoRecord_file == None:
+    if not videoRecord_file:
         current_video_path += '_0.avi'
     else:
         version_fileVideo_list = [int(file.split('_')[-1][0])
