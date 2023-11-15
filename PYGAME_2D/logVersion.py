@@ -19,3 +19,24 @@ def getlogVersion(dest_folder):
 
     folder_name += "_V" + str(version_number)
     return os.path.join(dest_folder, folder_name)
+
+
+def getlogVideo_path(Version_folder):
+    allfile = os.listdir(Version_folder)
+    current_video_path = 'recordVideo'
+    videoRecord_file = [file for file in allfile if "recordVideo" in file]
+
+    if videoRecord_file == None:
+        current_video_path += '_0.avi'
+    else:
+        version_fileVideo_list = [int(file.split('_')[-1][0])
+                                  for file in videoRecord_file]
+        version_number = max(version_fileVideo_list) + 1
+        current_video_path += '_' + str(version_number) + '.avi'
+
+    return os.path.join(Version_folder, current_video_path)
+
+
+# temp_folder = 'C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\PYGAME_2D\\DATA\\2023-11-15_V1'
+# print(f"all file : {os.listdir(temp_folder)}")
+# print(getlogVideo_path(temp_folder))
