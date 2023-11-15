@@ -34,16 +34,17 @@ for i in range(n_epsilondes):
     reward_records.append(game.run_episode(q_table))
 
     # TODO update diagram
-    game.creat_axes(axes, i)
-    plt.draw()
-    plt.pause(0.1)
-    plt.savefig(diagram_path)
-    print(f"Diagram saved to: {diagram_path}")
+    if (i % 10 == 0):
+        game.creat_axes(axes, i)
+        # plt.draw()
+        # plt.pause(1)
+        plt.savefig(diagram_path)
+        print(f"Diagram saved to: {diagram_path}")
 
     with open(q_table_path, "wb") as f:
         pickle.dump(q_table, f)
-    print(f"Q-table saved to: {q_table_path}")
-    print("-----------------------------------------------------")
+    # print(f"Q-table saved to: {q_table_path}")
+    print("-------------------------------------------------------")
 
 
 folder_path_done = folder_path + "_DONE"
