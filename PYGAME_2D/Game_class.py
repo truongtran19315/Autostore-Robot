@@ -28,6 +28,12 @@ class Game:
             math.pow(LENGTH_LIDARSIGNAL, SECTIONS_LIDARSPACE) * ACTION_SPACE
         self.fig = None
 
+        self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
+        self.recordVideo = cv2.VideoWriter(self.videoFile_path,
+                                           cv2.VideoWriter_fourcc(*'MJPG'),
+                                           GAME_SETTING.FPS,
+                                           (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
+
     def pick_sample(self, state, q_table):
         if np.random.random() > self.epsilon:
             action = np.argmax(q_table[tuple(state)])

@@ -206,11 +206,14 @@ class PyGame2D():
         self.robot = Robot()
         self.generateEnvironment()
 
+<<<<<<< Updated upstream
         # self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
         # self.recordVideo = cv2.VideoWriter(self.videoFile_path,
         #                                    cv2.VideoWriter_fourcc(*'MJPG'),
         #                                    GAME_SETTING.FPS,
         #                                    (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
+=======
+>>>>>>> Stashed changes
         self.n = 0
         self.elapsed_time = 0
         self.totalTime = 0
