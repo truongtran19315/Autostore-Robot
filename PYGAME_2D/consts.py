@@ -25,12 +25,12 @@ class PLAYER_SETTING:
     # INITIAL_X = 963
     # INITIAL_Y = 477
 
-    MAX_FORWARD_VELO = 100
-    MAX_ROTATION_VELO = 1
+    MAX_FORWARD_VELO = 1000  # ! edit
+    MAX_ROTATION_VELO = 100  # ! edit
     MIN_ROTATION_VELO = -MAX_ROTATION_VELO
 
-    ACCELERATION_FORWARD = 5
-    ACCELERATION_ROTATE = 0.05
+    ACCELERATION_FORWARD = 500  # !
+    ACCELERATION_ROTATE = 5  # !
 
     CASTED_RAYS = 45
     CASTED_RAYS = 90
@@ -119,7 +119,7 @@ SECTIONS_LIDARSPACE = 4  # ! chia lidar thành 4 vùng 0,1,2,3
 
 # set các khoảng rời rạc
 ALPHA_SPACE = 20
-FWVELO_SPACE = 4
+FWVELO_SPACE = 2
 RVELO_SPACE = 4
 
 # gamma = 0.99
@@ -139,5 +139,4 @@ epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
 # base_path = "C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\PYGAME_2D\\DATA"
 base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
-COUNTER = 100
-videoPath = os.path.join(base_path, 'recordVideo.avi')
+COUNTER = 1000

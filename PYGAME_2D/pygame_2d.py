@@ -80,8 +80,10 @@ class Car():
 class Robot(Car):
     def __init__(self) -> None:
         super().__init__(
-            initX=random.randint(900, 1265),
-            initY=random.randint(15, 705),
+            # initX=random.randint(900, 1265),
+            # initY=random.randint(15, 705),
+            initX=PLAYER_SETTING.INITIAL_X,
+            initY=PLAYER_SETTING.INITIAL_Y,
             maxForwardVelocity=PLAYER_SETTING.MAX_FORWARD_VELO,
             minRotationVelocity=PLAYER_SETTING.MIN_ROTATION_VELO,
             maxRotationVelocity=PLAYER_SETTING.MAX_ROTATION_VELO,
@@ -205,15 +207,6 @@ class PyGame2D():
         self.goal = Goal()
         self.robot = Robot()
         self.generateEnvironment()
-
-<<<<<<< Updated upstream
-        # self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
-        # self.recordVideo = cv2.VideoWriter(self.videoFile_path,
-        #                                    cv2.VideoWriter_fourcc(*'MJPG'),
-        #                                    GAME_SETTING.FPS,
-        #                                    (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
-=======
->>>>>>> Stashed changes
         self.n = 0
         self.elapsed_time = 0
         self.totalTime = 0
@@ -249,40 +242,66 @@ class PyGame2D():
     def evaluate(self):
         reward = 0
         if not self.robot.isAlive:
-            reward -= 1000
+            reward -= 100000
 
         if self.robot.achieveGoal:
-            reward += 10000
+            reward += 100000
 
         distance = self.observe()[-4:]
         if distance[1] == 0:
-            reward -= 150
+            reward -= 500
             # print('-150 huong thang co do dai = 0')
         elif distance[1] == 1:
-            reward -= 70
+            reward -= 300
             # print('-70 huong thang co do dai = 1')
         elif distance[1] == 2:
-            reward -= 20
+            reward -= 100
             # print('-20 huong thang co do dai = 2')
         elif distance[1] > 2:
             reward += 200
             # print('+70 huong thang khong co vat can')
 
-        if distance[0] == 0 or distance[2] == 0:
+        if distance[0] == 0:
             reward -= 80
             # print('-80 huong 2 ben co do dai = 0')
-        elif distance[0] == 1 or distance[2] == 1:
+        elif distance[0] == 1:
             reward -= 40
             # print('-40 huong 2 ben co do dai = 1')
-        elif distance[0] == 2 or distance[2] == 2:
+        elif distance[0] == 2:
             reward -= 15
             # print('-15 huong 2 ben co do dai = 2')
-        elif distance[0] > 2 or distance[2] > 2:
+        elif distance[0] > 2:
             reward += 180
             # print('+180 huong 2 ben khong co vat can')
-            
+
+        if distance[2] == 0:
+            reward -= 80
+            # print('-80 huong 2 ben co do dai = 0')
+        elif distance[2] == 1:
+            reward -= 40
+            # print('-40 huong 2 ben co do dai = 1')
+        elif distance[2] == 2:
+            reward -= 15
+            # print('-15 huong 2 ben co do dai = 2')
+        elif distance[2] > 2:
+            reward += 180
+            # print('+180 huong 2 ben khong co vat can')
+
+        # if distance[3] == 0:
+        #     reward += 80
+        # # print('-80 huong 2 ben co do dai = 0')
+        # elif distance[3] == 1:
+        #     reward += 40
+        #     # print('-40 huong 2 ben co do dai = 1')
+        # elif distance[3] == 2:
+        #     reward -= 15
+        #     # print('-15 huong 2 ben co do dai = 2')
+        # elif distance[3] > 2:
+        #     reward += 180
+        #     # print('+180 huong 2 ben khong co vat can')
+
         far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
-        reward -= far_from_goal*2
+        reward -= int(far_from_goal)
 
         return reward
 
@@ -351,13 +370,17 @@ class PyGame2D():
         self.obstacles.generateObstacles(self.env)
         self.goal.draw(self.env)
 
+    def getEnv(self):
+        return self.env
+
     def view(self, counter, action):
         screen = self.env.copy()
         self.robot.draw(screen)
         action = str(action)
-        cv2.putText(screen, action, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        cv2.putText(screen, action, (50, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         # self.record(screen, input)
-        
+
         return screen
         # cv2.imshow('Enviroment', screen)
         # cv2.waitKey(0)
