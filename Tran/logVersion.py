@@ -47,10 +47,12 @@ def getlogPosition_path(Version_folder, done):
         version_fileVideo_list = [int(file.split('_')[1])
                                   for file in videoRecord_file]
         version_number = max(version_fileVideo_list) + 1
-        if not done:
+        if done == 0:
             current_video_path += '_' + str(version_number) + '_.png'
-        else:
+        elif done == 1:
             current_video_path += '_' + str(version_number) + '_DONE.png'
+        elif done == 2:
+            current_video_path += '_' + str(version_number) + '_GOAL.png'
 
     return os.path.join(Version_folder, current_video_path)
 

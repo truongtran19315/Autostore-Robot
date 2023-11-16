@@ -162,9 +162,6 @@ class Robot(Car):
         # print(minDistance, minRay)
         return minDistance
 
-    def distanceConvert():
-        pass
-
     def checkCollision(self, distance):
         if distance <= self.radiusObject:
             self.isAlive = False
@@ -213,11 +210,11 @@ class PyGame2D():
         #                                    cv2.VideoWriter_fourcc(*'MJPG'),
         #                                    GAME_SETTING.FPS,
         #                                    (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
-        self.n = 0
-        self.elapsed_time = 0
-        self.totalTime = 0
-        self.minTime = INT_INFINITY
-        self.maxTime = 0
+        # self.n = 0
+        # self.elapsed_time = 0
+        # self.totalTime = 0
+        # self.minTime = INT_INFINITY
+        # self.maxTime = 0
 
     def _initObstacle(self):
         return Obstacles()
@@ -228,17 +225,17 @@ class PyGame2D():
     def action(self, action):
         self.robot.move(action=action)
         # self._obstacleMoves()
-        self.n += 1
-        start_time = time.time()
+        # self.n += 1
+        # start_time = time.time()
 
         distance = self.robot.scanLidar(obstacles=self.obstacles)
 
-        end_time = time.time()
+        # end_time = time.time()
 
-        elapsed_time = end_time - start_time
+        # elapsed_time = end_time - start_time
 
-        self.totalTime += elapsed_time
-        mediumTime = self.totalTime / self.n
+        # self.totalTime += elapsed_time
+        # mediumTime = self.totalTime / self.n
 
         # print(elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
 
@@ -248,10 +245,10 @@ class PyGame2D():
     def evaluate(self):
         reward = 0
         if not self.robot.isAlive:
-            reward -= 100000
+            reward -= 10000000
 
         if self.robot.achieveGoal:
-            reward += 100000
+            reward += 10000000
 
         distance = self.observe()[-4:]
         if distance[1] == 0:
@@ -264,47 +261,39 @@ class PyGame2D():
             reward -= 100
             # print('-20 huong thang co do dai = 2')
         elif distance[1] > 2:
-            reward += 200
+            # reward += 200
+            pass
             # print('+70 huong thang khong co vat can')
 
         if distance[0] == 0:
-            reward -= 80
+            reward -= 8
             # print('-80 huong 2 ben co do dai = 0')
         elif distance[0] == 1:
-            reward -= 40
+            reward -= 4
             # print('-40 huong 2 ben co do dai = 1')
         elif distance[0] == 2:
-            reward -= 15
+            reward -= 1
             # print('-15 huong 2 ben co do dai = 2')
         elif distance[0] > 2:
-            reward += 180
+            # reward += 18
+            pass
             # print('+180 huong 2 ben khong co vat can')
             
         if distance[2] == 0:
-            reward -= 80
+            reward -= 8
             # print('-80 huong 2 ben co do dai = 0')
         elif distance[2] == 1:
-            reward -= 40
+            reward -= 4
             # print('-40 huong 2 ben co do dai = 1')
         elif distance[2] == 2:
-            reward -= 15
+            reward -= 1
             # print('-15 huong 2 ben co do dai = 2')
         elif distance[2] > 2:
-            reward += 180
+            # reward += 18
+            pass
             # print('+180 huong 2 ben khong co vat can')
             
-        # if distance[3] == 0:
-        #     reward += 80
-        # # print('-80 huong 2 ben co do dai = 0')
-        # elif distance[3] == 1:
-        #     reward += 40
-        #     # print('-40 huong 2 ben co do dai = 1')
-        # elif distance[3] == 2:
-        #     reward -= 15
-        #     # print('-15 huong 2 ben co do dai = 2')
-        # elif distance[3] > 2:
-        #     reward += 180
-        #     # print('+180 huong 2 ben khong co vat can')
+        
             
         far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
         reward -= int(far_from_goal)
@@ -362,9 +351,11 @@ class PyGame2D():
         return np.concatenate((infoStateVector, lidarStateVector))
 
     def is_done(self):
-        if ((not self.robot.isAlive) or self.robot.achieveGoal):
-            return True
-        return False
+        if not self.robot.isAlive:
+            return PLAYER_SETTING.GONE
+        elif self.robot.achieveGoal:
+            return PLAYER_SETTING.GOAL
+        return PLAYER_SETTING.ALIVE
 
     def record(self, screen, input):
         if input == 27:

@@ -36,7 +36,7 @@ class Game:
         return action
 
     def run_episode(self, q_table, video, trackPosition, counter=COUNTER):
-        done = False
+        done = PLAYER_SETTING.ALIVE
         total_reward = 0
         state = self.game.observe()
         reward_records = []
@@ -49,11 +49,13 @@ class Game:
         slowdown = 0
         stop = 0
         nothing = 0
+        step_count = 0
         
         prev_state = None
         state_count_change = 0
         print(f"Start Real Posion: {firstPosition}")
         while not done and counter > 0:
+        # while done == 0:
             action = self.pick_sample(state, q_table)
             action_records.append(action)
             if action == 0:
@@ -68,9 +70,10 @@ class Game:
                 slowdown += 1
             elif action == 5: 
                 nothing += 1
-                
+            step_count += 1    
             
             next_state, reward, done = self.step(action)
+
             # screenRecord.append(self.trackGame(counter, action))
             # video.write(self.trackGame(counter, action))
             cv2.circle(trackPosition, self.get_RealPosion(), PLAYER_SETTING.RADIUS_OBJECT, COLOR.BLUE, 1)
@@ -97,6 +100,8 @@ class Game:
         ahead = 'ahead: ' + str(ahead)
         slowdown = 'slowdown: ' + str(slowdown)
         nothing = 'nothing: ' + str(nothing)
+        step_count = 'step counter: ' + str(step_count)
+        cv2.putText(trackPosition, step_count, (50, 400), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         cv2.putText(trackPosition, turn_right, (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         cv2.putText(trackPosition, turn_left, (50, 500), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         cv2.putText(trackPosition, stop, (50, 550), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
@@ -144,16 +149,6 @@ class Game:
         axes.set_xlabel('n epsilon')
         # axes.set_ylim(0, 1)
         axes.set_xlim(0, step_number)
-
-    def trackGame(self, counter, action):
-        # key = cv2.waitKey(delay=1)
-        # if key == 27 or (key & 0xFF == 'q'):
-        #     input = 27
-        # else:
-        #     input = -1
-        screen = self.game.view(counter, action)
-        
-        return screen
 
     def getEnv(self):
         return self.game.getEnv()
