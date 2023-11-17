@@ -30,9 +30,9 @@ class Game:
 
     def pick_sample(self, state, q_table):
         if np.random.random() > self.epsilon:
-            action = np.random.randint(0, ACTION_SPACE)
-        else:
             action = np.argmax(q_table[tuple(state)])
+        else:
+            action = np.random.randint(0, ACTION_SPACE)
         return action
 
     def run_episode(self, q_table, video, trackPosition, counter=COUNTER):

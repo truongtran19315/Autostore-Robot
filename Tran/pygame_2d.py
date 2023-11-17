@@ -57,8 +57,8 @@ class Car():
             pass
 
         # Calculate the position base on velocity per frame
-        dt = float(1/GAME_SETTING.FPS)
-        # dt = 1
+        # dt = float(1/GAME_SETTING.FPS)
+        dt = 1
 
         self.currAngle += (self.currRotationVelocity*dt)
 
@@ -252,7 +252,10 @@ class PyGame2D():
         if self.robot.achieveGoal:
             reward += 10000000
 
-        distance = self.observe()[-4:]
+        # distance = self.observe()[-4:]
+        observe = self.observe()
+        distance = observe[-4:]
+        direction = observe[0]
         if distance[1] == 0:
             reward -= 500
             # print('-150 huong thang co do dai = 0')
@@ -298,12 +301,12 @@ class PyGame2D():
         if self.robot.currentForwardVelocity == 0:
             reward -= 500
             
-        direction = self.observe()[0] 
-        reward -= (abs(direction - int(ALPHA_SPACE/2)) * 50)    
+        # direction = self.observe()[0] 
+        reward -= (abs(direction - int(ALPHA_SPACE/2)) * 100)    
             
         far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
         reward -= (int(far_from_goal) + 500)
-        # print(direction, reward)
+        # print(direction, observe[1], reward)
 
         return reward
 
@@ -331,7 +334,7 @@ class PyGame2D():
         #! chuyen doi state vector
         high, low = 1, 0
         alpha_space = -PLAYER_SETTING.PI, PLAYER_SETTING.PI
-        fwVelo_space = -PLAYER_SETTING.MAX_FORWARD_VELO, PLAYER_SETTING.MAX_FORWARD_VELO
+        fwVelo_space = 0, PLAYER_SETTING.MAX_FORWARD_VELO
         rVelo_space = PLAYER_SETTING.MIN_ROTATION_VELO, PLAYER_SETTING.MAX_ROTATION_VELO
 
         lowState = np.array(

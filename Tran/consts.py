@@ -25,12 +25,12 @@ class PLAYER_SETTING:
     INITIAL_X = 963
     INITIAL_Y = 477
 
-    MAX_FORWARD_VELO = 100 * 100
-    MAX_ROTATION_VELO = 1 *100
+    MAX_FORWARD_VELO = 100
+    MAX_ROTATION_VELO = 1
     MIN_ROTATION_VELO = -MAX_ROTATION_VELO
 
-    ACCELERATION_FORWARD = 5 *100
-    ACCELERATION_ROTATE = 0.05 *100
+    ACCELERATION_FORWARD = 5
+    ACCELERATION_ROTATE = 0.05
 
     CASTED_RAYS = 45
     CASTED_RAYS = 90
@@ -134,14 +134,14 @@ RVELO_SPACE = 4
 
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 10000 # Số lượng episode
+n_epsilondes = 10000 - 8001 # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.9  # Hệ số giảm
-epsilon = 0.9  # Xác suất khám phá
+epsilon = 0.9 - 8001*0.0001  # Xác suất khám phá
 epsilon_decay = 0.0001  # Hệ số giảm epsilon
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
 # base_path = "C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\PYGAME_2D\\DATA"
 base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
-COUNTER = 100
+COUNTER = 200
 videoPath = os.path.join(base_path, 'recordVideo.avi')
