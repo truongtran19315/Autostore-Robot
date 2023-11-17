@@ -163,7 +163,9 @@ class Robot(Car):
         return minDistance
 
     def checkCollision(self, distance):
-        if distance <= self.radiusObject:
+        if distance <= self.radiusObject \
+                or self.xPos < 12 or self.xPos > 1268 \
+                or self.yPos < 8 or self.yPos > 708:
             self.isAlive = False
 
     def checkAchieveGoal(self, goal):
@@ -293,16 +295,24 @@ class PyGame2D():
             pass
             # print('+180 huong 2 ben khong co vat can')
             
-        
+        if self.robot.currentForwardVelocity == 0:
+            reward -= 500
+            
+        direction = self.observe()[0] 
+        reward -= (abs(direction - int(ALPHA_SPACE/2)) * 50)    
             
         far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
-        reward -= int(far_from_goal)
+        reward -= (int(far_from_goal) + 500)
+        # print(direction, reward)
 
         return reward
 
     def observe(self):
-        ratioLeft = (self.robot.xPos)/(GAME_SETTING.SCREEN_WIDTH)
-        alpha = self.robot.currAngle
+        # ratioLeft = (self.robot.xPos)/(GAME_SETTING.SCREEN_WIDTH)
+        a = self.robot.currAngle
+        b = Utils.angleBetweenTwoPoints(self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
+        alpha = a - b
+        # print(a, b, alpha)
         fwVelo = self.robot.currentForwardVelocity
         rVelo = self.robot.currRotationVelocity
         lidars = self.robot.lidarSignals
@@ -314,13 +324,13 @@ class PyGame2D():
         bin_lidarsignal = np.delete(bin_lidarsignal, 0)
         lidars_digitized = np.digitize(lidars, bin_lidarsignal)
 
-        bin_lidarspace = np.array([45, 135, 180])
+        bin_lidarspace = np.array([60, 120, 180])
         lidars_sections = np.array_split(lidars_digitized, bin_lidarspace)
         section_lidars_min = [np.amin(section) for section in lidars_sections]
 
         #! chuyen doi state vector
         high, low = 1, 0
-        alpha_space = 0, 2*math.pi
+        alpha_space = -PLAYER_SETTING.PI, PLAYER_SETTING.PI
         fwVelo_space = -PLAYER_SETTING.MAX_FORWARD_VELO, PLAYER_SETTING.MAX_FORWARD_VELO
         rVelo_space = PLAYER_SETTING.MIN_ROTATION_VELO, PLAYER_SETTING.MAX_ROTATION_VELO
 

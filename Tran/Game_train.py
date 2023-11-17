@@ -10,7 +10,7 @@ os.makedirs(folder_path, exist_ok=True)
 videoFile_path = getlogVideo_path(getlogVersion(base_path))
 recordVideo = cv2.VideoWriter(videoFile_path,
                             cv2.VideoWriter_fourcc(*'XVID'),
-                            15,
+                            10,
                             (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
 Video = 1
 
@@ -45,7 +45,7 @@ reward_records = []
 goal_count = 0
 
 for i in range(n_epsilondes):
-    print(f"Epsilon {i} :")
+    print(f"Epsilon {i}")
     game.reset()
     
     trackPos = Env.copy()
@@ -65,12 +65,12 @@ for i in range(n_epsilondes):
         # plt.draw()
         # plt.pause(1)
         plt.savefig(diagram_path)
-        print(f"Diagram saved to: {diagram_path}")
+        # print(f"Diagram saved to: {diagram_path}")
 
     with open(q_table_path, "wb") as f:
         pickle.dump(q_table, f)
-    print(f"Q-table saved to: {q_table_path}")
-    print("-----------------------------------------------------")
+    # print(f"Q-table saved to: {q_table_path}")
+    # print("-----------------------------------------------------")
     # for j in range(len(screenRecord)):
     #     recordVideo.write(screenRecord[j])
         

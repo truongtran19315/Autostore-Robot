@@ -11,6 +11,18 @@ class Utils:
         new_rect = rotated_image.get_rect(
             center=image.get_rect(topleft=top_left).center)
         win.blit(rotated_image, new_rect.topleft)
+        
+    @staticmethod
+    def angleBetweenTwoPoints(xPointA, yPointA, xPointB, yPointB):
+        delta_x = xPointB - xPointA
+        delta_y = yPointB - yPointA
+        # print('a', delta_y, delta_x)
+        radian_angle = math.atan2(delta_y, delta_x)
+        if radian_angle < 0:
+            radian_angle = -radian_angle
+        else: radian_angle = PLAYER_SETTING.PI * 2 - radian_angle
+        # degree_angle = math.degrees(radian_angle)
+        return radian_angle
 
     @staticmethod
     def distanceBetweenTwoPoints(xPointA, yPointA, xPointB, yPointB):

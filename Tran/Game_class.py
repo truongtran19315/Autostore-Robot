@@ -30,9 +30,9 @@ class Game:
 
     def pick_sample(self, state, q_table):
         if np.random.random() > self.epsilon:
-            action = np.argmax(q_table[tuple(state)])
-        else:
             action = np.random.randint(0, ACTION_SPACE)
+        else:
+            action = np.argmax(q_table[tuple(state)])
         return action
 
     def run_episode(self, q_table, video, trackPosition, counter=COUNTER):
@@ -53,7 +53,7 @@ class Game:
         
         prev_state = None
         state_count_change = 0
-        print(f"Start Real Posion: {firstPosition}")
+        # print(f"Start Real Posion: {firstPosition}")
         while not done and counter > 0:
         # while done == 0:
             action = self.pick_sample(state, q_table)
@@ -76,7 +76,7 @@ class Game:
 
             # screenRecord.append(self.trackGame(counter, action))
             # video.write(self.trackGame(counter, action))
-            cv2.circle(trackPosition, self.get_RealPosion(), PLAYER_SETTING.RADIUS_OBJECT, COLOR.BLUE, 1)
+            cv2.circle(trackPosition, self.get_RealPosion(), PLAYER_SETTING.RADIUS_OBJECT, COLOR.GREEN, 1)
             maxQ = np.max(q_table[tuple(next_state)])
             q_table[tuple(state)][action] += self.alpha * (reward +
                                                            self.gamma * maxQ - q_table[tuple(state)][action])
@@ -89,7 +89,7 @@ class Game:
             total_reward += reward
             reward_records.append(reward)
             counter -= 1
-        print(f"End Real Posion: {self.get_RealPosion()}")
+        # print(f"End Real Posion: {self.get_RealPosion()}")
         cv2.circle(trackPosition, firstPosition, PLAYER_SETTING.RADIUS_OBJECT, COLOR.RED, 1)
         total_reward_str = 'total reward: ' + str(total_reward)
         cv2.putText(trackPosition, total_reward_str, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
@@ -117,7 +117,7 @@ class Game:
         # print(f"List record reward epsilon : {reward_records}")
 
         # print(f"List record action: {action_records}")
-        print(f"Total reward each epsilon : {total_reward}")
+        # print(f"Total reward each epsilon : {total_reward}")
         # print(f"List record reward: {reward_records}")
         # return total_reward, screenRecord
         return float(total_reward), video, trackPosition, done

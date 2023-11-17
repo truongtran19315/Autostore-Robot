@@ -56,6 +56,21 @@ def getlogPosition_path(Version_folder, done):
 
     return os.path.join(Version_folder, current_video_path)
 
+def getLog_path(Version_folder):
+    allfile = os.listdir(Version_folder)
+    current_log_path = 'log' #log
+    videoRecord_file = [file for file in allfile if "log" in file]
+
+    if not videoRecord_file:
+        current_log_path += '_0_.txt'
+    else:
+        version_fileVideo_list = [int(file.split('_')[1])
+                                  for file in videoRecord_file]
+        version_number = max(version_fileVideo_list) + 1
+        current_video_path += '_' + str(version_number) + '_.txt'
+
+    return os.path.join(Version_folder, current_log_path)
+
 
 # temp_folder = 'C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\PYGAME_2D\\DATA\\2023-11-15_V1'
 # print(f"all file : {os.listdir(temp_folder)}")
