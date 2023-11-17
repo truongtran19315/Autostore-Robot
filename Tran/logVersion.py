@@ -1,5 +1,6 @@
 import os
 import datetime
+import stat
 
 
 def getlogVersion(dest_folder):
@@ -56,22 +57,35 @@ def getlogPosition_path(Version_folder, done):
 
     return os.path.join(Version_folder, current_video_path)
 
-def getLog_path(Version_folder):
-    allfile = os.listdir(Version_folder)
+def getLog_path(log_folder):
+    allfile = os.listdir(log_folder)
     current_log_path = 'log' #log
-    videoRecord_file = [file for file in allfile if "log" in file]
+    log_file = [file for file in allfile if "log" in file]
 
-    if not videoRecord_file:
+    if not log_file:
         current_log_path += '_0_.txt'
     else:
-        version_fileVideo_list = [int(file.split('_')[1])
-                                  for file in videoRecord_file]
-        version_number = max(version_fileVideo_list) + 1
-        current_video_path += '_' + str(version_number) + '_.txt'
+        version_log_list = [int(file.split('_')[1])
+                                  for file in log_file]
+        version_number = max(version_log_list) + 1
+        current_log_path += '_' + str(version_number) + '_.txt'
 
-    return os.path.join(Version_folder, current_log_path)
+    return os.path.join(log_folder, current_log_path)
 
+base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
+folder_path = getlogVersion(base_path)
+os.makedirs(folder_path, exist_ok=True)
 
-# temp_folder = 'C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\PYGAME_2D\\DATA\\2023-11-15_V1'
-# print(f"all file : {os.listdir(temp_folder)}")
-# print(getlogVideo_path(temp_folder))
+videoFolderPath = os.path.join(folder_path, 'VIDEO')
+imageFolderPath = os.path.join(folder_path, 'IMAGE')
+logFolderPath = os.path.join(folder_path, 'LOG')
+os.makedirs(videoFolderPath, exist_ok=True)
+os.makedirs(imageFolderPath, exist_ok=True)
+os.makedirs(logFolderPath, exist_ok=True)
+
+# log_path = getLog_path(logFolderPath)
+# os.makedirs(log_path)
+# with open(log_path, 'a') as file:
+#     print(f'//////////////////////////// Log file /////////////////////////////', file=file)
+
+# os.chmod(log_path, stat.S_IWRITE)

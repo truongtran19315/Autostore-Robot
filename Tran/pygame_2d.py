@@ -11,7 +11,7 @@ from logVersion import *
 
 
 class Car():
-    def __init__(self, initX, initY, maxForwardVelocity, minRotationVelocity, maxRotationVelocity, accelerationForward, accelerationRotate, radiusObject) -> None:
+    def __init__(self, initX, initY, maxForwardVelocity, minRotationVelocity, maxRotationVelocity, currAngle, accelerationForward, accelerationRotate, radiusObject) -> None:
         self.xPos, self.yPos = initX, initY
         self.maxForwardVelocity = maxForwardVelocity
         self.maxRotationVelocity = maxRotationVelocity  # rotate to the right
@@ -22,6 +22,8 @@ class Car():
 
         self.currAngle = math.pi / 2
         # self.currAngle = math.pi
+        self.currAngle = currAngle
+        
         self.accelerationForward = accelerationForward
         self.accelerationRotate = accelerationRotate
 
@@ -78,15 +80,16 @@ class Car():
 
 
 class Robot(Car):
-    def __init__(self) -> None:
+    def __init__(self, xPos, yPos, currAngle) -> None:
         super().__init__(
-            # initX=random.randint(900, 1265),
-            # initY=random.randint(15, 705),
-            initX=PLAYER_SETTING.INITIAL_X,
-            initY=PLAYER_SETTING.INITIAL_Y,
+            initX=xPos,
+            initY=yPos,
+            # initX=PLAYER_SETTING.INITIAL_X,
+            # initY=PLAYER_SETTING.INITIAL_Y,
             maxForwardVelocity=PLAYER_SETTING.MAX_FORWARD_VELO,
             minRotationVelocity=PLAYER_SETTING.MIN_ROTATION_VELO,
             maxRotationVelocity=PLAYER_SETTING.MAX_ROTATION_VELO,
+            currAngle=currAngle,
             accelerationForward=PLAYER_SETTING.ACCELERATION_FORWARD,
             accelerationRotate=PLAYER_SETTING.ACCELERATION_ROTATE,
             radiusObject=PLAYER_SETTING.RADIUS_OBJECT
@@ -204,7 +207,8 @@ class PyGame2D():
         self.env = screen
         self.obstacles = self._initObstacle()
         self.goal = Goal()
-        self.robot = Robot()
+        xPos, yPos, currAngle = self.randomPosition()
+        self.robot = Robot(xPos, yPos, currAngle)
         self.generateEnvironment()
 
         # self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
@@ -223,6 +227,24 @@ class PyGame2D():
 
     def _obstacleMoves(self):
         pass
+    
+    def randomPosition(self):
+        xPos = 0
+        yPos = 0
+        currAngle =  random.uniform(0, 2*PLAYER_SETTING.PI)
+        
+        check = False
+        while not check:
+            xPos = random.randint(25, 1260)
+            yPos = random.randint(25, 700)
+            for obstacle in self.obstacles.obstacles:
+                if Utils.isPointInObstacle(obstacle, xPos, yPos):
+                    check = False
+                    break
+                else: check = True
+        
+        return xPos, yPos, currAngle
+            
 
     def action(self, action):
         self.robot.move(action=action)
@@ -298,11 +320,13 @@ class PyGame2D():
             pass
             # print('+180 huong 2 ben khong co vat can')
             
-        if self.robot.currentForwardVelocity == 0:
+        if self.robot.currentForwardVelocity == 0 and self.robot.currRotationVelocity == 0:
             reward -= 500
+        elif self.robot.currentForwardVelocity == 0:
+            reward -= 200
             
         # direction = self.observe()[0] 
-        reward -= (abs(direction - int(ALPHA_SPACE/2)) * 100)    
+        reward -= (direction * 50)    
             
         far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
         reward -= (int(far_from_goal) + 500)
@@ -314,7 +338,7 @@ class PyGame2D():
         # ratioLeft = (self.robot.xPos)/(GAME_SETTING.SCREEN_WIDTH)
         a = self.robot.currAngle
         b = Utils.angleBetweenTwoPoints(self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
-        alpha = a - b
+        alpha = abs(a - b)
         # print(a, b, alpha)
         fwVelo = self.robot.currentForwardVelocity
         rVelo = self.robot.currRotationVelocity
@@ -327,13 +351,13 @@ class PyGame2D():
         bin_lidarsignal = np.delete(bin_lidarsignal, 0)
         lidars_digitized = np.digitize(lidars, bin_lidarsignal)
 
-        bin_lidarspace = np.array([60, 120, 180])
+        bin_lidarspace = np.array([80, 100, 180])
         lidars_sections = np.array_split(lidars_digitized, bin_lidarspace)
         section_lidars_min = [np.amin(section) for section in lidars_sections]
 
         #! chuyen doi state vector
         high, low = 1, 0
-        alpha_space = -PLAYER_SETTING.PI, PLAYER_SETTING.PI
+        alpha_space = 0, PLAYER_SETTING.PI
         fwVelo_space = 0, PLAYER_SETTING.MAX_FORWARD_VELO
         rVelo_space = PLAYER_SETTING.MIN_ROTATION_VELO, PLAYER_SETTING.MAX_ROTATION_VELO
 

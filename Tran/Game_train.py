@@ -4,10 +4,19 @@ from Game_class import *
 import cv2
 
 
-folder_path = getlogVersion(base_path)
-os.makedirs(folder_path, exist_ok=True)
+# folder_path = getlogVersion(base_path)
+# os.makedirs(folder_path, exist_ok=True)
 
-videoFile_path = getlogVideo_path(getlogVersion(base_path))
+# videoFolderPath = os.path.join(folder_path, 'VIDEO')
+# imageFolderPath = os.path.join(folder_path, 'IMAGE')
+# logFolderPath = os.path.join(folder_path, 'LOG')
+# os.makedirs(videoFolderPath, exist_ok=True)
+# os.makedirs(imageFolderPath, exist_ok=True)
+# os.makedirs(logFolderPath, exist_ok=True)
+# log_path = getLog_path(logFolderPath)
+# os.makedirs(log_path)
+
+videoFile_path = getlogVideo_path(videoFolderPath)
 recordVideo = cv2.VideoWriter(videoFile_path,
                             cv2.VideoWriter_fourcc(*'XVID'),
                             10,
@@ -44,19 +53,25 @@ reward_records = []
 
 goal_count = 0
 
+all_States = np.zeros(game.new_observation_shape)
+
 for i in range(n_epsilondes):
     print(f"Epsilon {i}")
     game.reset()
     
     trackPos = Env.copy()
     
-    reward, _, trackPosition, done = game.run_episode(q_table, Video, trackPos)
+    log_path = getLog_path(logFolderPath)
+    with open(log_path, 'a') as file:
+        print(f'\n******************** Epsilon {i} ***********************', file=file)
+    
+    reward, _, trackPosition, done = game.run_episode(q_table, Video, trackPos, log_path, all_States)
     if done == PLAYER_SETTING.GOAL:
         goal_count += 1
     reward_records.append(reward)
     goal_count_str = 'goal counter: ' + str(goal_count)
     cv2.putText(trackPosition, goal_count_str, (50, 350), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-    trackPosition_path = getlogPosition_path(getlogVersion(base_path), done)
+    trackPosition_path = getlogPosition_path(imageFolderPath, done)
     cv2.imwrite(trackPosition_path, trackPosition)
     recordVideo.write(trackPosition)    
     # TODO update diagram
@@ -77,6 +92,11 @@ for i in range(n_epsilondes):
     if cv2.waitKey(1) & 0xFF == 'q':
         recordVideo.release()
         break
+
+
+game.creat_axes(axes, i)
+plt.savefig(diagram_path)
+print(f"Diagram saved to: {diagram_path}")
 
 folder_path_done = folder_path + "_DONE"
 os.rename(folder_path, folder_path_done)

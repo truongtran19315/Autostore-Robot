@@ -134,14 +134,11 @@ RVELO_SPACE = 4
 
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 10000 - 8001 # Số lượng episode
+n_epsilondes = 10000 # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.9  # Hệ số giảm
-epsilon = 0.9 - 8001*0.0001  # Xác suất khám phá
+epsilon = 0.9  # Xác suất khám phá
 epsilon_decay = 0.0001  # Hệ số giảm epsilon
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
-# base_path = "C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\PYGAME_2D\\DATA"
-base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
-COUNTER = 200
-videoPath = os.path.join(base_path, 'recordVideo.avi')
+COUNTER = 1000

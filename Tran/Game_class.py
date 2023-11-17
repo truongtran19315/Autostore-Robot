@@ -9,6 +9,10 @@ from matplotlib.animation import FuncAnimation
 # plt.ion()
 
 
+# folder_path = getlogVersion(base_path)
+# logFolderPath = os.path.join(folder_path, 'LOG')
+# log_path = getLog_path(logFolderPath)
+
 class Game:
     def __init__(self, screen):
         self.screen = screen
@@ -22,10 +26,10 @@ class Game:
         self.epsilon_decay = epsilon_decay
         self.alpha = alpha
         self.gamma = gamma
-        # self.count_state_change = 0
+        self.state_count_change = 0
         self.record_state_change = []
         self.total_states = ALPHA_SPACE * FWVELO_SPACE * RVELO_SPACE * \
-            math.pow(LENGTH_LIDARSIGNAL, SECTIONS_LIDARSPACE) * ACTION_SPACE
+            math.pow(LENGTH_LIDARSIGNAL, SECTIONS_LIDARSPACE)
         self.fig = None
 
     def pick_sample(self, state, q_table):
@@ -35,7 +39,7 @@ class Game:
             action = np.random.randint(0, ACTION_SPACE)
         return action
 
-    def run_episode(self, q_table, video, trackPosition, counter=COUNTER):
+    def run_episode(self, q_table, video, trackPosition, log_path, all_States, counter=COUNTER):
         done = PLAYER_SETTING.ALIVE
         total_reward = 0
         state = self.game.observe()
@@ -52,7 +56,7 @@ class Game:
         step_count = 0
         
         prev_state = None
-        state_count_change = 0
+        # state_count_change = 0
         # print(f"Start Real Posion: {firstPosition}")
         while not done and counter > 0:
         # while done == 0:
@@ -74,15 +78,21 @@ class Game:
             
             next_state, reward, done = self.step(action)
 
+            with open(log_path, 'a') as file:
+                print('\nAction:' + str(action) + ' obs: ' + str(next_state) + ' reward: ' + str(reward), file=file)
+
             # screenRecord.append(self.trackGame(counter, action))
             # video.write(self.trackGame(counter, action))
             cv2.circle(trackPosition, self.get_RealPosion(), PLAYER_SETTING.RADIUS_OBJECT, COLOR.GREEN, 1)
+            
             maxQ = np.max(q_table[tuple(next_state)])
             q_table[tuple(state)][action] += self.alpha * (reward +
                                                            self.gamma * maxQ - q_table[tuple(state)][action])
 
             if prev_state is not None and not np.array_equal(prev_state, state):
-                state_count_change += 1
+                if all_States[tuple(state)] == 0:
+                    self.state_count_change += 1
+                    all_States[tuple(state)] = 1
 
             prev_state = state
             state = next_state
@@ -109,7 +119,7 @@ class Game:
         cv2.putText(trackPosition, slowdown, (50, 650), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         cv2.putText(trackPosition, nothing, (50, 700), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         
-        self.record_state_change.append(state_count_change)
+        self.record_state_change.append(self.state_count_change)
 
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
