@@ -23,7 +23,7 @@ class Car():
         self.currAngle = math.pi / 2
         # self.currAngle = math.pi
         self.currAngle = currAngle
-        
+
         self.accelerationForward = accelerationForward
         self.accelerationRotate = accelerationRotate
 
@@ -227,12 +227,12 @@ class PyGame2D():
 
     def _obstacleMoves(self):
         pass
-    
+
     def randomPosition(self):
         xPos = 0
         yPos = 0
-        currAngle =  random.uniform(0, 2*PLAYER_SETTING.PI)
-        
+        currAngle = random.uniform(0, 2*PLAYER_SETTING.PI)
+
         check = False
         while not check:
             xPos = random.randint(25, 1260)
@@ -241,10 +241,10 @@ class PyGame2D():
                 if Utils.isPointInObstacle(obstacle, xPos, yPos):
                     check = False
                     break
-                else: check = True
-        
+                else:
+                    check = True
+
         return xPos, yPos, currAngle
-            
 
     def action(self, action):
         self.robot.move(action=action)
@@ -291,7 +291,7 @@ class PyGame2D():
             reward += 200
             # pass
             # print('+70 huong thang khong co vat can')
-            
+
         if distance[0] == 0:
             reward -= 50
             # print('-150 huong thang co do dai = 0')
@@ -305,7 +305,7 @@ class PyGame2D():
             reward += 50
             # pass
             # print('+70 huong thang khong co vat can')
-            
+
         if distance[2] == 0:
             reward -= 50
             # print('-150 huong thang co do dai = 0')
@@ -333,7 +333,7 @@ class PyGame2D():
         #     reward += 8
         #     # pass
         #     # print('+180 huong 2 ben khong co vat can')
-            
+
         # if distance[4] == 0:
         #     reward -= 8
         #     # print('-80 huong 2 ben co do dai = 0')
@@ -347,15 +347,15 @@ class PyGame2D():
         #     reward += 8
         #     # pass
         #     # print('+180 huong 2 ben khong co vat can')
-            
+
         if self.robot.currentForwardVelocity == 0 and self.robot.currRotationVelocity == 0:
             reward -= 1000
         elif self.robot.currentForwardVelocity == 0:
             reward -= 500
-            
-        # direction = self.observe()[0] 
-        reward -= (direction * 50)    
-            
+
+        # direction = self.observe()[0]
+        reward -= (direction * 50)
+
         # far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
         # reward -= (int(far_from_goal))
         # print(direction, observe[1], reward)
@@ -365,7 +365,8 @@ class PyGame2D():
     def observe(self):
         # ratioLeft = (self.robot.xPos)/(GAME_SETTING.SCREEN_WIDTH)
         a = self.robot.currAngle
-        b = Utils.angleBetweenTwoPoints(self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
+        b = Utils.angleBetweenTwoPoints(
+            self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
         alpha = abs(a - b)
         if alpha > PLAYER_SETTING.PI:
             alpha = 2*PLAYER_SETTING.PI - alpha
@@ -434,7 +435,7 @@ class PyGame2D():
     def generateEnvironment(self):
         self.obstacles.generateObstacles(self.env)
         self.goal.draw(self.env)
-        
+
     def getEnv(self):
         return self.env
 
@@ -444,10 +445,10 @@ class PyGame2D():
         # action = str(action)
         # cv2.putText(screen, action, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         # self.record(screen, input)
-        
+
         # return screen
         cv2.imshow('Enviroment', screen)
-        cv2.waitKey(0)
+        cv2.waitKey(1)
 
     def convert_lenLidar(self):
         self.robot.lidarSignals = np.array(self.robot.lidarSignals)
