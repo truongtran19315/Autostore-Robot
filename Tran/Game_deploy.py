@@ -3,9 +3,9 @@ from consts import *
 import numpy as np
 from Game_class import *
 
-date_train = input('Enter folder trained (year-month-day): ')
-vesion_day = input('Enter version trained this day (number): ')
-foler_train = date_train + '_V' + vesion_day
+date_train = '2023-11-21'
+vesion_day = 1
+foler_train = date_train + '_V' + str(vesion_day)
 foler_train_path = os.path.join(base_path, foler_train, 'q_table.pkl')
 
 with open(foler_train_path, "rb") as f:
