@@ -3,8 +3,12 @@ from consts import *
 import numpy as np
 from Game_class import *
 
+date_train = input('Enter folder trained (year-month-day): ')
+vesion_day = input('Enter version trained this day (number): ')
+foler_train = date_train + '_V' + vesion_day
+foler_train_path = os.path.join(base_path, foler_train, 'q_table.pkl')
 
-with open("D:\\Workspace\\Github\\Autostore-Robot\\Tran\\DATA\\2023-11-21_V2\\q_table.pkl", "rb") as f:
+with open(foler_train_path, "rb") as f:
     q_table = pickle.load(f)
 
 screen = np.zeros((720, 1280, 3), dtype=np.uint8)
@@ -13,11 +17,12 @@ Env = robot.getEnv()
 
 state = robot.game.observe()
 done = 0
-
-while done == 0:
+counter = 5000
+while done == 0 and counter > 0:
     action = np.argmax(q_table[tuple(state)])
     print(f'Action: {action}')
     next_state, _, done = robot.step(action)
     # robot.game.action(action)
     robot.game.view()
     state = next_state
+    counter -= 1
