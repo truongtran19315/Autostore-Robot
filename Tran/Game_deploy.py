@@ -4,7 +4,7 @@ import numpy as np
 from Game_class import *
 
 
-with open("C:\\Users\\truon\\PROJECTS\\PYTHON\\do-an-hk231\\Autostore-Robot\\Tran\\DATA\\2023-11-21_V1\\q_table.pkl", "rb") as f:
+with open("D:\\Workspace\\Github\\Autostore-Robot\\Tran\\DATA\\2023-11-21_V2\\q_table.pkl", "rb") as f:
     q_table = pickle.load(f)
 
 screen = np.zeros((720, 1280, 3), dtype=np.uint8)
@@ -12,10 +12,12 @@ robot = Game(screen)
 Env = robot.getEnv()
 
 state = robot.game.observe()
-while True:
+done = 0
+
+while done == 0:
     action = np.argmax(q_table[tuple(state)])
     print(f'Action: {action}')
-    robot.game.action(action)
+    next_state, _, done = robot.step(action)
+    # robot.game.action(action)
     robot.game.view()
-    next_state = robot.game.observe()
     state = next_state
