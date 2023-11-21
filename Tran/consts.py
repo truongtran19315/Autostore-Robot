@@ -140,7 +140,7 @@ RVELO_SPACE = 4
 
 
 # Định nghĩa các tham số đầu vào
-ed = 0
+ed = 6174
 n_epsilondes = 10000 - ed # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.9  # Hệ số giảm

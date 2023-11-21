@@ -282,14 +282,14 @@ class PyGame2D():
             reward -= 500
             # print('-150 huong thang co do dai = 0')
         elif distance[1] == 1:
-            reward -= 200
+            reward -= 100
             # print('-70 huong thang co do dai = 1')
         elif distance[1] == 2:
-            reward -= 100
+            reward -= 50
             # print('-20 huong thang co do dai = 2')
         elif distance[1] > 2:
-            reward += 200
-            # pass
+            # reward += 200
+            pass
             # print('+70 huong thang khong co vat can')
 
         if distance[0] == 0:
@@ -302,8 +302,8 @@ class PyGame2D():
             reward -= 10
             # print('-20 huong thang co do dai = 2')
         elif distance[0] > 2:
-            reward += 50
-            # pass
+            # reward += 50
+            pass
             # print('+70 huong thang khong co vat can')
 
         if distance[2] == 0:
@@ -316,8 +316,8 @@ class PyGame2D():
             reward -= 10
             # print('-20 huong thang co do dai = 2')
         elif distance[2] > 2:
-            reward += 50
-            # pass
+            # reward += 50
+            pass
             # print('+70 huong thang khong co vat can')
 
         # if distance[0] == 0:
