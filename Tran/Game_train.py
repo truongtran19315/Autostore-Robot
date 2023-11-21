@@ -92,6 +92,9 @@ for i in range(n_epsilondes):
     if cv2.waitKey(1) & 0xFF == 'q':
         recordVideo.release()
         break
+    
+    del trackPos
+    del trackPosition
 
 
 game.creat_axes(axes, i)
