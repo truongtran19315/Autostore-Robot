@@ -1,6 +1,0 @@
-!command prompt administrator mode
-
-D:
-cd D:\Workspace\Github\Autostore-Robot\Tran
-python setup.py build_ext --inplace
-python .\Game_train.py  

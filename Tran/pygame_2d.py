@@ -82,10 +82,10 @@ class Car():
 class Robot(Car):
     def __init__(self, xPos, yPos, currAngle) -> None:
         super().__init__(
-            initX=xPos,
-            initY=yPos,
-            # initX=PLAYER_SETTING.INITIAL_X,
-            # initY=PLAYER_SETTING.INITIAL_Y,
+            # initX=xPos,
+            # initY=yPos,
+            initX=PLAYER_SETTING.INITIAL_X,
+            initY=PLAYER_SETTING.INITIAL_Y,
             maxForwardVelocity=PLAYER_SETTING.MAX_FORWARD_VELO,
             minRotationVelocity=PLAYER_SETTING.MIN_ROTATION_VELO,
             maxRotationVelocity=PLAYER_SETTING.MAX_ROTATION_VELO,
@@ -269,67 +269,95 @@ class PyGame2D():
     def evaluate(self):
         reward = 0
         if not self.robot.isAlive:
-            reward -= 10000000
+            reward -= 1000000
 
         if self.robot.achieveGoal:
-            reward += 10000000
+            reward += 100000
 
         # distance = self.observe()[-4:]
         observe = self.observe()
-        distance = observe[-4:]
+        distance = observe[-3:]
         direction = observe[0]
         if distance[1] == 0:
             reward -= 500
             # print('-150 huong thang co do dai = 0')
         elif distance[1] == 1:
-            reward -= 300
+            reward -= 200
             # print('-70 huong thang co do dai = 1')
         elif distance[1] == 2:
             reward -= 100
             # print('-20 huong thang co do dai = 2')
         elif distance[1] > 2:
-            # reward += 200
-            pass
+            reward += 200
+            # pass
             # print('+70 huong thang khong co vat can')
-
+            
         if distance[0] == 0:
-            reward -= 8
-            # print('-80 huong 2 ben co do dai = 0')
+            reward -= 50
+            # print('-150 huong thang co do dai = 0')
         elif distance[0] == 1:
-            reward -= 4
-            # print('-40 huong 2 ben co do dai = 1')
+            reward -= 30
+            # print('-70 huong thang co do dai = 1')
         elif distance[0] == 2:
-            reward -= 1
-            # print('-15 huong 2 ben co do dai = 2')
+            reward -= 10
+            # print('-20 huong thang co do dai = 2')
         elif distance[0] > 2:
-            # reward += 18
-            pass
-            # print('+180 huong 2 ben khong co vat can')
+            reward += 50
+            # pass
+            # print('+70 huong thang khong co vat can')
             
         if distance[2] == 0:
-            reward -= 8
-            # print('-80 huong 2 ben co do dai = 0')
+            reward -= 50
+            # print('-150 huong thang co do dai = 0')
         elif distance[2] == 1:
-            reward -= 4
-            # print('-40 huong 2 ben co do dai = 1')
+            reward -= 30
+            # print('-70 huong thang co do dai = 1')
         elif distance[2] == 2:
-            reward -= 1
-            # print('-15 huong 2 ben co do dai = 2')
+            reward -= 10
+            # print('-20 huong thang co do dai = 2')
         elif distance[2] > 2:
-            # reward += 18
-            pass
-            # print('+180 huong 2 ben khong co vat can')
+            reward += 50
+            # pass
+            # print('+70 huong thang khong co vat can')
+
+        # if distance[0] == 0:
+        #     reward -= 8
+        #     # print('-80 huong 2 ben co do dai = 0')
+        # elif distance[0] == 1:
+        #     reward -= 4
+        #     # print('-40 huong 2 ben co do dai = 1')
+        # elif distance[0] == 2:
+        #     reward -= 1
+        #     # print('-15 huong 2 ben co do dai = 2')
+        # elif distance[0] > 2:
+        #     reward += 8
+        #     # pass
+        #     # print('+180 huong 2 ben khong co vat can')
+            
+        # if distance[4] == 0:
+        #     reward -= 8
+        #     # print('-80 huong 2 ben co do dai = 0')
+        # elif distance[4] == 1:
+        #     reward -= 4
+        #     # print('-40 huong 2 ben co do dai = 1')
+        # elif distance[4] == 2:
+        #     reward -= 1
+        #     # print('-15 huong 2 ben co do dai = 2')
+        # elif distance[4] > 2:
+        #     reward += 8
+        #     # pass
+        #     # print('+180 huong 2 ben khong co vat can')
             
         if self.robot.currentForwardVelocity == 0 and self.robot.currRotationVelocity == 0:
-            reward -= 500
+            reward -= 1000
         elif self.robot.currentForwardVelocity == 0:
-            reward -= 200
+            reward -= 500
             
         # direction = self.observe()[0] 
         reward -= (direction * 50)    
             
-        far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
-        reward -= (int(far_from_goal) + 500)
+        # far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
+        # reward -= (int(far_from_goal))
         # print(direction, observe[1], reward)
 
         return reward
@@ -339,6 +367,8 @@ class PyGame2D():
         a = self.robot.currAngle
         b = Utils.angleBetweenTwoPoints(self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
         alpha = abs(a - b)
+        if alpha > PLAYER_SETTING.PI:
+            alpha = 2*PLAYER_SETTING.PI - alpha
         # print(a, b, alpha)
         fwVelo = self.robot.currentForwardVelocity
         rVelo = self.robot.currRotationVelocity
@@ -351,7 +381,8 @@ class PyGame2D():
         bin_lidarsignal = np.delete(bin_lidarsignal, 0)
         lidars_digitized = np.digitize(lidars, bin_lidarsignal)
 
-        bin_lidarspace = np.array([80, 100, 180])
+        # bin_lidarspace = np.array([33, 84, 96, 147])
+        bin_lidarspace = np.array([84, 96])
         lidars_sections = np.array_split(lidars_digitized, bin_lidarspace)
         section_lidars_min = [np.amin(section) for section in lidars_sections]
 
@@ -407,16 +438,16 @@ class PyGame2D():
     def getEnv(self):
         return self.env
 
-    def view(self, counter, action):
+    def view(self):
         screen = self.env.copy()
         self.robot.draw(screen)
-        action = str(action)
-        cv2.putText(screen, action, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        # action = str(action)
+        # cv2.putText(screen, action, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         # self.record(screen, input)
         
-        return screen
-        # cv2.imshow('Enviroment', screen)
-        # cv2.waitKey(0)
+        # return screen
+        cv2.imshow('Enviroment', screen)
+        cv2.waitKey(0)
 
     def convert_lenLidar(self):
         self.robot.lidarSignals = np.array(self.robot.lidarSignals)

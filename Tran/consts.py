@@ -24,6 +24,9 @@ class PLAYER_SETTING:
 
     INITIAL_X = 963
     INITIAL_Y = 477
+    
+    INITIAL_X = 150
+    INITIAL_Y = 500
 
     MAX_FORWARD_VELO = 100
     MAX_ROTATION_VELO = 1
@@ -35,13 +38,16 @@ class PLAYER_SETTING:
     CASTED_RAYS = 45
     CASTED_RAYS = 90
     CASTED_RAYS = 360   # số lượng tia lidar
+    CASTED_RAYS = 180
     PI = math.pi
     HALF_PI = PI/2  # pi/2
     STEP_ANGLE = 2 * PI / CASTED_RAYS   # góc mỗi tia lidar
+    STEP_ANGLE = PI / CASTED_RAYS   # góc mỗi tia lidar
+    
 
     Y_GOAL_POSITION = 10
-    GOAL_POSITION = {"x": 200, "y": 50}
-    GOAL_RADIUS = 20
+    GOAL_POSITION = {"x": 950, "y": 315}
+    GOAL_RADIUS = 30
 
     # MAX_STEP_PER_EPOCH = 5000
     GOAL = 2
@@ -119,10 +125,10 @@ INT_INFINITY = 99999
 
 #! observe/ chuyen gia tri
 LENGTH_LIDARSIGNAL = 4   # 0,1,2,3
-SECTIONS_LIDARSPACE = 4  # ! chia lidar thành 4 vùng 0,1,2,3
+SECTIONS_LIDARSPACE = 3  # ! chia lidar thành 4 vùng 0,1,2,3,4
 
 # set các khoảng rời rạc
-ALPHA_SPACE = 10
+ALPHA_SPACE = 20
 FWVELO_SPACE = 4
 RVELO_SPACE = 4
 
@@ -134,11 +140,12 @@ RVELO_SPACE = 4
 
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 10000 # Số lượng episode
+ed = 0
+n_epsilondes = 10000 - ed # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.9  # Hệ số giảm
-epsilon = 0.9  # Xác suất khám phá
+epsilon = 0.9 - ed*0.0001 # Xác suất khám phá
 epsilon_decay = 0.0001  # Hệ số giảm epsilon
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
-COUNTER = 1000
+COUNTER = 500

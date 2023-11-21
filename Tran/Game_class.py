@@ -78,9 +78,6 @@ class Game:
             
             next_state, reward, done = self.step(action)
 
-            with open(log_path, 'a') as file:
-                print('\nAction:' + str(action) + ' obs: ' + str(next_state) + ' reward: ' + str(reward), file=file)
-
             # screenRecord.append(self.trackGame(counter, action))
             # video.write(self.trackGame(counter, action))
             cv2.circle(trackPosition, self.get_RealPosion(), PLAYER_SETTING.RADIUS_OBJECT, COLOR.GREEN, 1)
@@ -89,6 +86,11 @@ class Game:
             q_table[tuple(state)][action] += self.alpha * (reward +
                                                            self.gamma * maxQ - q_table[tuple(state)][action])
 
+            with open(log_path, 'a') as file:
+                print('Curr-State: ' + str(state) \
+                    + '\nAction:' + str(action) + ' obs: ' + str(next_state) + ' reward: ' + str(reward) \
+                    + '\nq-table at state: ' + str(q_table[tuple(state)]) + '\n', file=file)
+                
             if prev_state is not None and not np.array_equal(prev_state, state):
                 if all_States[tuple(state)] == 0:
                     self.state_count_change += 1
