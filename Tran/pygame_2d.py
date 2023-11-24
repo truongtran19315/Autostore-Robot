@@ -266,7 +266,7 @@ class PyGame2D():
         # print(elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
 
         self.robot.checkCollision(distance)
-        self.robot.checkAchieveGoal(self.goal)
+        self.distanGoal = self.robot.checkAchieveGoal(self.goal)
 
     def evaluate(self):
         reward = 0
@@ -279,7 +279,8 @@ class PyGame2D():
         # distance = self.observe()[-4:]
         observe = self.observe()
         distance = observe[-3:]
-        direction = observe[0]
+        goal_distance = observe[0]
+        direction = observe[1]
         if distance[1] == 0:
             reward -= 500
             # print('-150 huong thang co do dai = 0')
@@ -359,7 +360,7 @@ class PyGame2D():
         reward -= (abs(direction - 10) * 50)
 
         # far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
-        # reward -= (int(far_from_goal))
+        reward -= goal_distance*500
         # print(direction, observe[1], reward)
 
         return reward

@@ -129,10 +129,10 @@ LENGTH_LIDARSIGNAL = 4   # 0,1,2,3
 SECTIONS_LIDARSPACE = 3  # ! chia lidar thành 4 vùng 0,1,2,3,4
 
 # set các khoảng rời rạc
+DISTANCE_SPACE = 10  # ! khoang cach tu robot -> goal
 ALPHA_SPACE = 20
 FWVELO_SPACE = 4
 RVELO_SPACE = 8
-DISTANCE_SPACE = 10  # ! khoang cach tu robot -> goal
 
 # gamma = 0.99
 # alpha = 0.1
