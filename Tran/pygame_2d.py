@@ -210,6 +210,8 @@ class PyGame2D():
         xPos, yPos, currAngle = self.randomPosition()
         self.robot = Robot(xPos, yPos, currAngle)
         self.generateEnvironment()
+        self.distanGoal = Utils.distanceBetweenTwoPoints(
+            xPos, yPos, self.goal.xCenter, self.goal.yCenter)
 
         # self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
         # self.recordVideo = cv2.VideoWriter(self.videoFile_path,
@@ -374,6 +376,7 @@ class PyGame2D():
         elif alpha < -PLAYER_SETTING.PI:
             alpha += 2*PLAYER_SETTING.PI
         # print(a, b, alpha)
+        distanceGoal = self.distanGoal  # ! add distance
         fwVelo = self.robot.currentForwardVelocity
         rVelo = self.robot.currRotationVelocity
         lidars = self.robot.lidarSignals
@@ -391,20 +394,22 @@ class PyGame2D():
         section_lidars_min = [np.amin(section) for section in lidars_sections]
 
         #! chuyen doi state vector
-        high, low = 1, 0
+        # ! add distance
+        distanceGoal_space = PLAYER_SETTING.DISTANCEGOAL_MIN, PLAYER_SETTING.DISTANCEGOAL_MAX
         alpha_space = -PLAYER_SETTING.PI, PLAYER_SETTING.PI
         fwVelo_space = 0, PLAYER_SETTING.MAX_FORWARD_VELO
         rVelo_space = PLAYER_SETTING.MIN_ROTATION_VELO, PLAYER_SETTING.MAX_ROTATION_VELO
 
         lowState = np.array(
-            [alpha_space[0], fwVelo_space[0], rVelo_space[0]], dtype=float)
+            [distanceGoal_space[0], alpha_space[0], fwVelo_space[0], rVelo_space[0]], dtype=float)
         upState = np.array(
-            [alpha_space[1], fwVelo_space[1], rVelo_space[1]], dtype=float)
+            [distanceGoal_space[1], alpha_space[1], fwVelo_space[1], rVelo_space[1]], dtype=float)
 
-        infoState_shape = (ALPHA_SPACE, FWVELO_SPACE, RVELO_SPACE)
+        infoState_shape = (DISTANCE_SPACE, ALPHA_SPACE,
+                           FWVELO_SPACE, RVELO_SPACE)
 
         bins = []
-        for i in range(3):
+        for i in range(len(infoState_shape)):
             item = np.linspace(
                 lowState[i],
                 upState[i],
@@ -413,9 +418,9 @@ class PyGame2D():
             item = np.delete(item, 0)
             bins.append(item)
 
-        s = (alpha, fwVelo, rVelo)
+        s = (distanceGoal, alpha, fwVelo, rVelo)  # ! add distance
         infoStateVector = []
-        for i in range(3):
+        for i in range(len(infoState_shape)):
             infoStateVector.append(np.digitize(s[i], bins[i]))
 
         infoStateVector = np.array(infoStateVector)

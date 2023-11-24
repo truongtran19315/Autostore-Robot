@@ -24,16 +24,16 @@ class PLAYER_SETTING:
 
     INITIAL_X = 963
     INITIAL_Y = 477
-    
+
     INITIAL_X = 150
     INITIAL_Y = 500
 
-    MAX_FORWARD_VELO = 20 # 0.22 m/s -> 22px/s
-    MAX_ROTATION_VELO = 2.5 #rad/s
+    MAX_FORWARD_VELO = 100  # 0.22 m/s -> 22px/s
+    MAX_ROTATION_VELO = 1  # rad/s
     MIN_ROTATION_VELO = -MAX_ROTATION_VELO
 
-    ACCELERATION_FORWARD = 2
-    ACCELERATION_ROTATE = 0.1
+    ACCELERATION_FORWARD = 5
+    ACCELERATION_ROTATE = 0.05
 
     CASTED_RAYS = 45
     CASTED_RAYS = 90
@@ -43,7 +43,6 @@ class PLAYER_SETTING:
     HALF_PI = PI/2  # pi/2
     STEP_ANGLE = 2 * PI / CASTED_RAYS   # góc mỗi tia lidar
     STEP_ANGLE = PI / CASTED_RAYS   # góc mỗi tia lidar
-    
 
     Y_GOAL_POSITION = 10
     GOAL_POSITION = {"x": 950, "y": 315}
@@ -53,7 +52,9 @@ class PLAYER_SETTING:
     GOAL = 2
     GONE = 1
     ALIVE = 0
-    
+
+    DISTANCEGOAL_MIN = 0
+    DISTANCEGOAL_MAX = 1000
 
 
 class LANE_SETTING:
@@ -131,6 +132,7 @@ SECTIONS_LIDARSPACE = 3  # ! chia lidar thành 4 vùng 0,1,2,3,4
 ALPHA_SPACE = 20
 FWVELO_SPACE = 4
 RVELO_SPACE = 8
+DISTANCE_SPACE = 10  # ! khoang cach tu robot -> goal
 
 # gamma = 0.99
 # alpha = 0.1
@@ -141,10 +143,10 @@ RVELO_SPACE = 8
 
 # Định nghĩa các tham số đầu vào
 ed = 0
-n_epsilondes = 10000 - ed # Số lượng episode
+n_epsilondes = 10000 - ed  # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.9  # Hệ số giảm
-epsilon = 0.9 - ed*0.0001 # Xác suất khám phá
+epsilon = 0.9 - ed*0.0001  # Xác suất khám phá
 epsilon_decay = 0.0001  # Hệ số giảm epsilon
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
