@@ -28,12 +28,12 @@ class PLAYER_SETTING:
     INITIAL_X = 150
     INITIAL_Y = 500
 
-    MAX_FORWARD_VELO = 100
-    MAX_ROTATION_VELO = 1
+    MAX_FORWARD_VELO = 20 # 0.22 m/s -> 22px/s
+    MAX_ROTATION_VELO = 2.5 #rad/s
     MIN_ROTATION_VELO = -MAX_ROTATION_VELO
 
-    ACCELERATION_FORWARD = 5
-    ACCELERATION_ROTATE = 0.05
+    ACCELERATION_FORWARD = 2
+    ACCELERATION_ROTATE = 0.1
 
     CASTED_RAYS = 45
     CASTED_RAYS = 90
@@ -130,7 +130,7 @@ SECTIONS_LIDARSPACE = 3  # ! chia lidar thành 4 vùng 0,1,2,3,4
 # set các khoảng rời rạc
 ALPHA_SPACE = 20
 FWVELO_SPACE = 4
-RVELO_SPACE = 4
+RVELO_SPACE = 8
 
 # gamma = 0.99
 # alpha = 0.1
@@ -140,7 +140,7 @@ RVELO_SPACE = 4
 
 
 # Định nghĩa các tham số đầu vào
-ed = 6174
+ed = 0
 n_epsilondes = 10000 - ed # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.9  # Hệ số giảm
@@ -148,4 +148,4 @@ epsilon = 0.9 - ed*0.0001 # Xác suất khám phá
 epsilon_decay = 0.0001  # Hệ số giảm epsilon
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
-COUNTER = 500
+COUNTER = 200

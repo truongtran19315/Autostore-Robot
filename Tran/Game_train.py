@@ -53,6 +53,7 @@ game.fig, axes = plt.subplots()
 reward_records = []
 
 goal_count = 0
+version = ed
 
 all_States = np.zeros(game.new_observation_shape)
 
@@ -62,7 +63,7 @@ for i in range(n_epsilondes):
 
     trackPos = Env.copy()
 
-    log_path = getLog_path(logFolderPath)
+    log_path = getLog_path(logFolderPath, version)
     with open(log_path, 'a') as file:
         print(
             f'\n******************** Epsilon {i} ***********************', file=file)
@@ -75,7 +76,7 @@ for i in range(n_epsilondes):
     goal_count_str = 'goal counter: ' + str(goal_count)
     cv2.putText(trackPosition, goal_count_str, (50, 350),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-    trackPosition_path = getlogPosition_path(imageFolderPath, done)
+    trackPosition_path = getlogPosition_path(imageFolderPath, done, version)
     cv2.imwrite(trackPosition_path, trackPosition)
     recordVideo.write(trackPosition)
     # # TODO update diagram
@@ -99,6 +100,7 @@ for i in range(n_epsilondes):
     
     del trackPos
     del trackPosition
+    version += 1
 
 
 game.creat_axes(axes, i)

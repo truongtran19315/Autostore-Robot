@@ -103,8 +103,8 @@ class Game:
             counter -= 1
         # print(f"End Real Posion: {self.get_RealPosion()}")
         cv2.circle(trackPosition, firstPosition, PLAYER_SETTING.RADIUS_OBJECT, COLOR.RED, 1)
-        total_reward_str = 'total reward: ' + str(total_reward)
-        cv2.putText(trackPosition, total_reward_str, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        state_change_str = 'state change rate: ' + str(self.state_count_change/(ALPHA_SPACE*FWVELO_SPACE*RVELO_SPACE*ACTION_SPACE*LENGTH_LIDARSIGNAL**SECTIONS_LIDARSPACE))
+        cv2.putText(trackPosition, state_change_str, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         
         turn_right = 'turn right: ' + str(turn_right)
         turn_left = 'turn left: ' + str(turn_left)

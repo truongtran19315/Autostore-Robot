@@ -282,10 +282,10 @@ class PyGame2D():
             reward -= 500
             # print('-150 huong thang co do dai = 0')
         elif distance[1] == 1:
-            reward -= 100
+            reward -= 5
             # print('-70 huong thang co do dai = 1')
         elif distance[1] == 2:
-            reward -= 50
+            reward -= 3
             # print('-20 huong thang co do dai = 2')
         elif distance[1] > 2:
             # reward += 200
@@ -293,13 +293,13 @@ class PyGame2D():
             # print('+70 huong thang khong co vat can')
 
         if distance[0] == 0:
-            reward -= 50
+            reward -= 5
             # print('-150 huong thang co do dai = 0')
         elif distance[0] == 1:
-            reward -= 30
+            reward -= 3
             # print('-70 huong thang co do dai = 1')
         elif distance[0] == 2:
-            reward -= 10
+            reward -= 1
             # print('-20 huong thang co do dai = 2')
         elif distance[0] > 2:
             # reward += 50
@@ -307,13 +307,13 @@ class PyGame2D():
             # print('+70 huong thang khong co vat can')
 
         if distance[2] == 0:
-            reward -= 50
+            reward -= 5
             # print('-150 huong thang co do dai = 0')
         elif distance[2] == 1:
-            reward -= 30
+            reward -= 3
             # print('-70 huong thang co do dai = 1')
         elif distance[2] == 2:
-            reward -= 10
+            reward -= 1
             # print('-20 huong thang co do dai = 2')
         elif distance[2] > 2:
             # reward += 50
@@ -354,7 +354,7 @@ class PyGame2D():
             reward -= 500
 
         # direction = self.observe()[0]
-        reward -= (direction * 50)
+        reward -= (abs(direction - 10) * 50)
 
         # far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
         # reward -= (int(far_from_goal))
@@ -367,9 +367,12 @@ class PyGame2D():
         a = self.robot.currAngle
         b = Utils.angleBetweenTwoPoints(
             self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
-        alpha = abs(a - b)
+        # alpha = abs(a - b)
+        alpha = a - b
         if alpha > PLAYER_SETTING.PI:
-            alpha = 2*PLAYER_SETTING.PI - alpha
+            alpha += -2*PLAYER_SETTING.PI
+        elif alpha < -PLAYER_SETTING.PI:
+            alpha += 2*PLAYER_SETTING.PI
         # print(a, b, alpha)
         fwVelo = self.robot.currentForwardVelocity
         rVelo = self.robot.currRotationVelocity
@@ -389,7 +392,7 @@ class PyGame2D():
 
         #! chuyen doi state vector
         high, low = 1, 0
-        alpha_space = 0, PLAYER_SETTING.PI
+        alpha_space = -PLAYER_SETTING.PI, PLAYER_SETTING.PI
         fwVelo_space = 0, PLAYER_SETTING.MAX_FORWARD_VELO
         rVelo_space = PLAYER_SETTING.MIN_ROTATION_VELO, PLAYER_SETTING.MAX_ROTATION_VELO
 
