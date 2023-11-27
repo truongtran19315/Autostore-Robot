@@ -28,8 +28,8 @@ class PLAYER_SETTING:
     INITIAL_X = 150
     INITIAL_Y = 500
 
-    MAX_FORWARD_VELO = 100  # 0.22 m/s -> 22px/s
-    MAX_ROTATION_VELO = 1  # rad/s
+    MAX_FORWARD_VELO = 50  # 0.22 m/s -> 22px/s  1m = 100px
+    MAX_ROTATION_VELO = 0.5  # rad/s
     MIN_ROTATION_VELO = -MAX_ROTATION_VELO
 
     ACCELERATION_FORWARD = 5

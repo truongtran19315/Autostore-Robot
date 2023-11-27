@@ -97,6 +97,7 @@ class Robot(Car):
 
         self.isAlive = True
         self.achieveGoal = False
+        # self.bug = 0
         # 360 lidar signal around robot
         # lidar return distance from robot to obstacles in range - return infinity if not have obstacle
         self.lidarSignals = [INT_INFINITY]*PLAYER_SETTING.CASTED_RAYS
@@ -105,14 +106,15 @@ class Robot(Car):
                                 "color": COLOR.WHITE
                                 } for x in range(PLAYER_SETTING.CASTED_RAYS)]
 
-    def scanLidar(self, obstacles):
+    def scanLidar(self, obstacles):     
         obstaclesInRange = []  # to save obstacles in lidar range
         minDistance = INT_INFINITY
 
         for obstacle in obstacles.obstacles:
-            check = Utils.isPointInObstacleA(obstacle, self.xPos, self.yPos)
-            if check: 
-                print('a')
+            check = Utils.isRobotCollisionWithObstacle(obstacle, self.xPos, self.yPos)
+            if check:
+                minDistance = -1
+                # self.bug += 1
             distance = Utils.distanceBetweenTwoPoints(
                 self.xPos, self.yPos, obstacle.xCenter, obstacle.yCenter)
             isInRageLidar = distance < obstacle.radius + \
@@ -269,6 +271,8 @@ class PyGame2D():
         # print(elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
 
         self.robot.checkCollision(distance)
+        # if self.robot.bug > 0 and self.robot.isAlive:
+        #     print('a')
         self.distanGoal = self.robot.checkAchieveGoal(self.goal)
 
     def evaluate(self):
