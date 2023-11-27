@@ -110,6 +110,9 @@ class Robot(Car):
         minDistance = INT_INFINITY
 
         for obstacle in obstacles.obstacles:
+            check = Utils.isPointInObstacleA(obstacle, self.xPos, self.yPos)
+            if check: 
+                print('a')
             distance = Utils.distanceBetweenTwoPoints(
                 self.xPos, self.yPos, obstacle.xCenter, obstacle.yCenter)
             isInRageLidar = distance < obstacle.radius + \

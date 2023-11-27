@@ -28,6 +28,23 @@ class Utils:
     def distanceBetweenTwoPoints(xPointA, yPointA, xPointB, yPointB):
         return math.sqrt((xPointA - xPointB)**2 + (yPointA - yPointB)**2)
     
+    
+    def isPointInObstacleA(obstacle, xPointA, yPointA):
+        if obstacle.shape == 'circle':
+            distance = Utils.distanceBetweenTwoPoints(
+                    xPointA, yPointA, obstacle.xCenter, obstacle.yCenter)
+            if distance <= PLAYER_SETTING.RADIUS_OBJECT + obstacle.radius:
+                return True
+        else:
+            topLeft = [obstacle.xCenter - obstacle.width // 2 , \
+                obstacle.yCenter - obstacle.height//2]
+            topRight = obstacle.xCenter + obstacle.width // 2
+            botLeft = obstacle.yCenter + obstacle.height//2
+            if xPointA > topLeft[0] and xPointA < topRight \
+                and yPointA > topLeft[1] and yPointA < botLeft:
+                    return True
+        return False
+    
     def isPointInObstacle(obstacle, xPointA, yPointA):
         if obstacle.shape == 'circle':
             distance = Utils.distanceBetweenTwoPoints(
