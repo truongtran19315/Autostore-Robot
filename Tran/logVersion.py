@@ -62,7 +62,7 @@ def getLog_path(log_folder, version):
     # current_log_path = 'log' #log
     # log_file = [file for file in allfile if "log" in file]
 
-    # if not log_file:
+    # if not log_file:  
     #     current_log_path += '_0_.txt'
     # else:
     #     version_log_list = [int(file.split('_')[1])

@@ -28,7 +28,7 @@ class Game:
         self.gamma = gamma
         self.state_count_change = 0
         self.record_state_change = []
-        self.total_states = ALPHA_SPACE * FWVELO_SPACE * RVELO_SPACE * \
+        self.total_states = DISTANCE_SPACE * ALPHA_SPACE * FWVELO_SPACE * RVELO_SPACE * \
             math.pow(LENGTH_LIDARSIGNAL, SECTIONS_LIDARSPACE)
         self.fig = None
 
@@ -107,7 +107,7 @@ class Game:
         cv2.circle(trackPosition, firstPosition,
                    PLAYER_SETTING.RADIUS_OBJECT, COLOR.RED, 1)
         state_change_str = 'state change rate: ' + str(self.state_count_change/(
-            ALPHA_SPACE*FWVELO_SPACE*RVELO_SPACE*ACTION_SPACE*LENGTH_LIDARSIGNAL**SECTIONS_LIDARSPACE))
+            self.total_states))
         cv2.putText(trackPosition, state_change_str, (50, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
 

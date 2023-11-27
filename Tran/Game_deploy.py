@@ -3,7 +3,7 @@ from consts import *
 import numpy as np
 from Game_class import *
 
-date_train = '2023-11-21'
+date_train = '2023-11-27'
 vesion_day = 1
 foler_train = date_train + '_V' + str(vesion_day)
 foler_train_path = os.path.join(base_path, foler_train, 'q_table.pkl')

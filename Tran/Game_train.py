@@ -95,7 +95,7 @@ for i in range(n_epsilondes):
     #     recordVideo.write(screenRecord[j])
 
     if cv2.waitKey(1) & 0xFF == 'q':
-        recordVideo.release()
+        recordVideo.release()     
         break
     
     del trackPos
@@ -105,7 +105,7 @@ for i in range(n_epsilondes):
 
 game.creat_axes(axes, i)
 plt.savefig(diagram_path)
-print(f"Diagram saved to: {diagram_path}")
+print(f"Diagram saved to: {diagram_path}") 
 
 folder_path_done = folder_path + "_DONE"
 os.rename(folder_path, folder_path_done)

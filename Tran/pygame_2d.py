@@ -82,10 +82,10 @@ class Car():
 class Robot(Car):
     def __init__(self, xPos, yPos, currAngle) -> None:
         super().__init__(
-            # initX=xPos,
-            # initY=yPos,
-            initX=PLAYER_SETTING.INITIAL_X,
-            initY=PLAYER_SETTING.INITIAL_Y,
+            initX=xPos,
+            initY=yPos,
+            # initX=PLAYER_SETTING.INITIAL_X,
+            # initY=PLAYER_SETTING.INITIAL_Y,
             maxForwardVelocity=PLAYER_SETTING.MAX_FORWARD_VELO,
             minRotationVelocity=PLAYER_SETTING.MIN_ROTATION_VELO,
             maxRotationVelocity=PLAYER_SETTING.MAX_ROTATION_VELO,
@@ -357,7 +357,7 @@ class PyGame2D():
             reward -= 500
 
         # direction = self.observe()[0]
-        reward -= (abs(direction - 10) * 50)
+        reward -= (abs(direction - ALPHA_SPACE/2) * 100)
 
         # far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
         reward -= goal_distance*500
