@@ -111,7 +111,7 @@ class Robot(Car):
         minDistance = INT_INFINITY
 
         for obstacle in obstacles.obstacles:
-            check = Utils.isRobotCollisionWithObstacle(obstacle, self.xPos, self.yPos)
+            check = Utils.isRobotWithinObstacle(obstacle, self.xPos, self.yPos)
             if check:
                 minDistance = -1
                 # self.bug += 1
@@ -243,6 +243,7 @@ class PyGame2D():
         check = False
         while not check:
             xPos = random.randint(25, 1260)
+            # xPos = random.randint(25, 650)
             yPos = random.randint(25, 700)
             for obstacle in self.obstacles.obstacles:
                 if Utils.isPointInObstacle(obstacle, xPos, yPos):

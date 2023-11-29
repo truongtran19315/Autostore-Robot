@@ -29,7 +29,7 @@ class Utils:
         return math.sqrt((xPointA - xPointB)**2 + (yPointA - yPointB)**2)
     
     
-    def isRobotCollisionWithObstacle(obstacle, xPointA, yPointA):
+    def isRobotWithinObstacle(obstacle, xPointA, yPointA):
         if obstacle.shape == 'circle':
             distance = Utils.distanceBetweenTwoPoints(
                     xPointA, yPointA, obstacle.xCenter, obstacle.yCenter)
