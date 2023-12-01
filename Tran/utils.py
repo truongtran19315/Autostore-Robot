@@ -29,19 +29,19 @@ class Utils:
         return math.sqrt((xPointA - xPointB)**2 + (yPointA - yPointB)**2)
     
     
-    def isPointInObstacleA(obstacle, xPointA, yPointA):
+    def isRobotWithinObstacle(obstacle, xPointA, yPointA):
         if obstacle.shape == 'circle':
             distance = Utils.distanceBetweenTwoPoints(
                     xPointA, yPointA, obstacle.xCenter, obstacle.yCenter)
-            if distance <= PLAYER_SETTING.RADIUS_OBJECT + obstacle.radius:
+            if distance <= obstacle.radius:
                 return True
         else:
             topLeft = [obstacle.xCenter - obstacle.width // 2 , \
                 obstacle.yCenter - obstacle.height//2]
-            topRight = obstacle.xCenter + obstacle.width // 2
-            botLeft = obstacle.yCenter + obstacle.height//2
-            if xPointA > topLeft[0] and xPointA < topRight \
-                and yPointA > topLeft[1] and yPointA < botLeft:
+            xtopRight = obstacle.xCenter + obstacle.width // 2
+            ybotLeft = obstacle.yCenter + obstacle.height//2
+            if xPointA >= topLeft[0] and xPointA <= xtopRight \
+                and yPointA >= topLeft[1] and yPointA <= ybotLeft:
                     return True
         return False
     
@@ -250,33 +250,32 @@ class Utils:
                         yPoint = y4Point
 
             # Trường hợp tia trùng với cạnh
-            elif a == a2:
-                if b == b2:
-                    d1 = Utils.distanceBetweenTwoPoints(
-                        xSource, ySource, botLeft[0], botLeft[1])
-                    d2 = Utils.distanceBetweenTwoPoints(
-                        xSource, ySource, botRight[0], botRight[1])
-                    if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
-                        distance = d1
-                        xPoint = botLeft[0]
-                        yPoint = botLeft[1]
-                    elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
-                        distance = d2
-                        xPoint = botRight[0]
-                        yPoint = botRight[1]
-                elif b == b4:
-                    d1 = Utils.distanceBetweenTwoPoints(
-                        xSource, ySource, topLeft[0], topLeft[1])
-                    d2 = Utils.distanceBetweenTwoPoints(
-                        xSource, ySource, topRight[0], topRight[1])
-                    if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
-                        distance = d1
-                        xPoint = topLeft[0]
-                        yPoint = topLeft[1]
-                    elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
-                        distance = d2
-                        xPoint = topRight[0]
-                        yPoint = topRight[1]
+            elif a == a2 and b == b2:
+                d1 = Utils.distanceBetweenTwoPoints(
+                    xSource, ySource, botLeft[0], botLeft[1])
+                d2 = Utils.distanceBetweenTwoPoints(
+                    xSource, ySource, botRight[0], botRight[1])
+                if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+                    distance = d1
+                    xPoint = botLeft[0]
+                    yPoint = botLeft[1]
+                elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+                    distance = d2
+                    xPoint = botRight[0]
+                    yPoint = botRight[1]
+            elif a == a2 and b == b4:
+                d1 = Utils.distanceBetweenTwoPoints(
+                    xSource, ySource, topLeft[0], topLeft[1])
+                d2 = Utils.distanceBetweenTwoPoints(
+                    xSource, ySource, topRight[0], topRight[1])
+                if d1 < d2 and d1 <= PLAYER_SETTING.RADIUS_LIDAR:
+                    distance = d1
+                    xPoint = topLeft[0]
+                    yPoint = topLeft[1]
+                elif d1 > d2 and d2 <= PLAYER_SETTING.RADIUS_LIDAR:
+                    distance = d2
+                    xPoint = topRight[0]
+                    yPoint = topRight[1]
             else:
 
                 x1Point = topLeft[0]
