@@ -8,10 +8,7 @@ import math
 from matplotlib.animation import FuncAnimation
 # plt.ion()
 
-
-# folder_path = getlogVersion(base_path)
-# logFolderPath = os.path.join(folder_path, 'LOG')
-# log_path = getLog_path(logFolderPath)
+import pickle
 
 class Game:
     def __init__(self, screen):
@@ -26,11 +23,33 @@ class Game:
         self.epsilon_decay = epsilon_decay
         self.alpha = alpha
         self.gamma = gamma
-        self.state_count_change = 0
-        self.record_state_change = []
         self.total_states = DISTANCE_SPACE * ALPHA_SPACE * FWVELO_SPACE * RVELO_SPACE * \
             math.pow(LENGTH_LIDARSIGNAL, SECTIONS_LIDARSPACE)
         self.fig = None
+        
+        # create state count change to count the number of state change
+        self.record_state_change_filename = "record_state_change.pkl"
+        self.record_state_change_path = os.path.join(folder_path, self.record_state_change_filename)  
+        if os.path.exists(self.record_state_change_path):
+            with open(self.record_state_change_path, "rb") as f:
+                self.record_state_change = pickle.load(f)
+                self.state_count_change = self.record_state_change[-1:][0]
+                print(self.record_state_change)
+                print(self.state_count_change)
+        else:
+            self.state_count_change = 0
+            self.record_state_change = []
+            print('new: ', self.state_count_change)
+            
+        
+        # create allState table to count the state change
+        self.allStates_filename = "allStates.pkl"
+        self.allStates_path = os.path.join(folder_path, self.allStates_filename)  
+        if os.path.exists(self.allStates_path):
+            with open(self.allStates_path, "rb") as f:
+                self.allStates = pickle.load(f)
+        else:
+            self.allStates = np.zeros(self.new_observation_shape)
 
     def pick_sample(self, state, q_table):
         if np.random.random() > self.epsilon:
@@ -39,7 +58,7 @@ class Game:
             action = np.random.randint(0, ACTION_SPACE)
         return action
 
-    def run_episode(self, q_table, video, trackPosition, log_path, all_States, counter=COUNTER):
+    def run_episode(self, q_table, trackPosition, log_path, counter=COUNTER):
         done = PLAYER_SETTING.ALIVE
         total_reward = 0
         state = self.game.observe()
@@ -56,10 +75,9 @@ class Game:
         step_count = 0
 
         prev_state = None
-        # state_count_change = 0
-        # print(f"Start Real Posion: {firstPosition}")
+
         while not done and counter > 0:
-            # while done == 0:
+
             action = self.pick_sample(state, q_table)
             action_records.append(action)
             if action == 0:
@@ -78,8 +96,6 @@ class Game:
 
             next_state, reward, done = self.step(action)
 
-            # screenRecord.append(self.trackGame(counter, action))
-            # video.write(self.trackGame(counter, action))
             cv2.circle(trackPosition, self.get_RealPosion(),
                        PLAYER_SETTING.RADIUS_OBJECT, COLOR.GREEN, 1)
             
@@ -94,9 +110,9 @@ class Game:
                                                            self.gamma * maxQ - q_table[tuple(state)][action])
 
             if prev_state is not None and not np.array_equal(prev_state, state):
-                if all_States[tuple(state)] == 0:
+                if self.allStates[tuple(state)] == 0:
                     self.state_count_change += 1
-                    all_States[tuple(state)] = 1
+                    self.allStates[tuple(state)] = 1
 
             prev_state = state
             state = next_state
@@ -144,7 +160,7 @@ class Game:
         # print(f"Total reward each epsilon : {total_reward}")
         # print(f"List record reward: {reward_records}")
         # return total_reward, screenRecord
-        return float(total_reward), video, trackPosition, done
+        return float(total_reward), trackPosition, done
 
     def reset(self):
         del self.game
@@ -162,11 +178,11 @@ class Game:
     def render(self):
         self.game.view(self.screen)
 
-    def creat_axes(self, axes, step_number):
+    def creat_axes(self, axes, step_number, last_epsilon):
         record_state_change_rate = np.array(
             self.record_state_change) / self.total_states
 
-        axes.plot(np.arange(0, step_number + 1), record_state_change_rate,
+        axes.plot(np.arange(0, len(record_state_change_rate)), record_state_change_rate,
                   marker='o', linestyle='-', color='b', label='rate states change')
 
         axes.set_ylabel('states change')

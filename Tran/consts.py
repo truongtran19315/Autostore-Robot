@@ -139,16 +139,9 @@ ALPHA_SPACE = 10
 FWVELO_SPACE = 4
 RVELO_SPACE = 4
 
-# gamma = 0.99
-# alpha = 0.1
-# epsilon = 1
-# epsilon_decay = epsilon / 4000
-# n_epsilondes = 10000
-
-
 # Định nghĩa các tham số đầu vào
 ed = 0
-n_epsilondes = 10000 - ed  # Số lượng episode
+n_epsilondes = 5 - ed  # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.9  # Hệ số giảm
 epsilon_decay = 0.0001  # Hệ số giảm epsilon

@@ -36,7 +36,7 @@ while eps > 0:
     
     state = robot.game.observe()
     done = 0
-    counter = 500
+    counter = 200
     while done == 0 and counter > 0:
         action = np.argmax(q_table[tuple(state)])
         # print(f'Action: {action}')
@@ -49,4 +49,4 @@ while eps > 0:
             goal += 1
     eps -= 1
     
-print('goal percent: ' + str(100 * goal / 100) + '%')
+print('goal count: ' + str(goal))

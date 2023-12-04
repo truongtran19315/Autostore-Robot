@@ -37,44 +37,22 @@ def getlogVideo_path(Version_folder):
     return os.path.join(Version_folder, current_video_path)
 
 def getlogPosition_path(Version_folder, done, version):
-    # allfile = os.listdir(Version_folder)
-    # current_video_path = 'TP_' + str(version) #tracking Position
-    # videoRecord_file = [file for file in allfile if "TP" in file]
-
-    # if version == 0:
-    #     current_video_path += '_0_.png'
-    # else:
-    #     version_fileVideo_list = [int(file.split('_')[1])
-    #                               for file in videoRecord_file]
-    #     version_number = max(version_fileVideo_list) + 1
     if done == 0:
         current_video_path = 'TP_' + str(version) + '_.png'
     elif done == 1:
         current_video_path = 'TP_' + str(version) + '_DONE.png'
     elif done == 2:
         current_video_path = 'TP_' + str(version) + '_GOAL.png'
-    
-
     return os.path.join(Version_folder, current_video_path)
 
 def getLog_path(log_folder, version):
-    # allfile = os.listdir(log_folder)
-    # current_log_path = 'log' #log
-    # log_file = [file for file in allfile if "log" in file]
-
-    # if not log_file:  
-    #     current_log_path += '_0_.txt'
-    # else:
-    #     version_log_list = [int(file.split('_')[1])
-    #                               for file in log_file]
-    #     version_number = max(version_log_list) + 1
-    #     current_log_path += '_' + str(version_number) + '_.txt'
-    
     current_log_path = 'log_' + str(version) + '_.txt'
-
     return os.path.join(log_folder, current_log_path)
 
 base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
+os.makedirs(base_path, exist_ok=True)
+
+
 folder_path = getlogVersion(base_path)
 os.makedirs(folder_path, exist_ok=True)
 
