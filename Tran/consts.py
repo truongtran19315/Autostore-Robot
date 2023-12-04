@@ -141,11 +141,11 @@ RVELO_SPACE = 4
 
 # Định nghĩa các tham số đầu vào
 ed = 0
-n_epsilondes = 5 - ed  # Số lượng episode
+n_epsilondes = 10000 - ed  # Số lượng episode
 alpha = 0.1  # Hệ số học
-gamma = 0.9  # Hệ số giảm
-epsilon_decay = 0.0001  # Hệ số giảm epsilon
-epsilon = 0.9 - ed*epsilon_decay  # Xác suất khám phá
+gamma = 0.99  # Hệ số giảm
+epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon
+epsilon = 0.9 - epsilon_decay*ed  # Xác suất khám phá
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
 COUNTER = 200

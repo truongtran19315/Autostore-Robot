@@ -34,12 +34,9 @@ class Game:
             with open(self.record_state_change_path, "rb") as f:
                 self.record_state_change = pickle.load(f)
                 self.state_count_change = self.record_state_change[-1:][0]
-                print(self.record_state_change)
-                print(self.state_count_change)
         else:
             self.state_count_change = 0
             self.record_state_change = []
-            print('new: ', self.state_count_change)
             
         
         # create allState table to count the state change
@@ -103,7 +100,7 @@ class Game:
                 print('Curr-State: ' + str(state)
                       + '\nAction:' + str(action) + ' obs: ' +
                       str(next_state) + ' reward: ' + str(reward)
-                      + '\nq-table before update: ' + str(q_table[tuple(state)]), file=file)
+                      + '\nq-table before update: ' + str(q_table[tuple(state)]) + '\n', file=file)
 
             maxQ = np.max(q_table[tuple(next_state)])
             q_table[tuple(state)][action] += self.alpha * (reward +
@@ -119,7 +116,7 @@ class Game:
             total_reward += reward
             reward_records.append(reward)
             counter -= 1
-        # print(f"End Real Posion: {self.get_RealPosion()}")
+
         cv2.circle(trackPosition, firstPosition,
                    PLAYER_SETTING.RADIUS_OBJECT, COLOR.RED, 1)
         state_change_str = 'state change rate: ' + str(self.state_count_change/(
@@ -153,18 +150,15 @@ class Game:
 
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
-        # print(f"Total reward each epsilon : {reward}")
-        # print(f"List record reward epsilon : {reward_records}")
-
-        # print(f"List record action: {action_records}")
-        # print(f"Total reward each epsilon : {total_reward}")
-        # print(f"List record reward: {reward_records}")
-        # return total_reward, screenRecord
+        else: self.epsilon = self.epsilon_min
+    
         return float(total_reward), trackPosition, done
 
     def reset(self):
         del self.game
         self.game = pygame_2d.PyGame2D(screen=self.screen)
+        # to update the lidar scan state
+        self.game.action(action=ACTIONS.DO_NOTHING)
         obs = self.game.observe()
         return obs
 

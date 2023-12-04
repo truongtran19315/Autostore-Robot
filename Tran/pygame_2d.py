@@ -292,90 +292,42 @@ class PyGame2D():
         direction = observe[1]
         if distance[1] == 0:
             reward -= 500
-            # print('-150 huong thang co do dai = 0')
         elif distance[1] == 1:
             reward -= 5
-            # print('-70 huong thang co do dai = 1')
         elif distance[1] == 2:
             reward -= 3
-            # print('-20 huong thang co do dai = 2')
         elif distance[1] > 2:
             # reward += 200
             pass
-            # print('+70 huong thang khong co vat can')
 
         if distance[0] == 0:
             reward -= 5
-            # print('-150 huong thang co do dai = 0')
         elif distance[0] == 1:
             reward -= 3
-            # print('-70 huong thang co do dai = 1')
         elif distance[0] == 2:
             reward -= 1
-            # print('-20 huong thang co do dai = 2')
         elif distance[0] > 2:
             # reward += 50
             pass
-            # print('+70 huong thang khong co vat can')
 
         if distance[2] == 0:
             reward -= 5
-            # print('-150 huong thang co do dai = 0')
         elif distance[2] == 1:
             reward -= 3
-            # print('-70 huong thang co do dai = 1')
         elif distance[2] == 2:
             reward -= 1
-            # print('-20 huong thang co do dai = 2')
         elif distance[2] > 2:
             # reward += 50
             pass
-            # print('+70 huong thang khong co vat can')
 
-        # if distance[0] == 0:
-        #     reward -= 8
-        #     # print('-80 huong 2 ben co do dai = 0')
-        # elif distance[0] == 1:
-        #     reward -= 4
-        #     # print('-40 huong 2 ben co do dai = 1')
-        # elif distance[0] == 2:
-        #     reward -= 1
-        #     # print('-15 huong 2 ben co do dai = 2')
-        # elif distance[0] > 2:
-        #     reward += 8
-        #     # pass
-        #     # print('+180 huong 2 ben khong co vat can')
-
-        # if distance[4] == 0:
-        #     reward -= 8
-        #     # print('-80 huong 2 ben co do dai = 0')
-        # elif distance[4] == 1:
-        #     reward -= 4
-        #     # print('-40 huong 2 ben co do dai = 1')
-        # elif distance[4] == 2:
-        #     reward -= 1
-        #     # print('-15 huong 2 ben co do dai = 2')
-        # elif distance[4] > 2:
-        #     reward += 8
-        #     # pass
-        #     # print('+180 huong 2 ben khong co vat can')
-
-        # if self.robot.currentForwardVelocity == 0 and self.robot.currRotationVelocity == 0:
-        #     reward -= 1000
-        # elif self.robot.currentForwardVelocity == 0:
-        #     reward -= 500
-
-        # direction = self.observe()[0]
         reward -= (abs(direction - ALPHA_SPACE/2) * 100)
 
-        # far_from_goal = self.robot.checkAchieveGoal(goal=self.goal)
         reward -= goal_distance*500
         # print(direction, observe[1], reward)
 
         return reward
 
     def observe(self):
-        # ratioLeft = (self.robot.xPos)/(GAME_SETTING.SCREEN_WIDTH)
         a = self.robot.currAngle
         b = Utils.angleBetweenTwoPoints(
             self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
@@ -385,7 +337,6 @@ class PyGame2D():
             alpha += -2*PLAYER_SETTING.PI
         elif alpha < -PLAYER_SETTING.PI:
             alpha += 2*PLAYER_SETTING.PI
-        # print(a, b, alpha)
         distanceGoal = self.distanGoal  # ! add distance
         fwVelo = self.robot.currentForwardVelocity
         rVelo = self.robot.currRotationVelocity
@@ -399,8 +350,8 @@ class PyGame2D():
         lidars_digitized = np.digitize(lidars, bin_lidarsignal)
 
         # bin_lidarspace = np.array([33, 84, 96, 147])
-        # bin_lidarspace = np.array([84, 96])
-        bin_lidarspace = np.array([78, 102])
+        bin_lidarspace = np.array([85, 95])
+        # bin_lidarspace = np.array([78, 102])
         lidars_sections = np.array_split(lidars_digitized, bin_lidarspace)
         section_lidars_min = [np.amin(section) for section in lidars_sections]
 

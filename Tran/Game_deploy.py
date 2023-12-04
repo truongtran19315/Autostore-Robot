@@ -5,8 +5,8 @@ from Game_class import *
 
 date_train = '2023-12-04'
 vesion_day = 4
-foler_train = date_train + '_V' + str(vesion_day)
-foler_train_path = os.path.join(base_path, foler_train, 'q_table.pkl')
+folder_train = date_train + '_V' + str(vesion_day) + '_DONE'
+foler_train_path = os.path.join(base_path, folder_train, 'q_table.pkl')
 
 with open(foler_train_path, "rb") as f:
     q_table = pickle.load(f)
@@ -36,7 +36,7 @@ while eps > 0:
     
     state = robot.game.observe()
     done = 0
-    counter = 200
+    counter = 500
     while done == 0 and counter > 0:
         action = np.argmax(q_table[tuple(state)])
         # print(f'Action: {action}')
