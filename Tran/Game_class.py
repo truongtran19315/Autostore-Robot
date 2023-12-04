@@ -82,16 +82,16 @@ class Game:
             # video.write(self.trackGame(counter, action))
             cv2.circle(trackPosition, self.get_RealPosion(),
                        PLAYER_SETTING.RADIUS_OBJECT, COLOR.GREEN, 1)
-
-            maxQ = np.max(q_table[tuple(next_state)])
-            q_table[tuple(state)][action] += self.alpha * (reward +
-                                                           self.gamma * maxQ - q_table[tuple(state)][action])
-
+            
             with open(log_path, 'a') as file:
                 print('Curr-State: ' + str(state)
                       + '\nAction:' + str(action) + ' obs: ' +
                       str(next_state) + ' reward: ' + str(reward)
-                      + '\nq-table at state: ' + str(q_table[tuple(state)]) + '\n', file=file)
+                      + '\nq-table before update: ' + str(q_table[tuple(state)]), file=file)
+
+            maxQ = np.max(q_table[tuple(next_state)])
+            q_table[tuple(state)][action] += self.alpha * (reward +
+                                                           self.gamma * maxQ - q_table[tuple(state)][action])
 
             if prev_state is not None and not np.array_equal(prev_state, state):
                 if all_States[tuple(state)] == 0:

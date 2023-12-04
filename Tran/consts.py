@@ -34,6 +34,9 @@ class PLAYER_SETTING:
 
     ACCELERATION_FORWARD = 5
     ACCELERATION_ROTATE = 0.05
+    
+    ACCELERATION_FORWARD = MAX_FORWARD_VELO/3
+    ACCELERATION_ROTATE = MAX_ROTATION_VELO/3
 
     CASTED_RAYS = 45
     CASTED_RAYS = 90
@@ -130,7 +133,9 @@ SECTIONS_LIDARSPACE = 3  # ! chia lidar thành 4 vùng 0,1,2,3,4
 
 # set các khoảng rời rạc
 DISTANCE_SPACE = 10  # ! khoang cach tu robot -> goal
+DISTANCE_SPACE = 5  
 ALPHA_SPACE = 10
+# ALPHA_SPACE = 20
 FWVELO_SPACE = 4
 RVELO_SPACE = 4
 
@@ -143,10 +148,10 @@ RVELO_SPACE = 4
 
 # Định nghĩa các tham số đầu vào
 ed = 0
-n_epsilondes = 50000 - ed  # Số lượng episode
+n_epsilondes = 10000 - ed  # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.9  # Hệ số giảm
-epsilon_decay = 0.00002  # Hệ số giảm epsilon
+epsilon_decay = 0.0001  # Hệ số giảm epsilon
 epsilon = 0.9 - ed*epsilon_decay  # Xác suất khám phá
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 

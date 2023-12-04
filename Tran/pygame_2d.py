@@ -61,6 +61,7 @@ class Car():
         # Calculate the position base on velocity per frame
         # dt = float(1/GAME_SETTING.FPS)
         dt = 1
+        dt = 0.5
 
         self.currAngle += (self.currRotationVelocity*dt)
 
@@ -359,10 +360,10 @@ class PyGame2D():
         #     # pass
         #     # print('+180 huong 2 ben khong co vat can')
 
-        if self.robot.currentForwardVelocity == 0 and self.robot.currRotationVelocity == 0:
-            reward -= 1000
-        elif self.robot.currentForwardVelocity == 0:
-            reward -= 500
+        # if self.robot.currentForwardVelocity == 0 and self.robot.currRotationVelocity == 0:
+        #     reward -= 1000
+        # elif self.robot.currentForwardVelocity == 0:
+        #     reward -= 500
 
         # direction = self.observe()[0]
         reward -= (abs(direction - ALPHA_SPACE/2) * 100)
@@ -398,7 +399,8 @@ class PyGame2D():
         lidars_digitized = np.digitize(lidars, bin_lidarsignal)
 
         # bin_lidarspace = np.array([33, 84, 96, 147])
-        bin_lidarspace = np.array([84, 96])
+        # bin_lidarspace = np.array([84, 96])
+        bin_lidarspace = np.array([78, 102])
         lidars_sections = np.array_split(lidars_digitized, bin_lidarspace)
         section_lidars_min = [np.amin(section) for section in lidars_sections]
 
@@ -465,7 +467,7 @@ class PyGame2D():
 
         # return screen
         cv2.imshow('Enviroment', screen)
-        cv2.waitKey(1)
+        # cv2.waitKey(1)
 
     def convert_lenLidar(self):
         self.robot.lidarSignals = np.array(self.robot.lidarSignals)
@@ -492,7 +494,7 @@ class PyGame2D():
 #     elif game.robot.achieveGoal:
 #         print("Great!!!!!!!!!")
 #         input = 27
-#     game.view(input)
+#     game.view()
 #     if input == 27:
 #         cv2.destroyAllWindows()
 #         break
