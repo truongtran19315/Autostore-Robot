@@ -10,13 +10,13 @@ foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 with open(foler_train_path, "rb") as f:
     q_table = pickle.load(f)
 
-numberRun = 100  # ! số lần chạy
+numberRun = 10  # ! số lần chạy
 arrRun = []
 print('================ Start Run =========================')
 for i in range(1, numberRun + 1):
     print('At attempt number {}'.format(i))
     goal = 0
-    total_eps = 1000  # ! số bước thử trong mỗi lần chạy
+    total_eps = 1  # ! số bước thử trong mỗi lần chạy
     eps = 1
     while eps <= total_eps:
         screen = np.zeros((720, 1280, 3), dtype=np.uint8)
@@ -57,7 +57,7 @@ axes.set_ylim(0, 101)
 axes.text(numberRun * 1/9, 30, 'Phần trăm tỉ lệ tới đích trung bình sau {} lần chạy: {} %'.format(
     numberRun, np.mean(np.array(arrRun))), fontsize=12, ha='left')
 
-deploy_chartRun = os.path.join(folder_path, ('chartRundeploy' + '_' + str(
+deploy_chartRun = os.path.join(base_path, date_train, ('chartRundeploy' + '_' + str(
     datetime.now().hour) + 'h' + str(datetime.now().minute) + 'p'))
 plt.savefig(deploy_chartRun)
 print(f"Diagram saved to: {deploy_chartRun}")
