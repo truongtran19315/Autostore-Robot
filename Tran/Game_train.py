@@ -53,7 +53,9 @@ else:
 all_States = np.zeros(game.new_observation_shape)
 
 for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
-    print(f"Epsilon {i}")
+    # print(f"Epsilon {i}")
+    print("Running Episode {}".format(i), end="\r")
+
     game.reset()
 
     trackPos = Env.copy()
@@ -71,7 +73,8 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
     goal_count_str = 'goal counter: ' + str(goal_count)
     cv2.putText(trackPosition, goal_count_str, (50, 350),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-    trackPosition_path = getlogPosition_path(imageFolderPath, done, last_epsilon)
+    trackPosition_path = getlogPosition_path(
+        imageFolderPath, done, last_epsilon)
     cv2.imwrite(trackPosition_path, trackPosition)
     recordVideo.write(trackPosition)
 
@@ -79,9 +82,25 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
         pickle.dump(q_table, f)
 
     if cv2.waitKey(1) & 0xFF == 'q':
-        recordVideo.release()     
+        recordVideo.release()
         break
-     
+
+    if i % 1000 == 0:
+        with open(os.path.join(folder_path, q_table_filename), "wb") as f:
+            pickle.dump(q_table, f)
+
+        with open(os.path.join(folder_path, game.allStates_filename), "wb") as f:
+            pickle.dump(game.allStates, f)
+
+        with open(os.path.join(folder_path, game.record_state_change_filename), "wb") as f:
+            pickle.dump(game.record_state_change, f)
+
+        with open(os.path.join(folder_path, last_epsilon_filename), "wb") as f:
+            pickle.dump(last_epsilon, f)
+        game.creat_axes(axes, i, last_epsilon)
+        plt.savefig(diagram_path)
+        print(f"Diagram saved at eps {i}")
+
     del trackPos
     del trackPosition
     last_epsilon += 1
@@ -92,18 +111,18 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
 
 game.creat_axes(axes, i, last_epsilon)
 plt.savefig(diagram_path)
-print(f"Diagram saved to: {diagram_path}") 
+print(f"Diagram saved to: {diagram_path}")
 
 with open(os.path.join(folder_path, q_table_filename), "wb") as f:
     pickle.dump(q_table, f)
-    
+
 with open(os.path.join(folder_path, game.allStates_filename), "wb") as f:
     pickle.dump(game.allStates, f)
-    
+
 with open(os.path.join(folder_path, game.record_state_change_filename), "wb") as f:
     pickle.dump(game.record_state_change, f)
 
 with open(os.path.join(folder_path, last_epsilon_filename), "wb") as f:
     pickle.dump(last_epsilon, f)
-    
+
 print('done')
