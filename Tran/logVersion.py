@@ -36,6 +36,7 @@ def getlogVideo_path(Version_folder):
 
     return os.path.join(Version_folder, current_video_path)
 
+
 def getlogPosition_path(Version_folder, done, version):
     if done == 0:
         current_video_path = 'TP_' + str(version) + '_.png'
@@ -45,9 +46,11 @@ def getlogPosition_path(Version_folder, done, version):
         current_video_path = 'TP_' + str(version) + '_GOAL.png'
     return os.path.join(Version_folder, current_video_path)
 
+
 def getLog_path(log_folder, version):
     current_log_path = 'log_' + str(version) + '_.txt'
     return os.path.join(log_folder, current_log_path)
+
 
 base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
 os.makedirs(base_path, exist_ok=True)

@@ -4,13 +4,13 @@ import numpy as np
 from Game_class import *
 from datetime import datetime
 
-date_train = '2023-12-06_V1'
+date_train = '2023-12-09_V1'
 foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 
 with open(foler_train_path, "rb") as f:
     q_table = pickle.load(f)
 
-numberRun = 100  # ! số lần chạy
+numberRun = 10  # ! số lần chạy
 arrRun = []
 print('================ Start Run =========================')
 for i in range(1, numberRun + 1):

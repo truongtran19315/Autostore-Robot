@@ -10,6 +10,7 @@ from matplotlib.animation import FuncAnimation
 
 import pickle
 
+
 class Game:
     def __init__(self, screen):
         self.screen = screen
@@ -26,10 +27,11 @@ class Game:
         self.total_states = DISTANCE_SPACE * ALPHA_SPACE * FWVELO_SPACE * RVELO_SPACE * \
             math.pow(LENGTH_LIDARSIGNAL, SECTIONS_LIDARSPACE)
         self.fig = None
-        
-        # create state count change to count the number of state change
+
+        #! create state count change to count the number of state change
         self.record_state_change_filename = "record_state_change.pkl"
-        self.record_state_change_path = os.path.join(folder_path, self.record_state_change_filename)  
+        self.record_state_change_path = os.path.join(
+            folder_path, self.record_state_change_filename)
         if os.path.exists(self.record_state_change_path):
             with open(self.record_state_change_path, "rb") as f:
                 self.record_state_change = pickle.load(f)
@@ -37,16 +39,27 @@ class Game:
         else:
             self.state_count_change = 0
             self.record_state_change = []
-            
-        
-        # create allState table to count the state change
+
+        #! create allState table to count the state change
         self.allStates_filename = "allStates.pkl"
-        self.allStates_path = os.path.join(folder_path, self.allStates_filename)  
+        self.allStates_path = os.path.join(
+            folder_path, self.allStates_filename)
         if os.path.exists(self.allStates_path):
             with open(self.allStates_path, "rb") as f:
                 self.allStates = pickle.load(f)
         else:
             self.allStates = np.zeros(self.new_observation_shape)
+
+        #! create record reward
+        self.reward_records_filename = "reward_records.pkl"
+        self.reward_records_path = os.path.join(
+            folder_path, self.reward_records_filename)
+        if os.path.exists(self.reward_records_path):
+            with open(self.reward_records_path, "rb") as f:
+                self.reward_records = pickle.load(f)
+        else:
+            self.reward_records = []
+            print("Create new reward records!!")
 
     def pick_sample(self, state, q_table):
         if np.random.random() > self.epsilon:
@@ -95,7 +108,7 @@ class Game:
 
             cv2.circle(trackPosition, self.get_RealPosion(),
                        PLAYER_SETTING.RADIUS_OBJECT, COLOR.GREEN, 1)
-            
+
             with open(log_path, 'a') as file:
                 print('Curr-State: ' + str(state)
                       + '\nAction:' + str(action) + ' obs: ' +
@@ -150,8 +163,9 @@ class Game:
 
         if self.epsilon - self.epsilon_decay >= self.epsilon_min:
             self.epsilon -= self.epsilon_decay
-        else: self.epsilon = self.epsilon_min
-    
+        else:
+            self.epsilon = self.epsilon_min
+
         return float(total_reward), trackPosition, done
 
     def reset(self):
@@ -175,14 +189,34 @@ class Game:
     def creat_axes(self, axes, step_number, last_epsilon):
         record_state_change_rate = np.array(
             self.record_state_change) / self.total_states
+        axes[0].plot(np.arange(0, len(record_state_change_rate)), record_state_change_rate,
+                     linestyle='-', color='blue', label='Tốc độ cập nhật states')
+        axes[0].set_ylabel('Tỉ lệ states đã thay đổi')
+        axes[0].set_xlabel('Lần chạy')
+        axes[0].set_xlim(0, step_number)
+        axes[1].set_title('Tốc độ cập nhật states')
+        # axes[1].plot(np.arange(0, len(self.reward_records)), np.array(
+        #     self.reward_records), color='red', label='Thay đổi hàm reward')
+        # axes[1].set_ylabel('Giá trị reward')
+        # axes[1].set_xlabel('số lần chạy')
+        # axes[1].set_xlim(0, step_number)
 
-        axes.plot(np.arange(0, len(record_state_change_rate)), record_state_change_rate,
-                  marker='o', linestyle='-', color='b', label='rate states change')
-
-        axes.set_ylabel('states change')
-        axes.set_xlabel('n epsilon')
-        # axes.set_ylim(0, 1)
-        axes.set_xlim(0, step_number)
+        average_reward = []
+        for idx in range(len(self.reward_records)):
+            avg_list = np.empty(shape=(1,), dtype=int)
+            if idx < 50:
+                avg_list = self.reward_records[:idx+1]
+            else:
+                avg_list = self.reward_records[idx-49:idx+1]
+            average_reward.append(np.average(avg_list))
+        # Plot
+        axes[1].plot(self.reward_records, label='Điểm thưởng')
+        axes[1].plot(
+            average_reward, label='Điểm thưởng trung bình (trong 50 lần chạy)')
+        axes[1].set_title('Biểu đồ điểm thưởng và điểm thưởng trung bình')
+        axes[1].set_xlabel('Lần chạy')
+        axes[1].set_ylabel('Điểm thưởng')
+        # axes[1].legend(loc='upper left')
 
     def getEnv(self):
         return self.game.getEnv()
