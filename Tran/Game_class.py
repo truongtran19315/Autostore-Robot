@@ -202,6 +202,7 @@ class Game:
     def creat_axes(self, axes, step_number, last_epsilon):
         record_state_change_rate = np.array(
             self.record_state_change) / self.total_states
+        axes[0].set_title('Biểu đồ biểu thị độ phủ của state trong Q-table')
         axes[0].plot(np.arange(0, len(record_state_change_rate)), record_state_change_rate,
                      linestyle='-', color='blue', label='Tốc độ cập nhật states')
         axes[0].set_ylabel('Tỉ lệ states đã thay đổi')
@@ -244,7 +245,8 @@ class Game:
         axes[2].plot(self.record_goal_step_count, label='Số bước đến đích')
         axes[2].plot(average_goal_step_count,
                      label='Số bước trung bình (trong 50 lần tới đích)')
-        axes[2].set_title('Biểu đồ số bước cần để tới đích')
+        axes[2].set_title(
+            'Biểu đồ số bước và số bước trung bình cần để tới đích')
         axes[2].set_xlabel('Số lần tới đích')
         axes[2].set_ylabel('Số bước tới đích')
 

@@ -114,7 +114,8 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
 # folder_path = folder_path_done
 
 game.creat_axes(axes, i, last_epsilon)
-
+axes[1].legend(loc='upper left')
+axes[2].legend(loc='upper left')
 plt.savefig(diagram_path)
 print(f"Diagram saved to: {diagram_path}")
 
