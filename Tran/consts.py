@@ -138,7 +138,7 @@ FWVELO_SPACE = 4
 RVELO_SPACE = 4
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 100000  # Số lượng episode
+n_epsilondes = 10  # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.99  # Hệ số giảm
 epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon

@@ -61,6 +61,16 @@ class Game:
             self.reward_records = []
             print("Create new reward records!!")
 
+        #! create allState table to count the state change
+        self.record_goal_step_count_filename = "record_goal_step_count.pkl"
+        self.record_goal_step_count_path = os.path.join(
+            folder_path, self.record_goal_step_count_filename)
+        if os.path.exists(self.record_goal_step_count_path):
+            with open(self.record_goal_step_count_path, "rb") as f:
+                self.record_goal_step_count = pickle.load(f)
+        else:
+            self.record_goal_step_count = []
+
     def pick_sample(self, state, q_table):
         if np.random.random() > self.epsilon:
             action = np.argmax(q_table[tuple(state)])
@@ -82,7 +92,7 @@ class Game:
         slowdown = 0
         stop = 0
         nothing = 0
-        step_count = 0
+        step_count = 1
 
         prev_state = None
 
@@ -130,6 +140,9 @@ class Game:
             reward_records.append(reward)
             counter -= 1
 
+        if done == 2:
+            self.record_goal_step_count.append(step_count)
+
         cv2.circle(trackPosition, firstPosition,
                    PLAYER_SETTING.RADIUS_OBJECT, COLOR.RED, 1)
         state_change_str = 'state change rate: ' + str(self.state_count_change/(
@@ -143,8 +156,8 @@ class Game:
         ahead = 'ahead: ' + str(ahead)
         slowdown = 'slowdown: ' + str(slowdown)
         nothing = 'nothing: ' + str(nothing)
-        step_count = 'step counter: ' + str(step_count)
-        cv2.putText(trackPosition, step_count, (50, 400),
+        step_count_str = 'step counter: ' + str(step_count)
+        cv2.putText(trackPosition, step_count_str, (50, 400),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         cv2.putText(trackPosition, turn_right, (50, 450),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
@@ -217,6 +230,23 @@ class Game:
         axes[1].set_xlabel('Lần chạy')
         axes[1].set_ylabel('Điểm thưởng')
         # axes[1].legend(loc='upper left')
+
+        # goal step count plot
+        average_goal_step_count = []
+        for idx in range(len(self.record_goal_step_count)):
+            avg_list_goal_step_count = np.empty(shape=(1,), dtype=int)
+            if idx < 50:
+                avg_list_goal_step_count = self.record_goal_step_count[:idx+1]
+            else:
+                avg_list_goal_step_count = self.record_goal_step_count[idx-49:idx+1]
+            average_goal_step_count.append(
+                np.average(avg_list_goal_step_count))
+        axes[2].plot(self.record_goal_step_count, label='Số bước đến đích')
+        axes[2].plot(average_goal_step_count,
+                     label='Số bước trung bình (trong 50 lần tới đích)')
+        axes[2].set_title('Biểu đồ số bước cần để tới đích')
+        axes[2].set_xlabel('Số lần tới đích')
+        axes[2].set_ylabel('Số bước tới đích')
 
     def getEnv(self):
         return self.game.getEnv()

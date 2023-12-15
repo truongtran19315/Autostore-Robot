@@ -10,7 +10,7 @@ foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 with open(foler_train_path, "rb") as f:
     q_table = pickle.load(f)
 
-numberRun = 10  # ! số lần chạy
+numberRun = 111  # ! số lần chạy
 arrRun = []
 print('================ Start Run =========================')
 for i in range(1, numberRun + 1):
@@ -47,7 +47,7 @@ for i in range(1, numberRun + 1):
 
 
 fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(8, 6))
-axes.plot(np.arange(1, numberRun + 1), np.array(arrRun), marker='o')
+axes.plot(np.arange(1, numberRun + 1), np.array(arrRun))
 axes.set_ylabel(
     'Tỉ lệ tới đích sau {} lần thử (trong 1 lần chạy)'.format(total_eps))
 axes.set_xlabel('Số lần chạy')
@@ -55,7 +55,7 @@ axes.set_xlim(0, numberRun + 1)
 axes.set_xticks(np.arange(0, numberRun + 1, 1))
 axes.set_ylim(0, 101)
 axes.text(numberRun * 1/9, 30, 'Phần trăm tỉ lệ tới đích trung bình sau {} lần chạy: {} %'.format(
-    numberRun, np.mean(np.array(arrRun))), fontsize=12, ha='left')
+    numberRun, round(np.mean(np.array(arrRun)), 2), fontsize=12, ha='left'))
 
 deploy_chartRun = os.path.join(base_path, date_train, ('chartRundeploy' + '_' + str(
     datetime.now().hour) + 'h' + str(datetime.now().minute) + 'p'))

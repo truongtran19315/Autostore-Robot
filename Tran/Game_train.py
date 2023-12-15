@@ -32,13 +32,8 @@ else:
 
 
 print(f"Shape of Q-table: {q_table.shape}")
-print(f"Init state:  {game.reset()}")
 print("Start training....")
 
-game.fig, axes = plt.subplots()
-reward_records = []
-
-goal_count = 0
 
 # to store last epsilon before program crash
 last_epsilon_filename = "last_epsilon.pkl"
@@ -51,6 +46,8 @@ else:
     last_epsilon = 0
 
 all_States = np.zeros(game.new_observation_shape)
+game.fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10, 18), dpi=300)
+goal_count = 0
 
 for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
     # print(f"Epsilon {i}")
@@ -69,7 +66,7 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
         q_table, trackPos, log_path)
     if done == PLAYER_SETTING.GOAL:
         goal_count += 1
-    reward_records.append(reward)
+    game.reward_records.append(reward)
     goal_count_str = 'goal counter: ' + str(goal_count)
     cv2.putText(trackPosition, goal_count_str, (50, 350),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
@@ -97,6 +94,13 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
 
         with open(os.path.join(folder_path, last_epsilon_filename), "wb") as f:
             pickle.dump(last_epsilon, f)
+
+        with open(os.path.join(folder_path, game.reward_records_filename), "wb") as f:
+            pickle.dump(game.reward_records, f)
+
+        with open(os.path.join(folder_path, game.record_goal_step_count_filename), "wb") as f:
+            pickle.dump(game.record_goal_step_count, f)
+
         game.creat_axes(axes, i, last_epsilon)
         plt.savefig(diagram_path)
         print(f"Diagram saved at eps {i}")
@@ -110,6 +114,7 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
 # folder_path = folder_path_done
 
 game.creat_axes(axes, i, last_epsilon)
+
 plt.savefig(diagram_path)
 print(f"Diagram saved to: {diagram_path}")
 
@@ -124,5 +129,11 @@ with open(os.path.join(folder_path, game.record_state_change_filename), "wb") as
 
 with open(os.path.join(folder_path, last_epsilon_filename), "wb") as f:
     pickle.dump(last_epsilon, f)
+
+with open(os.path.join(folder_path, game.reward_records_filename), "wb") as f:
+    pickle.dump(game.reward_records, f)
+
+with open(os.path.join(folder_path, game.record_goal_step_count_filename), "wb") as f:
+    pickle.dump(game.record_goal_step_count, f)
 
 print('done')
