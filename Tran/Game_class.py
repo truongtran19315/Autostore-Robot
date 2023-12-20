@@ -12,9 +12,10 @@ import pickle
 
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, map):
         self.screen = screen
-        self.game = pygame_2d.PyGame2D(screen=self.screen)
+        self.map = map
+        self.game = pygame_2d.PyGame2D(screen=self.screen, map=self.map)
         self.lidarspace_shape = tuple(
             [LENGTH_LIDARSIGNAL] * SECTIONS_LIDARSPACE)
         self.new_observation_shape = (DISTANCE_SPACE, ALPHA_SPACE, FWVELO_SPACE,
@@ -183,7 +184,8 @@ class Game:
 
     def reset(self):
         del self.game
-        self.game = pygame_2d.PyGame2D(screen=self.screen)
+        self.screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+        self.game = pygame_2d.PyGame2D(screen=self.screen, map=self.map)
         # to update the lidar scan state
         self.game.action(action=ACTIONS.DO_NOTHING)
         obs = self.game.observe()

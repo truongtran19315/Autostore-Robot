@@ -7,6 +7,7 @@ class GAME_SETTING:
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
     FPS = 60
+    DT = 0.5
 
 
 class PLAYER_SETTING:
@@ -77,14 +78,33 @@ class LANE_SETTING:
 
 
 class OBSTACLE_SETTING:
-    MAX_INSTANCES = 15
-    RADIUS_OBJECT = 10
-    PROBABILITIES_ACTION = [0.1,
-                            0.1,
-                            0.1,
-                            0.4,
-                            0.2,
-                            0.1]
+    # MAX_INSTANCES = 15
+    # RADIUS_OBJECT = 10
+    # PROBABILITIES_ACTION = [0.1,
+    #                         0.1,
+    #                         0.1,
+    #                         0.4,
+    #                         0.2,
+    #                         0.1]
+    NUM_OBSTACLE = 10
+    RECT_OBSTACLE = NUM_OBSTACLE//2
+    CIRCLE_OBSTACLE = NUM_OBSTACLE//2
+    
+    MAX_RADIUS = 100
+    MIN_RADIUS = PLAYER_SETTING.RADIUS_OBJECT
+    
+    MAX_HEIGHT = 100
+    MIN_HEIGHT = PLAYER_SETTING.RADIUS_OBJECT
+    MAX_WIDTH = 100
+    MIN_WIDTH = PLAYER_SETTING.RADIUS_OBJECT
+    
+    MIN_DISTANCE_GOAL_VS_OBS = 50
+    
+    
+class MAP_SETTING:
+    MAP_DEFAULT = 0 
+    RANDOM_MAP_OFF = 1
+    RANDOM_MAP_ON = 2
 
 
 class COLOR:
@@ -138,11 +158,12 @@ FWVELO_SPACE = 4
 RVELO_SPACE = 4
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 10  # Số lượng episode
+n_epsilondes = 200000  # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.99  # Hệ số giảm
-epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon
-epsilon = 0.9  # ! Xác suất khám phá
+# epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon
+epsilon_decay = 10/200000
+epsilon = 0.9 - 0*epsilon_decay  # ! Xác suất khám phá
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
 COUNTER = 200

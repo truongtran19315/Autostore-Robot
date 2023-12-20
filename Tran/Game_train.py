@@ -15,8 +15,8 @@ diagram_filename = "diagram.png"
 diagram_path = os.path.join(folder_path, diagram_filename)
 
 screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-game = Game(screen)
-
+map = MAP_SETTING.RANDOM_MAP_ON
+game = Game(screen, map)
 
 Env = game.getEnv()
 
@@ -51,10 +51,15 @@ goal_count = 0
 
 for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
     # print(f"Epsilon {i}")
+    # if (i - 1) % 10 == 0:
+    #     screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+    #     game = Game(screen)
+
+    #     Env = game.getEnv()
     print("Running Episode {}".format(i), end="\r")
 
     game.reset()
-
+    Env = game.getEnv()
     trackPos = Env.copy()
 
     log_path = getLog_path(logFolderPath, last_epsilon)
@@ -82,7 +87,7 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
         recordVideo.release()
         break
 
-    if i % 1000 == 0:
+    if i % 10000 == 0:
         with open(os.path.join(folder_path, q_table_filename), "wb") as f:
             pickle.dump(q_table, f)
 
@@ -101,9 +106,9 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
         with open(os.path.join(folder_path, game.record_goal_step_count_filename), "wb") as f:
             pickle.dump(game.record_goal_step_count, f)
 
-        game.creat_axes(axes, i, last_epsilon)
-        plt.savefig(diagram_path)
-        print(f"Diagram saved at eps {i}")
+        # game.creat_axes(axes, i, last_epsilon)
+        # plt.savefig(diagram_path)
+        # print(f"Diagram saved at eps {i}")
 
     del trackPos
     del trackPosition

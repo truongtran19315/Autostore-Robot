@@ -62,6 +62,7 @@ class Car():
         # dt = float(1/GAME_SETTING.FPS)
         dt = 1
         dt = 0.5
+        dt = GAME_SETTING.DT
 
         self.currAngle += (self.currRotationVelocity*dt)
 
@@ -209,10 +210,15 @@ class Robot(Car):
 
 
 class PyGame2D():
-    def __init__(self, screen) -> None:
+    def __init__(self, screen, map) -> None:
         self.env = screen
-        self.obstacles = self._initObstacle()
-        self.goal = Goal()
+        
+        # init obstacles
+        self.obstacles = self._initObstacle(numOfCircle=OBSTACLE_SETTING.CIRCLE_OBSTACLE, 
+                                            numOfRect=OBSTACLE_SETTING.RECT_OBSTACLE, 
+                                            map=map)
+        
+        self.goal = self.obstacles.goal
         xPos, yPos, currAngle = self.randomPosition()
         self.robot = Robot(xPos, yPos, currAngle)
         self.generateEnvironment()
@@ -230,8 +236,13 @@ class PyGame2D():
         # self.minTime = INT_INFINITY
         # self.maxTime = 0
 
-    def _initObstacle(self):
-        return Obstacles()
+    def _initObstacle(self, numOfCircle, numOfRect, map):
+        return Obstacles(numOfCircle, numOfRect, map)
+    
+    # def randomObstacle(self):
+    #     x = Obstacles()
+    #     x.randomObstacle()
+    #     return x
 
     def _obstacleMoves(self):
         pass

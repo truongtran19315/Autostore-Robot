@@ -4,34 +4,35 @@ import numpy as np
 from Game_class import *
 from datetime import datetime
 
-date_train = '2023-12-09_V1'
+date_train = '2023-12-20_V1'
 foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 
 with open(foler_train_path, "rb") as f:
     q_table = pickle.load(f)
 
-numberRun = 111  # ! số lần chạy
+numberRun = 100  # ! số lần chạy
 arrRun = []
 print('================ Start Run =========================')
 for i in range(1, numberRun + 1):
     print('At attempt number {}'.format(i))
     goal = 0
-    total_eps = 1000  # ! số bước thử trong mỗi lần chạy
+    total_eps = 100  # ! số bước thử trong mỗi lần chạy
     eps = 1
     while eps <= total_eps:
         screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-        robot = Game(screen)
+        robot = Game(screen, MAP_SETTING.MAP_DEFAULT)
         Env = robot.getEnv()
 
         state = robot.reset()
         done = 0
-        counter = 200
+        counter = 1000
         while done == 0 and counter > 0:
             action = np.argmax(q_table[tuple(state)])
             # print(f'Action: {action}')
             next_state, _, done = robot.step(action)
             # robot.game.action(action)
             # robot.game.view()
+            # cv2.waitKey(1)
             state = next_state
             counter -= 1
             if done == 2:
