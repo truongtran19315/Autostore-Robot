@@ -62,6 +62,7 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
     Env = game.getEnv()
     trackPos = Env.copy()
 
+    #log file
     log_path = getLog_path(logFolderPath, last_epsilon)
     with open(log_path, 'a') as file:
         print(
@@ -77,7 +78,11 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
                 cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
     trackPosition_path = getlogPosition_path(
         imageFolderPath, done, last_epsilon)
+    
+    #save log pic
     cv2.imwrite(trackPosition_path, trackPosition)
+    
+    #add frame to video
     recordVideo.write(trackPosition)
 
     with open(q_table_path, "wb") as f:
@@ -87,7 +92,7 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
         recordVideo.release()
         break
 
-    if i % 10000 == 0:
+    if i % 1000 == 0:
         with open(os.path.join(folder_path, q_table_filename), "wb") as f:
             pickle.dump(q_table, f)
 

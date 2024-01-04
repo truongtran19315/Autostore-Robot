@@ -445,7 +445,7 @@ class PyGame2D():
 
 
 # screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-# game = PyGame2D(screen)
+# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
 # # game.view()
 # while True:
 #     input = Utils.inputUser()

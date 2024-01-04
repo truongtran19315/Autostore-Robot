@@ -120,6 +120,8 @@ class Game:
             cv2.circle(trackPosition, self.get_RealPosion(),
                        PLAYER_SETTING.RADIUS_OBJECT, COLOR.GREEN, 1)
 
+            
+            #log file
             with open(log_path, 'a') as file:
                 print('Curr-State: ' + str(state)
                       + '\nAction:' + str(action) + ' obs: ' +

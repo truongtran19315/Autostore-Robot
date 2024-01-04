@@ -158,12 +158,12 @@ FWVELO_SPACE = 4
 RVELO_SPACE = 4
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 200000  # Số lượng episode
+n_epsilondes = 1000000 - 256000 # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.99  # Hệ số giảm
 # epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon
-epsilon_decay = 10/200000
-epsilon = 0.9 - 0*epsilon_decay  # ! Xác suất khám phá
+epsilon_decay = 10/1000000
+epsilon = 0.9 - 256000*epsilon_decay  # ! Xác suất khám phá
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
 COUNTER = 200
