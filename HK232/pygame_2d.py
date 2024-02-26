@@ -11,11 +11,8 @@ from logVersion import *
 
 
 class Car():
-    def __init__(self, initX, initY, maxForwardVelocity, minRotationVelocity, maxRotationVelocity, currAngle, accelerationForward, accelerationRotate, radiusObject) -> None:
+    def __init__(self, initX, initY, currAngle, radiusObject) -> None:
         self.xPos, self.yPos = initX, initY
-        self.maxForwardVelocity = maxForwardVelocity
-        self.maxRotationVelocity = maxRotationVelocity  # rotate to the right
-        self.minRotationVelocity = minRotationVelocity  # //      left
 
         self.currentForwardVelocity = 0  # always >= 0
         self.currRotationVelocity = 0  # rotate left < 0, rotate right > 0
@@ -24,44 +21,21 @@ class Car():
         # self.currAngle = math.pi
         self.currAngle = currAngle
 
-        self.accelerationForward = accelerationForward
-        self.accelerationRotate = accelerationRotate
-
         self.radiusObject = radiusObject
 
     def move(self, action):  # t = 1
-        if action == ACTIONS.FORWARD_ACCELERATION:
-            if self.currentForwardVelocity != self.maxForwardVelocity:
-                self.currentForwardVelocity = self.currentForwardVelocity + self.accelerationForward
-            if self.currentForwardVelocity >= self.maxForwardVelocity:
-                self.currentForwardVelocity = self.maxForwardVelocity
-        elif action == ACTIONS.BACKWARD_ACCELERATION:
-            if self.currentForwardVelocity != 0:
-                self.currentForwardVelocity = self.currentForwardVelocity - self.accelerationForward
-            if self.currentForwardVelocity <= 0:
-                self.currentForwardVelocity = 0
-        elif action == ACTIONS.TURN_LEFT_ACCELERATION:
-            if self.currRotationVelocity != self.maxRotationVelocity:
-                self.currRotationVelocity = round(
-                    self.currRotationVelocity + self.accelerationRotate, 2)
-            if self.currRotationVelocity >= self.maxRotationVelocity:
-                self.currRotationVelocity = self.maxRotationVelocity
-        elif action == ACTIONS.TURN_RIGHT_ACCELERATION:
-            if self.currRotationVelocity != self.minRotationVelocity:
-                self.currRotationVelocity = round(
-                    self.currRotationVelocity - self.accelerationRotate, 2)
-            if self.currRotationVelocity <= self.minRotationVelocity:
-                self.currRotationVelocity = self.minRotationVelocity
-        elif action == ACTIONS.STOP:
-            self.currentForwardVelocity = 0
-            self.currRotationVelocity = 0
+        if action == ACTIONS.FORWARD:
+            self.xPos += math.cos(self.currAngle) * GAME_SETTING.GRID_WIDTH
+            self.yPos += -math.sin(self.currAngle) * GAME_SETTING.GRID_WIDTH
+        elif action == ACTIONS.TURN_LEFT:
+            self.currAngle += math.pi/2
+        elif action == ACTIONS.TURN_RIGHT:
+            self.currAngle -= math.pi/2
         else:
             pass
 
         # Calculate the position base on velocity per frame
         # dt = float(1/GAME_SETTING.FPS)
-        dt = 1
-        dt = 0.5
         dt = GAME_SETTING.DT
 
         self.currAngle += (self.currRotationVelocity*dt)
@@ -82,18 +56,11 @@ class Car():
 
 
 class Robot(Car):
-    def __init__(self, xPos, yPos, currAngle) -> None:
+    def __init__(self) -> None:
         super().__init__(
-            initX=xPos,
-            initY=yPos,
-            # initX=PLAYER_SETTING.INITIAL_X,
-            # initY=PLAYER_SETTING.INITIAL_Y,
-            maxForwardVelocity=PLAYER_SETTING.MAX_FORWARD_VELO,
-            minRotationVelocity=PLAYER_SETTING.MIN_ROTATION_VELO,
-            maxRotationVelocity=PLAYER_SETTING.MAX_ROTATION_VELO,
-            currAngle=currAngle,
-            accelerationForward=PLAYER_SETTING.ACCELERATION_FORWARD,
-            accelerationRotate=PLAYER_SETTING.ACCELERATION_ROTATE,
+            initX=PLAYER_SETTING.INITIAL_X,
+            initY=PLAYER_SETTING.INITIAL_Y,
+            currAngle=math.pi,
             radiusObject=PLAYER_SETTING.RADIUS_OBJECT
         )
 
@@ -116,7 +83,6 @@ class Robot(Car):
             check = Utils.isRobotWithinObstacle(obstacle, self.xPos, self.yPos)
             if check:
                 minDistance = -1
-                # self.bug += 1
             distance = Utils.distanceBetweenTwoPoints(
                 self.xPos, self.yPos, obstacle.xCenter, obstacle.yCenter)
             isInRageLidar = distance < obstacle.radius + \
@@ -142,7 +108,7 @@ class Robot(Car):
             y = INT_INFINITY
 
             for obstacle in obstaclesInRange:
-                d, x, y = cythonUtils.getDistanceFromObstacle(
+                d, x, y = cythonUtils.getDistanceFromObject(
                     obstacle, self.xPos, self.yPos, target_x, target_y)
                 # d, x, y = Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y)
 
@@ -179,12 +145,16 @@ class Robot(Car):
             self.isAlive = False
 
     def checkAchieveGoal(self, goal):
-        distance = Utils.distanceBetweenTwoPoints(
-            self.xPos, self.yPos, goal.xCenter, goal.yCenter)
-        if distance < self.radiusObject + goal.radius:
+        check = Utils.isRobotWithinObstacle(goal, self.xPos, self.yPos)
+        if check:
+            self.achieveGoal = True
+            return -1
+        distance = cythonUtils.getDistanceFromObject(
+            goal, self.xPos, self.yPos, goal.xCenter, goal.yCenter)
+        if distance[0] <= self.radiusObject:
             self.achieveGoal = True
 
-        return distance
+        return distance[0]
 
     def draw(self, screen):
         # cv2.circle(screen, (self.xPos, self.yPos), 370, COLOR.BLUE, -1)
@@ -219,11 +189,8 @@ class PyGame2D():
                                             map=map)
         
         self.goal = self.obstacles.goal
-        xPos, yPos, currAngle = self.randomPosition()
-        self.robot = Robot(xPos, yPos, currAngle)
+        self.robot = Robot()
         self.generateEnvironment()
-        self.distanGoal = Utils.distanceBetweenTwoPoints(
-            xPos, yPos, self.goal.xCenter, self.goal.yCenter)
 
         # self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
         # self.recordVideo = cv2.VideoWriter(self.videoFile_path,
@@ -237,7 +204,7 @@ class PyGame2D():
         # self.maxTime = 0
 
     def _initObstacle(self, numOfCircle, numOfRect, map):
-        return Obstacles(numOfCircle, numOfRect, map)
+        return Obstacles(numOfCircle, numOfRect, map)       
     
     # def randomObstacle(self):
     #     x = Obstacles()
@@ -246,25 +213,6 @@ class PyGame2D():
 
     def _obstacleMoves(self):
         pass
-
-    def randomPosition(self):
-        xPos = 0
-        yPos = 0
-        currAngle = random.uniform(0, 2*PLAYER_SETTING.PI)
-
-        check = False
-        while not check:
-            xPos = random.randint(25, 1260)
-            # xPos = random.randint(25, 650)
-            yPos = random.randint(25, 700)
-            for obstacle in self.obstacles.obstacles:
-                if Utils.isPointInObstacle(obstacle, xPos, yPos):
-                    check = False
-                    break
-                else:
-                    check = True
-
-        return xPos, yPos, currAngle
 
     def action(self, action):
         self.robot.move(action=action)
@@ -283,10 +231,10 @@ class PyGame2D():
 
         # print(elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
 
-        self.robot.checkCollision(distance)
         # if self.robot.bug > 0 and self.robot.isAlive:
         #     print('a')
         self.distanGoal = self.robot.checkAchieveGoal(self.goal)
+        self.robot.checkCollision(distance)
 
     def evaluate(self):
         reward = 0
@@ -401,10 +349,10 @@ class PyGame2D():
         return np.concatenate((infoStateVector, lidarStateVector))
 
     def is_done(self):
-        if not self.robot.isAlive:
-            return PLAYER_SETTING.GONE
-        elif self.robot.achieveGoal:
+        if self.robot.achieveGoal:
             return PLAYER_SETTING.GOAL
+        elif not self.robot.isAlive:
+            return PLAYER_SETTING.GONE
         return PLAYER_SETTING.ALIVE
 
     def record(self, screen, input):
@@ -413,7 +361,29 @@ class PyGame2D():
         else:
             self.recordVideo.write(screen)
 
+    def generateGrid(self, env):
+        start_x = 0
+        start_y = 0
+        end_x = 0
+        end_y = GAME_SETTING.SCREEN_HEIGHT
+        
+        while start_x < GAME_SETTING.SCREEN_WIDTH:
+            cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.BLACK, 1)
+            start_x = start_x + GAME_SETTING.GRID_WIDTH
+            end_x = end_x + GAME_SETTING.GRID_WIDTH
+            
+        start_x = 0
+        start_y = 0
+        end_x = GAME_SETTING.SCREEN_WIDTH
+        end_y = 0
+        
+        while start_y < GAME_SETTING.SCREEN_HEIGHT:
+            cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.BLACK, 1)
+            start_y = start_y + GAME_SETTING.GRID_WIDTH
+            end_y = end_y + GAME_SETTING.GRID_WIDTH
+
     def generateEnvironment(self):
+        self.generateGrid(self.env)
         self.obstacles.generateObstacles(self.env)
         self.goal.draw(self.env)
 
@@ -444,20 +414,20 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-# screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
-# # game.view()
-# while True:
-#     input = Utils.inputUser()
-#     game.action(input)
-#     if not game.robot.isAlive:
-#         print("Oops!!!!!!!!!!")
-#         input = 27
-#     elif game.robot.achieveGoal:
-#         print("Great!!!!!!!!!")
-#         input = 27
-#     game.view()
-#     if input == 27:
-#         cv2.destroyAllWindows()
-#         break
-#     pass
+screen = np.ones((GAME_SETTING.SCREEN_HEIGHT, GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
+# game.view()
+while True:
+    input = Utils.inputUser()
+    game.action(input)
+    if game.robot.achieveGoal:
+        print("Great!!!!!!!!!")
+        input = 27
+    elif not game.robot.isAlive:
+        print("Oops!!!!!!!!!!")
+        input = 27
+    game.view()
+    if input == 27:
+        cv2.destroyAllWindows()
+        break
+    pass

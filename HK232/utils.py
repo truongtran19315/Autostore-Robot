@@ -30,19 +30,13 @@ class Utils:
     
     
     def isRobotWithinObstacle(obstacle, xPointA, yPointA):
-        if obstacle.shape == 'circle':
-            distance = Utils.distanceBetweenTwoPoints(
-                    xPointA, yPointA, obstacle.xCenter, obstacle.yCenter)
-            if distance <= obstacle.radius:
+        topLeft = [obstacle.xCenter - obstacle.width // 2 , \
+            obstacle.yCenter - obstacle.height//2]
+        xtopRight = obstacle.xCenter + obstacle.width // 2
+        ybotLeft = obstacle.yCenter + obstacle.height//2
+        if xPointA >= topLeft[0] and xPointA <= xtopRight \
+            and yPointA >= topLeft[1] and yPointA <= ybotLeft:
                 return True
-        else:
-            topLeft = [obstacle.xCenter - obstacle.width // 2 , \
-                obstacle.yCenter - obstacle.height//2]
-            xtopRight = obstacle.xCenter + obstacle.width // 2
-            ybotLeft = obstacle.yCenter + obstacle.height//2
-            if xPointA >= topLeft[0] and xPointA <= xtopRight \
-                and yPointA >= topLeft[1] and yPointA <= ybotLeft:
-                    return True
         return False
     
     def isPointInObstacle(obstacle, xPointA, yPointA):
@@ -341,22 +335,19 @@ class Utils:
         # Rotate left ()
         if key == ord('a'):
             # game.action(ACTIONS.TURN_LEFT_ACCELERATION)
-            return ACTIONS.TURN_LEFT_ACCELERATION
+            return ACTIONS.TURN_LEFT
         # Rotate right ()
         elif key == ord('d'):
             # game.action(ACTIONS.TURN_RIGHT_ACCELERATION)
-            return ACTIONS.TURN_RIGHT_ACCELERATION
+            return ACTIONS.TURN_RIGHT
         # Increase forward velocity
         elif key == ord('w'):
             # game.action(ACTIONS.FORWARD_ACCELERATION)
-            return ACTIONS.FORWARD_ACCELERATION
-        elif key == ord('x'):
-            # game.action(ACTIONS.BACKWARD_ACCELERATION)
-            return ACTIONS.BACKWARD_ACCELERATION
-        # Stop
+            return ACTIONS.FORWARD
         elif key == ord('s'):
-            # game.action(ACTIONS.STOP)
-            return ACTIONS.STOP
+            # game.action(ACTIONS.BACKWARD_ACCELERATION)
+            return ACTIONS.BACKWARD
+        # Stop
         elif key == 27 or (key & 0xFF == 'q'):
             return 27
         else:

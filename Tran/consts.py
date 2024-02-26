@@ -7,7 +7,7 @@ class GAME_SETTING:
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
     FPS = 60
-    DT = 0.5
+    DT = 0.1
 
 
 class PLAYER_SETTING:
@@ -36,8 +36,8 @@ class PLAYER_SETTING:
     ACCELERATION_FORWARD = 5
     ACCELERATION_ROTATE = 0.05
 
-    ACCELERATION_FORWARD = MAX_FORWARD_VELO/3
-    ACCELERATION_ROTATE = MAX_ROTATION_VELO/3
+    #ACCELERATION_FORWARD = MAX_FORWARD_VELO/3
+    #ACCELERATION_ROTATE = MAX_ROTATION_VELO/3
 
     CASTED_RAYS = 45
     CASTED_RAYS = 90
@@ -158,12 +158,12 @@ FWVELO_SPACE = 4
 RVELO_SPACE = 4
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 1000000 - 256000 # Số lượng episode
+n_epsilondes = 1000000 # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.99  # Hệ số giảm
 # epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon
 epsilon_decay = 10/1000000
-epsilon = 0.9 - 256000*epsilon_decay  # ! Xác suất khám phá
+epsilon = 0.9 - 0*epsilon_decay  # ! Xác suất khám phá
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
 COUNTER = 200

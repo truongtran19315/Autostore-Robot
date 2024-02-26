@@ -122,11 +122,11 @@ class Game:
 
             
             #log file
-            with open(log_path, 'a') as file:
-                print('Curr-State: ' + str(state)
-                      + '\nAction:' + str(action) + ' obs: ' +
-                      str(next_state) + ' reward: ' + str(reward)
-                      + '\nq-table before update: ' + str(q_table[tuple(state)]) + '\n', file=file)
+            # with open(log_path, 'a') as file:
+            #     print('Curr-State: ' + str(state)
+            #           + '\nAction:' + str(action) + ' obs: ' +
+            #           str(next_state) + ' reward: ' + str(reward)
+            #           + '\nq-table before update: ' + str(q_table[tuple(state)]) + '\n', file=file)
 
             maxQ = np.max(q_table[tuple(next_state)])
             q_table[tuple(state)][action] += self.alpha * (reward +

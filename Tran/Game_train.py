@@ -63,27 +63,29 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
     trackPos = Env.copy()
 
     #log file
-    log_path = getLog_path(logFolderPath, last_epsilon)
-    with open(log_path, 'a') as file:
-        print(
-            f'\n******************** Epsilon {i} ***********************', file=file)
+    # log_path = getLog_path(logFolderPath, last_epsilon)
+    # with open(log_path, 'a') as file:
+    #     print(
+    #         f'\n******************** Epsilon {i} ***********************', file=file)
+    log_path = 1
 
     reward, trackPosition, done = game.run_episode(
         q_table, trackPos, log_path)
     if done == PLAYER_SETTING.GOAL:
         goal_count += 1
     game.reward_records.append(reward)
-    goal_count_str = 'goal counter: ' + str(goal_count)
-    cv2.putText(trackPosition, goal_count_str, (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-    trackPosition_path = getlogPosition_path(
-        imageFolderPath, done, last_epsilon)
+    
+    # goal_count_str = 'goal counter: ' + str(goal_count)
+    # cv2.putText(trackPosition, goal_count_str, (50, 350),
+    #             cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+    # trackPosition_path = getlogPosition_path(
+    #     imageFolderPath, done, last_epsilon)
     
     #save log pic
-    cv2.imwrite(trackPosition_path, trackPosition)
+    # cv2.imwrite(trackPosition_path, trackPosition)
     
     #add frame to video
-    recordVideo.write(trackPosition)
+    # recordVideo.write(trackPosition)
 
     with open(q_table_path, "wb") as f:
         pickle.dump(q_table, f)

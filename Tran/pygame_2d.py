@@ -444,20 +444,20 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-# screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
-# # game.view()
-# while True:
-#     input = Utils.inputUser()
-#     game.action(input)
-#     if not game.robot.isAlive:
-#         print("Oops!!!!!!!!!!")
-#         input = 27
-#     elif game.robot.achieveGoal:
-#         print("Great!!!!!!!!!")
-#         input = 27
-#     game.view()
-#     if input == 27:
-#         cv2.destroyAllWindows()
-#         break
-#     pass
+screen = np.zeros((500, 500, 3), dtype=np.uint8)
+game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
+# game.view()
+while True:
+    input = Utils.inputUser()
+    game.action(input)
+    if not game.robot.isAlive:
+        print("Oops!!!!!!!!!!")
+        input = 27
+    elif game.robot.achieveGoal:
+        print("Great!!!!!!!!!")
+        input = 27
+    game.view()
+    if input == 27:
+        cv2.destroyAllWindows()
+        break
+    pass

@@ -6,7 +6,10 @@ from utils import *
 
 a = Utils.angleBetweenTwoPoints(150, 110, 100, 100)
 print(a)
-
+def power_gen(x, n): 
+  return lambda n: x ** n 
+result = power_gen(3, 4)
+print(power_gen(3, 4))
 
 
 
