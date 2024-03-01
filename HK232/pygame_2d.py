@@ -47,12 +47,13 @@ class Car():
             self.currAngle = abs(self.currAngle - 2*math.pi)
 
         # Update the new position based on the velocity
-        self.xPos += math.cos(self.currAngle) * \
-            self.currentForwardVelocity * dt
-        self.yPos += -math.sin(self.currAngle) * \
-            self.currentForwardVelocity * dt
+        # self.xPos += math.cos(self.currAngle) * \
+        #     self.currentForwardVelocity * dt
+        # self.yPos += -math.sin(self.currAngle) * \
+        #     self.currentForwardVelocity * dt
 
-        # print(self.xPos, self.yPos, " current angle: ", self.currAngle, self.currentForwardVelocity, self.currRotationVelocity)
+        # print(self.xPos, self.yPos, " current angle: ", self.currAngle,
+        #       self.currentForwardVelocity, self.currRotationVelocity)
 
 
 class Robot(Car):
@@ -75,7 +76,7 @@ class Robot(Car):
                                 "color": COLOR.WHITE
                                 } for x in range(PLAYER_SETTING.CASTED_RAYS)]
 
-    def scanLidar(self, obstacles):     
+    def scanLidar(self, obstacles):
         obstaclesInRange = []  # to save obstacles in lidar range
         minDistance = INT_INFINITY
 
@@ -182,12 +183,12 @@ class Robot(Car):
 class PyGame2D():
     def __init__(self, screen, map) -> None:
         self.env = screen
-        
+
         # init obstacles
-        self.obstacles = self._initObstacle(numOfCircle=OBSTACLE_SETTING.CIRCLE_OBSTACLE, 
-                                            numOfRect=OBSTACLE_SETTING.RECT_OBSTACLE, 
+        self.obstacles = self._initObstacle(numOfCircle=OBSTACLE_SETTING.CIRCLE_OBSTACLE,
+                                            numOfRect=OBSTACLE_SETTING.RECT_OBSTACLE,
                                             map=map)
-        
+
         self.goal = self.obstacles.goal
         self.robot = Robot()
         self.generateEnvironment()
@@ -204,8 +205,8 @@ class PyGame2D():
         # self.maxTime = 0
 
     def _initObstacle(self, numOfCircle, numOfRect, map):
-        return Obstacles(numOfCircle, numOfRect, map)       
-    
+        return Obstacles(numOfCircle, numOfRect, map)
+
     # def randomObstacle(self):
     #     x = Obstacles()
     #     x.randomObstacle()
@@ -216,73 +217,26 @@ class PyGame2D():
 
     def action(self, action):
         self.robot.move(action=action)
-        # self._obstacleMoves()
-        # self.n += 1
-        # start_time = time.time()
-
         distance = self.robot.scanLidar(obstacles=self.obstacles)
-
-        # end_time = time.time()
-
-        # elapsed_time = end_time - start_time
-
-        # self.totalTime += elapsed_time
-        # mediumTime = self.totalTime / self.n
-
-        # print(elapsed_time, mediumTime, self.minTime, self.maxTime, self.n)
-
-        # if self.robot.bug > 0 and self.robot.isAlive:
-        #     print('a')
-        self.distanGoal = self.robot.checkAchieveGoal(self.goal)
+        self.distanceGoal = self.robot.checkAchieveGoal(self.goal)
         self.robot.checkCollision(distance)
 
     def evaluate(self):
         reward = 0
+
         if not self.robot.isAlive:
             reward -= 1000000
-
         if self.robot.achieveGoal:
             reward += 100000
 
-        # distance = self.observe()[-4:]
         observe = self.observe()
-        distance = observe[-3:]
         goal_distance = observe[0]
-        direction = observe[1]
-        if distance[1] == 0:
-            reward -= 500
-        elif distance[1] == 1:
-            reward -= 5
-        elif distance[1] == 2:
-            reward -= 3
-        elif distance[1] > 2:
-            # reward += 200
-            pass
-
-        if distance[0] == 0:
-            reward -= 5
-        elif distance[0] == 1:
-            reward -= 3
-        elif distance[0] == 2:
-            reward -= 1
-        elif distance[0] > 2:
-            # reward += 50
-            pass
-
-        if distance[2] == 0:
-            reward -= 5
-        elif distance[2] == 1:
-            reward -= 3
-        elif distance[2] == 2:
-            reward -= 1
-        elif distance[2] > 2:
-            # reward += 50
-            pass
-
-        reward -= (abs(direction - ALPHA_SPACE/2) * 100)
-
         reward -= goal_distance*500
-        # print(direction, observe[1], reward)
+
+        if observe[2] == 0:
+            reward -= 1000
+        elif observe[2] == 1:
+            reward += 100
 
         return reward
 
@@ -296,56 +250,25 @@ class PyGame2D():
             alpha += -2*PLAYER_SETTING.PI
         elif alpha < -PLAYER_SETTING.PI:
             alpha += 2*PLAYER_SETTING.PI
-        distanceGoal = self.distanGoal  # ! add distance
-        fwVelo = self.robot.currentForwardVelocity
-        rVelo = self.robot.currRotationVelocity
+
         lidars = self.robot.lidarSignals
+        lidars_NumberSelected = [lidars[0], lidars[90], lidars[180]]
 
-        # TODO
-        #! chuyen gia tri tia lidar
-        bin_lidarsignal = np.linspace(
-            0, 360, num=LENGTH_LIDARSIGNAL, endpoint=True)
-        bin_lidarsignal = np.delete(bin_lidarsignal, 0)
-        lidars_digitized = np.digitize(lidars, bin_lidarsignal)
+        lidarLength_bin = [40]
+        lidarLength_digitized = np.digitize(
+            lidars_NumberSelected, lidarLength_bin)
 
-        # bin_lidarspace = np.array([33, 84, 96, 147])
-        bin_lidarspace = np.array([85, 95])
-        # bin_lidarspace = np.array([78, 102])
-        lidars_sections = np.array_split(lidars_digitized, bin_lidarspace)
-        section_lidars_min = [np.amin(section) for section in lidars_sections]
-
-        #! chuyen doi state vector
-        # ! add distance
         distanceGoal_space = PLAYER_SETTING.DISTANCEGOAL_MIN, PLAYER_SETTING.DISTANCEGOAL_MAX
-        alpha_space = -PLAYER_SETTING.PI, PLAYER_SETTING.PI
-        fwVelo_space = 0, PLAYER_SETTING.MAX_FORWARD_VELO
-        rVelo_space = PLAYER_SETTING.MIN_ROTATION_VELO, PLAYER_SETTING.MAX_ROTATION_VELO
-
-        lowState = np.array(
-            [distanceGoal_space[0], alpha_space[0], fwVelo_space[0], rVelo_space[0]], dtype=float)
-        upState = np.array(
-            [distanceGoal_space[1], alpha_space[1], fwVelo_space[1], rVelo_space[1]], dtype=float)
-
-        infoState_shape = (DISTANCE_SPACE, ALPHA_SPACE,
-                           FWVELO_SPACE, RVELO_SPACE)
-
-        bins = []
-        for i in range(len(infoState_shape)):
-            item = np.linspace(
-                lowState[i],
-                upState[i],
-                num=infoState_shape[i],
-                endpoint=False)
-            item = np.delete(item, 0)
-            bins.append(item)
-
-        s = (distanceGoal, alpha, fwVelo, rVelo)  # ! add distance
+        distanceGoal_bin = np.linspace(
+            distanceGoal_space[0], distanceGoal_space[1], num=DISTANCE_SPACE, endpoint=False)
+        distanceGoal_bin = np.delete(distanceGoal_bin, 0)
         infoStateVector = []
-        for i in range(len(infoState_shape)):
-            infoStateVector.append(np.digitize(s[i], bins[i]))
+        infoStateVector.append(np.digitize(
+            self.distanceGoal, distanceGoal_bin))
 
         infoStateVector = np.array(infoStateVector)
-        lidarStateVector = np.array(section_lidars_min)
+        lidarStateVector = np.array(lidarLength_digitized)
+        # distance, lidar 0, 90, 180
         return np.concatenate((infoStateVector, lidarStateVector))
 
     def is_done(self):
@@ -366,17 +289,17 @@ class PyGame2D():
         start_y = 0
         end_x = 0
         end_y = GAME_SETTING.SCREEN_HEIGHT
-        
+
         while start_x < GAME_SETTING.SCREEN_WIDTH:
             cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.BLACK, 1)
             start_x = start_x + GAME_SETTING.GRID_WIDTH
             end_x = end_x + GAME_SETTING.GRID_WIDTH
-            
+
         start_x = 0
         start_y = 0
         end_x = GAME_SETTING.SCREEN_WIDTH
         end_y = 0
-        
+
         while start_y < GAME_SETTING.SCREEN_HEIGHT:
             cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.BLACK, 1)
             start_y = start_y + GAME_SETTING.GRID_WIDTH
@@ -414,20 +337,21 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-screen = np.ones((GAME_SETTING.SCREEN_HEIGHT, GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
-# game.view()
-while True:
-    input = Utils.inputUser()
-    game.action(input)
-    if game.robot.achieveGoal:
-        print("Great!!!!!!!!!")
-        input = 27
-    elif not game.robot.isAlive:
-        print("Oops!!!!!!!!!!")
-        input = 27
-    game.view()
-    if input == 27:
-        cv2.destroyAllWindows()
-        break
-    pass
+# screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+#                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
+# # game.view()
+# while True:
+#     input = Utils.inputUser()
+#     game.action(input)
+#     if game.robot.achieveGoal:
+#         print("Great!!!!!!!!!")
+#         input = 27
+#     elif not game.robot.isAlive:
+#         print("Oops!!!!!!!!!!")
+#         input = 27
+#     game.view()
+#     if input == 27:
+#         cv2.destroyAllWindows()
+#         break
+#     pass
