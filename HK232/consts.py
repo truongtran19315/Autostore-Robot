@@ -19,14 +19,11 @@ class PLAYER_SETTING:
     INITIAL_X = 30
     INITIAL_Y = 30
 
-    CASTED_RAYS = 45
-    CASTED_RAYS = 90
-    CASTED_RAYS = 360   # số lượng tia lidar
-    CASTED_RAYS = 180
+    CASTED_RAYS = 181  # ! số lượng tia lidar
     PI = math.pi
     HALF_PI = PI/2  # pi/2
     STEP_ANGLE = 2 * PI / CASTED_RAYS   # góc mỗi tia lidar
-    STEP_ANGLE = PI / CASTED_RAYS   # góc mỗi tia lidar 
+    STEP_ANGLE = PI / CASTED_RAYS   # góc mỗi tia lidar
 
     # MAX_STEP_PER_EPOCH = 5000
     GOAL = 2
@@ -34,7 +31,8 @@ class PLAYER_SETTING:
     ALIVE = 0
 
     DISTANCEGOAL_MIN = 0
-    DISTANCEGOAL_MAX = 1000
+    DISTANCEGOAL_MAX = 700
+
 
 class OBSTACLE_SETTING:
     # MAX_INSTANCES = 15
@@ -48,20 +46,20 @@ class OBSTACLE_SETTING:
     NUM_OBSTACLE = 10
     RECT_OBSTACLE = NUM_OBSTACLE//2
     CIRCLE_OBSTACLE = NUM_OBSTACLE//2
-    
+
     MAX_RADIUS = 100
     MIN_RADIUS = PLAYER_SETTING.RADIUS_OBJECT
-    
+
     MAX_HEIGHT = 100
     MIN_HEIGHT = PLAYER_SETTING.RADIUS_OBJECT
     MAX_WIDTH = 100
     MIN_WIDTH = PLAYER_SETTING.RADIUS_OBJECT
-    
+
     MIN_DISTANCE_GOAL_VS_OBS = 50
-    
-    
+
+
 class MAP_SETTING:
-    MAP_DEFAULT = 0 
+    MAP_DEFAULT = 0
     RANDOM_MAP_OFF = 1
     RANDOM_MAP_ON = 2
 
@@ -81,7 +79,6 @@ class COLOR:
 class ACTIONS:
     TURN_RIGHT = 0
     TURN_LEFT = 1
-    # STOP = 2
     FORWARD = 2
     BACKWARD = 3
     DO_NOTHING = 4  # DIFFERENT WITH STOP
@@ -107,17 +104,17 @@ INT_INFINITY = 99999
 
 
 #! observe/ chuyen gia tri
-LENGTH_LIDARSIGNAL = 4   # 0,1,2,3
-SECTIONS_LIDARSPACE = 3  # ! chia lidar thành 4 vùng 0,1,2,3,4
+LENGTH_LIDARSIGNAL = 2   # 0,1 #! edit for new map
+SECTIONS_LIDARSPACE = 3  # ! 3 rays are: 0, 90 , 180
 
 # set các khoảng rời rạc
-DISTANCE_SPACE = 5
+DISTANCE_SPACE = 7
 ALPHA_SPACE = 10
 FWVELO_SPACE = 4
 RVELO_SPACE = 4
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 1000000 - 256000 # Số lượng episode
+n_epsilondes = 10000  # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.99  # Hệ số giảm
 # epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon
