@@ -14,8 +14,9 @@ q_table_path = os.path.join(folder_path, q_table_filename)
 diagram_filename = "diagram.png"
 diagram_path = os.path.join(folder_path, diagram_filename)
 
-screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-map = MAP_SETTING.RANDOM_MAP_ON
+screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+map = MAP_SETTING.RANDOM_MAP_OFF
 game = Game(screen, map)
 
 Env = game.getEnv()
@@ -50,19 +51,13 @@ game.fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10, 18), dpi=300)
 goal_count = 0
 
 for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
-    # print(f"Epsilon {i}")
-    # if (i - 1) % 10 == 0:
-    #     screen = np.zeros((720, 1280, 3), dtype=np.uint8)
-    #     game = Game(screen)
-
-    #     Env = game.getEnv()
     print("Running Episode {}".format(i), end="\r")
 
     game.reset()
     Env = game.getEnv()
     trackPos = Env.copy()
 
-    #log file
+    # log file
     log_path = getLog_path(logFolderPath, last_epsilon)
     with open(log_path, 'a') as file:
         print(
@@ -78,11 +73,11 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
                 cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
     trackPosition_path = getlogPosition_path(
         imageFolderPath, done, last_epsilon)
-    
-    #save log pic
+
+    # save log pic
     cv2.imwrite(trackPosition_path, trackPosition)
-    
-    #add frame to video
+
+    # add frame to video
     recordVideo.write(trackPosition)
 
     with open(q_table_path, "wb") as f:
