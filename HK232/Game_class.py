@@ -18,14 +18,13 @@ class Game:
         self.game = pygame_2d.PyGame2D(screen=self.screen, map=self.map)
         self.lidarspace_shape = tuple(
             [LENGTH_LIDARSIGNAL] * SECTIONS_LIDARSPACE)
-        self.new_observation_shape = (DISTANCE_SPACE, ALPHA_SPACE, FWVELO_SPACE,
-                                      RVELO_SPACE) + self.lidarspace_shape
+        self.new_observation_shape = (DISTANCE_SPACE, ) + self.lidarspace_shape
         self.epsilon = epsilon
         self.epsilon_min = epsilon_min
         self.epsilon_decay = epsilon_decay
         self.alpha = alpha
         self.gamma = gamma
-        self.total_states = DISTANCE_SPACE * ALPHA_SPACE * FWVELO_SPACE * RVELO_SPACE * \
+        self.total_states = DISTANCE_SPACE * \
             math.pow(LENGTH_LIDARSIGNAL, SECTIONS_LIDARSPACE)
         self.fig = None
 
@@ -89,9 +88,8 @@ class Game:
         firstPosition = self.get_RealPosion()
         turn_left = 0
         turn_right = 0
-        ahead = 0
-        slowdown = 0
-        stop = 0
+        forward = 0
+        backward = 0
         nothing = 0
         step_count = 1
 
@@ -106,12 +104,10 @@ class Game:
             elif action == 1:
                 turn_left += 1
             elif action == 2:
-                stop += 1
+                forward += 1
             elif action == 3:
-                ahead += 1
+                backward += 1
             elif action == 4:
-                slowdown += 1
-            elif action == 5:
                 nothing += 1
             step_count += 1
 
@@ -120,8 +116,7 @@ class Game:
             cv2.circle(trackPosition, self.get_RealPosion(),
                        PLAYER_SETTING.RADIUS_OBJECT, COLOR.GREEN, 1)
 
-            
-            #log file
+            # log file
             with open(log_path, 'a') as file:
                 print('Curr-State: ' + str(state)
                       + '\nAction:' + str(action) + ' obs: ' +
@@ -155,9 +150,8 @@ class Game:
 
         turn_right = 'turn right: ' + str(turn_right)
         turn_left = 'turn left: ' + str(turn_left)
-        stop = 'stop: ' + str(stop)
-        ahead = 'ahead: ' + str(ahead)
-        slowdown = 'slowdown: ' + str(slowdown)
+        forward = 'forward: ' + str(forward)
+        backward = 'backward: ' + str(backward)
         nothing = 'nothing: ' + str(nothing)
         step_count_str = 'step counter: ' + str(step_count)
         cv2.putText(trackPosition, step_count_str, (50, 400),
@@ -166,11 +160,9 @@ class Game:
                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         cv2.putText(trackPosition, turn_left, (50, 500),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-        cv2.putText(trackPosition, stop, (50, 550),
+        cv2.putText(trackPosition, forward, (50, 600),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-        cv2.putText(trackPosition, ahead, (50, 600),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-        cv2.putText(trackPosition, slowdown, (50, 650),
+        cv2.putText(trackPosition, backward, (50, 650),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         cv2.putText(trackPosition, nothing, (50, 700),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
@@ -186,8 +178,10 @@ class Game:
 
     def reset(self):
         del self.game
-        self.screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+        self.screen = np.ones(
+            (GAME_SETTING.SCREEN_HEIGHT, GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
         self.game = pygame_2d.PyGame2D(screen=self.screen, map=self.map)
+
         # to update the lidar scan state
         self.game.action(action=ACTIONS.DO_NOTHING)
         obs = self.game.observe()
