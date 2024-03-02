@@ -236,7 +236,12 @@ class PyGame2D():
         if observe[2] == 0:
             reward -= 1000
         elif observe[2] == 1:
-            reward += 100
+            reward += 10
+
+        # if observe[1] == 0:
+        #     reward -= 50
+        # if observe[3] == 0:
+        #     reward -= 50
 
         return reward
 
