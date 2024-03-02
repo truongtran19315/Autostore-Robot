@@ -68,9 +68,9 @@ for i in range(last_epsilon + 1, n_epsilondes + last_epsilon + 1):
     if done == PLAYER_SETTING.GOAL:
         goal_count += 1
     game.reward_records.append(reward)
-    goal_count_str = 'goal counter: ' + str(goal_count)
-    cv2.putText(trackPosition, goal_count_str, (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+    goal_count_str = 'Goal counter: ' + str(goal_count)
+    cv2.putText(trackPosition, goal_count_str, (300, 440),
+                cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLACK, 1)
     trackPosition_path = getlogPosition_path(
         imageFolderPath, done, last_epsilon)
 
