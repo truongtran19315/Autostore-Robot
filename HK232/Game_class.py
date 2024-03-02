@@ -143,29 +143,31 @@ class Game:
 
         cv2.circle(trackPosition, firstPosition,
                    PLAYER_SETTING.RADIUS_OBJECT, COLOR.RED, 1)
-        state_change_str = 'state change rate: ' + str(self.state_count_change/(
-            self.total_states))
-        cv2.putText(trackPosition, state_change_str, (50, 50),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        state_change_str = 'State Change : ' + \
+            str(self.state_count_change/self.total_states)
+        cv2.putText(trackPosition, state_change_str, (260, 480),
+                    cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLACK, 1)
 
-        turn_right = 'turn right: ' + str(turn_right)
-        turn_left = 'turn left: ' + str(turn_left)
-        forward = 'forward: ' + str(forward)
-        backward = 'backward: ' + str(backward)
-        nothing = 'nothing: ' + str(nothing)
-        step_count_str = 'step counter: ' + str(step_count)
-        cv2.putText(trackPosition, step_count_str, (50, 400),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-        cv2.putText(trackPosition, turn_right, (50, 450),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-        cv2.putText(trackPosition, turn_left, (50, 500),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-        cv2.putText(trackPosition, forward, (50, 600),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-        cv2.putText(trackPosition, backward, (50, 650),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
-        cv2.putText(trackPosition, nothing, (50, 700),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+        turn_right = 'Turn Right: ' + str(turn_right)
+        turn_left = 'Turn Left : ' + str(turn_left)
+        forward = 'Forward  : ' + str(forward)
+        backward = 'Backward : ' + str(backward)
+        nothing = 'Nothing  : ' + str(nothing)
+
+        step_count_str = 'Total step : ' + str(step_count)
+        cv2.putText(trackPosition, step_count_str, (300, 400),
+                    cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
+
+        cv2.putText(trackPosition, forward, (40, 400),
+                    cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
+        cv2.putText(trackPosition, backward, (40, 420),
+                    cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
+        cv2.putText(trackPosition, turn_right, (40, 440),
+                    cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
+        cv2.putText(trackPosition, turn_left, (40, 460),
+                    cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
+        cv2.putText(trackPosition, nothing, (40, 480),
+                    cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
 
         self.record_state_change.append(self.state_count_change)
 
