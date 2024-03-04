@@ -33,6 +33,7 @@ class Car():
 
         self.currAngle = PLAYER_SETTING.CURR_ANGLE[self.currAngleIndex]
 
+
 class Robot(Car):
     def __init__(self) -> None:
         super().__init__(
@@ -153,7 +154,8 @@ class Robot(Car):
         ySource = int(self.yPos)
         cv2.line(screen, (xSource, ySource),
                  (target_x, target_y), COLOR.BLACK, 2)
-        print("xSource: ", xSource, "ySource: ", ySource, "target_x: ", target_x, "target_y: ", target_y)
+        # print("xSource: ", xSource, "ySource: ", ySource,
+        #       "target_x: ", target_x, "target_y: ", target_y)
         cv2.circle(screen, (xSource, ySource),
                    self.radiusObject, COLOR.BLUE, -1)
 
@@ -202,23 +204,19 @@ class PyGame2D():
         reward = 0
 
         if not self.robot.isAlive:
-            reward -= 1000000
+            reward -= 1000
         if self.robot.achieveGoal:
-            reward += 100000
+            reward += 1000
 
         observe = self.observe()
         goal_distance = observe[0]
-        reward -= goal_distance*500
+        reward -= goal_distance*100
 
-        if observe[2] == 0:
-            reward -= 1000
-        elif observe[2] == 1:
-            reward += 10
+        obstacles_distance = observe[-3:]  # ! 0, 90, 180
+        reward -= 10 - 20 * obstacles_distance[1]
 
-        # if observe[1] == 0:
-        #     reward -= 50
-        # if observe[3] == 0:
-        #     reward -= 50
+        dentaGoal_Angle = observe[1]
+        reward -= (abs(dentaGoal_Angle - ALPHA_SPACE/2) * 100)
 
         return reward
 
@@ -248,9 +246,14 @@ class PyGame2D():
         infoStateVector.append(np.digitize(
             self.distanceGoal, distanceGoal_bin))
 
+        alphaGoal_bin = np.linspace(-math.pi, math.pi,
+                                    num=ALPHA_SPACE, endpoint=False)
+        alphaGoal_bin = np.delete(alphaGoal_bin, 0)
+        infoStateVector.append(np.digitize(alpha, alphaGoal_bin))
+
         infoStateVector = np.array(infoStateVector)
         lidarStateVector = np.array(lidarLength_digitized)
-        # distance, lidar 0, 90, 180
+        #! distance, alpha, 0, 90, 180
         return np.concatenate((infoStateVector, lidarStateVector))
 
     def is_done(self):
@@ -273,7 +276,8 @@ class PyGame2D():
         end_y = GAME_SETTING.SCREEN_HEIGHT
 
         while start_x < GAME_SETTING.SCREEN_WIDTH:
-            cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.GRID_COLOR, 1)
+            cv2.line(env, (start_x, start_y),
+                     (end_x, end_y), COLOR.GRID_COLOR, 1)
             start_x = start_x + GAME_SETTING.GRID_WIDTH
             end_x = end_x + GAME_SETTING.GRID_WIDTH
 
@@ -283,7 +287,8 @@ class PyGame2D():
         end_y = 0
 
         while start_y < GAME_SETTING.SCREEN_HEIGHT:
-            cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.GRID_COLOR, 1)
+            cv2.line(env, (start_x, start_y),
+                     (end_x, end_y), COLOR.GRID_COLOR, 1)
             start_y = start_y + GAME_SETTING.GRID_WIDTH
             end_y = end_y + GAME_SETTING.GRID_WIDTH
 
@@ -319,21 +324,21 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
-                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
-# game.view()
-while True:
-    input = Utils.inputUser()
-    game.action(input)
-    if game.robot.achieveGoal:
-        print("Great!!!!!!!!!")
-        input = 27
-    elif not game.robot.isAlive:
-        print("Oops!!!!!!!!!!")
-        input = 27
-    game.view()
-    if input == 27:
-        cv2.destroyAllWindows()
-        break
-    pass
+# screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+#                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
+# # game.view()
+# while True:
+#     input = Utils.inputUser()
+#     game.action(input)
+#     if game.robot.achieveGoal:
+#         print("Great!!!!!!!!!")
+#         input = 27
+#     elif not game.robot.isAlive:
+#         print("Oops!!!!!!!!!!")
+#         input = 27
+#     game.view()
+#     if input == 27:
+#         cv2.destroyAllWindows()
+#         break
+#     pass
