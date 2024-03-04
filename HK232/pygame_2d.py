@@ -5,21 +5,16 @@ import random
 from obstacles import Obstacles, Goal
 from consts import *
 from utils import Utils
-import cythonUtils
 import time
 from logVersion import *
 
 
 class Car():
-    def __init__(self, initX, initY, currAngle, radiusObject) -> None:
+    def __init__(self, initX, initY, initAngleIndex, radiusObject) -> None:
         self.xPos, self.yPos = initX, initY
 
-        self.currentForwardVelocity = 0  # always >= 0
-        self.currRotationVelocity = 0  # rotate left < 0, rotate right > 0
-
-        self.currAngle = math.pi / 2
-        # self.currAngle = math.pi
-        self.currAngle = currAngle
+        self.currAngleIndex = initAngleIndex
+        self.currAngle = PLAYER_SETTING.CURR_ANGLE[self.currAngleIndex]
 
         self.radiusObject = radiusObject
 
@@ -28,40 +23,22 @@ class Car():
             self.xPos += math.cos(self.currAngle) * GAME_SETTING.GRID_WIDTH
             self.yPos += -math.sin(self.currAngle) * GAME_SETTING.GRID_WIDTH
         elif action == ACTIONS.TURN_LEFT:
-            self.currAngle += math.pi/2
+            self.currAngleIndex = (self.currAngleIndex + 1) % 4
         elif action == ACTIONS.TURN_RIGHT:
-            self.currAngle -= math.pi/2
+            self.currAngleIndex = (self.currAngleIndex - 1) % 4
+        elif action == ACTIONS.TURN_BACK:
+            self.currAngleIndex = (self.currAngleIndex + 2) % 4
         else:
             pass
 
-        # Calculate the position base on velocity per frame
-        # dt = float(1/GAME_SETTING.FPS)
-        dt = GAME_SETTING.DT
-
-        self.currAngle += (self.currRotationVelocity*dt)
-
-        # Prevent car go to the opposite way
-        if (self.currAngle < 0):
-            self.currAngle = 2*math.pi - abs(self.currAngle)
-        elif (self.currAngle > 2*math.pi):
-            self.currAngle = abs(self.currAngle - 2*math.pi)
-
-        # Update the new position based on the velocity
-        # self.xPos += math.cos(self.currAngle) * \
-        #     self.currentForwardVelocity * dt
-        # self.yPos += -math.sin(self.currAngle) * \
-        #     self.currentForwardVelocity * dt
-
-        # print(self.xPos, self.yPos, " current angle: ", self.currAngle,
-        #       self.currentForwardVelocity, self.currRotationVelocity)
-
+        self.currAngle = PLAYER_SETTING.CURR_ANGLE[self.currAngleIndex]
 
 class Robot(Car):
     def __init__(self) -> None:
         super().__init__(
             initX=PLAYER_SETTING.INITIAL_X,
             initY=PLAYER_SETTING.INITIAL_Y,
-            currAngle=math.pi,
+            initAngleIndex=PLAYER_SETTING.INITIAL_ANGLE_INDEX,
             radiusObject=PLAYER_SETTING.RADIUS_OBJECT
         )
 
@@ -73,7 +50,7 @@ class Robot(Car):
         self.lidarSignals = [INT_INFINITY]*PLAYER_SETTING.CASTED_RAYS
         self.lidarVisualize = [{"source": {"x": self.xPos, "y": self.yPos},
                                 "target": {"x": self.xPos, "y": self.yPos},
-                                "color": COLOR.WHITE
+                                "color": COLOR.LIDAR_DEF_COLOR
                                 } for x in range(PLAYER_SETTING.CASTED_RAYS)]
 
     def scanLidar(self, obstacles):
@@ -84,11 +61,12 @@ class Robot(Car):
             check = Utils.isRobotWithinObstacle(obstacle, self.xPos, self.yPos)
             if check:
                 minDistance = -1
+                return minDistance
             distance = Utils.distanceBetweenTwoPoints(
                 self.xPos, self.yPos, obstacle.xCenter, obstacle.yCenter)
-            isInRageLidar = distance < obstacle.radius + \
+            isInRangeLidar = distance < obstacle.radius + \
                 PLAYER_SETTING.RADIUS_LIDAR
-            if (isInRageLidar == True):
+            if (isInRangeLidar == True):
                 obstaclesInRange.append(obstacle)
 
         startAngle = self.currAngle - PLAYER_SETTING.HALF_PI
@@ -109,9 +87,8 @@ class Robot(Car):
             y = INT_INFINITY
 
             for obstacle in obstaclesInRange:
-                d, x, y = cythonUtils.getDistanceFromObject(
+                d, x, y = Utils.getDistanceFromObject(
                     obstacle, self.xPos, self.yPos, target_x, target_y)
-                # d, x, y = Utils.getDistanceFromObstacle(obstacle, self.xPos, self.yPos, target_x, target_y)
 
                 if d < distance:
                     distance = d
@@ -125,7 +102,7 @@ class Robot(Car):
                 self.lidarVisualize[ray]["color"] = COLOR.RED
             else:
                 self.lidarSignals[ray] = INT_INFINITY
-                self.lidarVisualize[ray]["color"] = COLOR.CYAN
+                self.lidarVisualize[ray]["color"] = COLOR.LIDAR_DEF_COLOR
 
             self.lidarVisualize[ray]["target"] = {
                 "x": target_x,
@@ -141,8 +118,8 @@ class Robot(Car):
 
     def checkCollision(self, distance):
         if distance <= self.radiusObject \
-                or self.xPos < 12 or self.xPos > 1268 \
-                or self.yPos < 8 or self.yPos > 708:
+                or self.xPos < 0 or self.xPos > GAME_SETTING.SCREEN_WIDTH \
+                or self.yPos < 0 or self.yPos > GAME_SETTING.SCREEN_HEIGHT:
             self.isAlive = False
 
     def checkAchieveGoal(self, goal):
@@ -150,7 +127,7 @@ class Robot(Car):
         if check:
             self.achieveGoal = True
             return -1
-        distance = cythonUtils.getDistanceFromObject(
+        distance = Utils.getDistanceFromObject(
             goal, self.xPos, self.yPos, goal.xCenter, goal.yCenter)
         if distance[0] <= self.radiusObject:
             self.achieveGoal = True
@@ -169,13 +146,14 @@ class Robot(Car):
             cv2.line(screen, (srcX, srcY), (targetX, targetY), color, 1)
 
         target_x = int(self.xPos +
-                       math.cos(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3)
+                       math.cos(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3 * 2)
         target_y = int(self.yPos -
-                       math.sin(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3)
+                       math.sin(self.currAngle) * PLAYER_SETTING.RADIUS_LIDAR / 3 * 2)
         xSource = int(self.xPos)
         ySource = int(self.yPos)
         cv2.line(screen, (xSource, ySource),
-                 (target_x, target_y), COLOR.WHITE, 5)
+                 (target_x, target_y), COLOR.BLACK, 2)
+        print("xSource: ", xSource, "ySource: ", ySource, "target_x: ", target_x, "target_y: ", target_y)
         cv2.circle(screen, (xSource, ySource),
                    self.radiusObject, COLOR.BLUE, -1)
 
@@ -185,8 +163,7 @@ class PyGame2D():
         self.env = screen
 
         # init obstacles
-        self.obstacles = self._initObstacle(numOfCircle=OBSTACLE_SETTING.CIRCLE_OBSTACLE,
-                                            numOfRect=OBSTACLE_SETTING.RECT_OBSTACLE,
+        self.obstacles = self._initObstacle(numOfRect=OBSTACLE_SETTING.RECT_OBSTACLE,
                                             map=map)
 
         self.goal = self.obstacles.goal
@@ -204,8 +181,8 @@ class PyGame2D():
         # self.minTime = INT_INFINITY
         # self.maxTime = 0
 
-    def _initObstacle(self, numOfCircle, numOfRect, map):
-        return Obstacles(numOfCircle, numOfRect, map)
+    def _initObstacle(self, numOfRect, map):
+        return Obstacles(numOfRect, map)
 
     # def randomObstacle(self):
     #     x = Obstacles()
@@ -296,7 +273,7 @@ class PyGame2D():
         end_y = GAME_SETTING.SCREEN_HEIGHT
 
         while start_x < GAME_SETTING.SCREEN_WIDTH:
-            cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.BLACK, 1)
+            cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.GRID_COLOR, 1)
             start_x = start_x + GAME_SETTING.GRID_WIDTH
             end_x = end_x + GAME_SETTING.GRID_WIDTH
 
@@ -306,7 +283,7 @@ class PyGame2D():
         end_y = 0
 
         while start_y < GAME_SETTING.SCREEN_HEIGHT:
-            cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.BLACK, 1)
+            cv2.line(env, (start_x, start_y), (end_x, end_y), COLOR.GRID_COLOR, 1)
             start_y = start_y + GAME_SETTING.GRID_WIDTH
             end_y = end_y + GAME_SETTING.GRID_WIDTH
 
@@ -342,21 +319,21 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-# screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
-#                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
-# # game.view()
-# while True:
-#     input = Utils.inputUser()
-#     game.action(input)
-#     if game.robot.achieveGoal:
-#         print("Great!!!!!!!!!")
-#         input = 27
-#     elif not game.robot.isAlive:
-#         print("Oops!!!!!!!!!!")
-#         input = 27
-#     game.view()
-#     if input == 27:
-#         cv2.destroyAllWindows()
-#         break
-#     pass
+screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
+# game.view()
+while True:
+    input = Utils.inputUser()
+    game.action(input)
+    if game.robot.achieveGoal:
+        print("Great!!!!!!!!!")
+        input = 27
+    elif not game.robot.isAlive:
+        print("Oops!!!!!!!!!!")
+        input = 27
+    game.view()
+    if input == 27:
+        cv2.destroyAllWindows()
+        break
+    pass

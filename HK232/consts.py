@@ -4,6 +4,8 @@ import os
 
 
 class GAME_SETTING:
+    # 20px = 1m
+    # map 25x25 m
     SCREEN_WIDTH = 500
     SCREEN_HEIGHT = 500
     GRID_WIDTH = 20
@@ -13,17 +15,19 @@ class GAME_SETTING:
 
 
 class PLAYER_SETTING:
-    RADIUS_OBJECT = 9
-    RADIUS_LIDAR = 360  # độ dài của mỗi tia lidar
+    RADIUS_OBJECT = 5
+    RADIUS_LIDAR = 72  # độ dài của mỗi tia lidar 3m6 / 20px
 
-    INITIAL_X = 30
-    INITIAL_Y = 30
-
-    CASTED_RAYS = 181  # ! số lượng tia lidar
+    CASTED_RAYS = 360   # số lượng tia lidar
     PI = math.pi
     HALF_PI = PI/2  # pi/2
     STEP_ANGLE = 2 * PI / CASTED_RAYS   # góc mỗi tia lidar
-    STEP_ANGLE = PI / CASTED_RAYS   # góc mỗi tia lidar
+    
+    INITIAL_X = 10
+    INITIAL_Y = 10
+    
+    CURR_ANGLE = [0, PI/2, PI, 3*PI/2]
+    INITIAL_ANGLE_INDEX = 0
 
     # MAX_STEP_PER_EPOCH = 5000
     GOAL = 2
@@ -73,14 +77,16 @@ class COLOR:
     CYAN = (0, 255, 255)
     PINK = (255, 255, 0)
     PURPLE = (255, 0, 255)
+    GRID_COLOR = (220, 220, 220)
+    LIDAR_DEF_COLOR = (0, 204, 204)
 
 
 # RELATED TO REINFORCEMENT LEARNING
 class ACTIONS:
-    TURN_RIGHT = 0
-    TURN_LEFT = 1
-    FORWARD = 2
-    BACKWARD = 3
+    FORWARD = 0
+    TURN_RIGHT = 1
+    TURN_LEFT = 2
+    TURN_BACK = 3
     DO_NOTHING = 4  # DIFFERENT WITH STOP
 
 
@@ -92,11 +98,10 @@ class EQUATION:
 
 ACTION_SPACE = 5
 ACTIONS_LIST = [
+    ACTIONS.FORWARD,
     ACTIONS.TURN_RIGHT,
     ACTIONS.TURN_LEFT,
-    # ACTIONS.STOP,
-    ACTIONS.FORWARD,
-    ACTIONS.BACKWARD,
+    ACTIONS.TURN_BACK,
     ACTIONS.DO_NOTHING,
 ]
 MAX_EPISODE = 100000

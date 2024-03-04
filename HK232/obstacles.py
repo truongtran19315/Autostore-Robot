@@ -70,7 +70,7 @@ class Goal():
 
 
 class Obstacles():
-    def __init__(self, numOfCircle, numOfRect, map) -> None:
+    def __init__(self, numOfRect, map) -> None:
         
         self.goal = Goal()
 
@@ -80,10 +80,10 @@ class Obstacles():
         
         # define wall 
         # x, y height, width - 1280x720
-        self.wallArr = [[250, 0, 4, 500],
-                        [0, 250, 500, 4],
-                        [250, 500, 4, 500],
-                        [500, 250, 500, 4]]
+        # self.wallArr = [[250, 0, 4, 500],
+        #                 [0, 250, 500, 4],
+        #                 [250, 500, 4, 500],
+        #                 [500, 250, 500, 4]]
         # self.wallArr = []
 
         # x, y height, width - 1280x720
@@ -119,12 +119,12 @@ class Obstacles():
             self.rectangleObstacles.append(rectangle)
             self.obstacles.append(rectangle)
 
-        self.wall = []
-        for obstacle in self.wallArr:
-            rectangle = StaticObstacles(
-                xCenter=obstacle[0], yCenter=obstacle[1], height=obstacle[2], width=obstacle[3], shape='wall')
-            self.wall.append(rectangle)
-            self.obstacles.append(rectangle)       
+        # self.wall = []
+        # for obstacle in self.wallArr:
+        #     rectangle = StaticObstacles(
+        #         xCenter=obstacle[0], yCenter=obstacle[1], height=obstacle[2], width=obstacle[3], shape='wall')
+        #     self.wall.append(rectangle)
+        #     self.obstacles.append(rectangle)       
 
     def generateObstacles(self, screen):
         for obstacle in self.obstacles:

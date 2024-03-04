@@ -4,7 +4,7 @@ import math
 from utils import *
 
 
-a = Utils.angleBetweenTwoPoints(150, 110, 100, 100)
+a = -1 % 4
 print(a)
 
 
