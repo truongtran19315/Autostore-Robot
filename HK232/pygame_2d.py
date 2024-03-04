@@ -20,8 +20,8 @@ class Car():
 
     def move(self, action):  # t = 1
         if action == ACTIONS.FORWARD:
-            self.xPos += math.cos(self.currAngle) * GAME_SETTING.GRID_WIDTH
-            self.yPos += -math.sin(self.currAngle) * GAME_SETTING.GRID_WIDTH
+            self.xPos += round(math.cos(self.currAngle) * GAME_SETTING.GRID_WIDTH)
+            self.yPos += round(-math.sin(self.currAngle) * GAME_SETTING.GRID_WIDTH)
         elif action == ACTIONS.TURN_LEFT:
             self.currAngleIndex = (self.currAngleIndex + 1) % 4
         elif action == ACTIONS.TURN_RIGHT:
@@ -124,16 +124,21 @@ class Robot(Car):
             self.isAlive = False
 
     def checkAchieveGoal(self, goal):
-        check = Utils.isRobotWithinObstacle(goal, self.xPos, self.yPos)
-        if check:
-            self.achieveGoal = True
-            return -1
-        distance = Utils.getDistanceFromObject(
-            goal, self.xPos, self.yPos, goal.xCenter, goal.yCenter)
-        if distance[0] <= self.radiusObject:
-            self.achieveGoal = True
+        # check = Utils.isRobotWithinObstacle(goal, self.xPos, self.yPos)
+        # if check:
+        #     self.achieveGoal = True
+        #     return -1
+        # distance = Utils.getDistanceFromObject(
+        #     goal, self.xPos, self.yPos, goal.xCenter, goal.yCenter)
+        # if distance[0] <= self.radiusObject:
+        #     self.achieveGoal = True
 
-        return distance[0]
+        # return distance[0]
+        distance = Utils.length2RightAngleEdge(goal, self.xPos, self.yPos)
+        if distance == 0:
+            self.achieveGoal = True
+        # print("distance: ", distance)
+        return distance
 
     def draw(self, screen):
         # cv2.circle(screen, (self.xPos, self.yPos), 370, COLOR.BLUE, -1)
@@ -203,17 +208,20 @@ class PyGame2D():
     def evaluate(self):
         reward = 0
 
-        if not self.robot.isAlive:
-            reward -= 1000
         if self.robot.achieveGoal:
-            reward += 1000
+            reward += 100000
+        elif not self.robot.isAlive:
+            reward -= 1000000
 
         observe = self.observe()
         goal_distance = observe[0]
         reward -= goal_distance*100
 
-        obstacles_distance = observe[-3:]  # ! 0, 90, 180
-        reward -= 10 - 20 * obstacles_distance[1]
+        obstacles_distance = observe[-4:]  # ! 0, 90, 180, 270
+        if obstacles_distance[1] == 0:
+            reward -= 100
+        # if obstacles_distance[0] == 0 or obstacles_distance[2] == 0 or obstacles_distance[3] == 0:
+        #     reward -= 5
 
         dentaGoal_Angle = observe[1]
         reward -= (abs(dentaGoal_Angle - ALPHA_SPACE/2) * 100)

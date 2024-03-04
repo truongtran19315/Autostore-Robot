@@ -3,7 +3,7 @@ import os
 import pickle
 import numpy as np
 
-date_train = '2024-01-03_V1'
+date_train = '2024-03-04_V4'
 base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DATA')
 allState_path = os.path.join(base_path, date_train, 'allStates.pkl')
 foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')

@@ -4,13 +4,13 @@ import numpy as np
 from Game_class import *
 from datetime import datetime
 
-date_train = '2023-12-22_V1'
+date_train = '2024-03-04_V4'
 foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 
 with open(foler_train_path, "rb") as f:
     q_table = pickle.load(f)
 
-numberRun = 100  # ! số lần chạy
+numberRun = 10  # ! số lần chạy
 arrRun = []
 print('================ Start Run =========================')
 for i in range(1, numberRun + 1):
@@ -19,7 +19,8 @@ for i in range(1, numberRun + 1):
     total_eps = 100  # ! số bước thử trong mỗi lần chạy
     eps = 1
     while eps <= total_eps:
-        screen = np.zeros((720, 1280, 3), dtype=np.uint8)
+        screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
         robot = Game(screen, MAP_SETTING.MAP_DEFAULT)
         Env = robot.getEnv()
 

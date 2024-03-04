@@ -36,7 +36,7 @@ class PLAYER_SETTING:
     ALIVE = 0
 
     DISTANCEGOAL_MIN = 0
-    DISTANCEGOAL_MAX = 700
+    DISTANCEGOAL_MAX = 960
 
 
 class OBSTACLE_SETTING:
@@ -114,11 +114,11 @@ LENGTH_LIDARSIGNAL = 2   # 0,1 #! edit for new map
 SECTIONS_LIDARSPACE = 4  # ! 3 rays are: 0, 90 , 180
 
 # set các khoảng rời rạc
-DISTANCE_SPACE = 14
-ALPHA_SPACE = 10
+DISTANCE_SPACE = 40
+ALPHA_SPACE = 8
 
 # Định nghĩa các tham số đầu vào
-n_epsilondes = 10000  # Số lượng episode
+n_epsilondes = 50000  # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.99  # Hệ số giảm
 epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon

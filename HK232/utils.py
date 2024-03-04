@@ -22,7 +22,7 @@ class Utils:
     def distanceBetweenTwoPoints(xPointA, yPointA, xPointB, yPointB):
         return math.sqrt((xPointA - xPointB)**2 + (yPointA - yPointB)**2)
     
-    
+    @staticmethod
     def isRobotWithinObstacle(obstacle, xPointA, yPointA):
         topLeft = [obstacle.xCenter - obstacle.width // 2 , \
             obstacle.yCenter - obstacle.height//2]
@@ -32,6 +32,10 @@ class Utils:
             and yPointA >= topLeft[1] and yPointA <= ybotLeft:
                 return True
         return False
+    
+    @staticmethod
+    def length2RightAngleEdge(goal, xPointA, yPointA):
+        return abs(xPointA - goal.xCenter) + abs(yPointA - goal.yCenter)
 
     @staticmethod
     def findLinePassTwoPoints(xPointA, yPointA, xPointB, yPointB):
