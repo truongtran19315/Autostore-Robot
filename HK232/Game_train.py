@@ -16,7 +16,7 @@ diagram_path = os.path.join(folder_path, diagram_filename)
 
 screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-map = MAP_SETTING.RANDOM_MAP_OFF
+map = MAP_SETTING.MAP_DEFAULT
 game = Game(screen, map)
 
 Env = game.getEnv()

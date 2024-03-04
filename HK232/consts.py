@@ -19,6 +19,7 @@ class PLAYER_SETTING:
     RADIUS_LIDAR = 72  # độ dài của mỗi tia lidar 3m6 / 20px
 
     CASTED_RAYS = 360   # số lượng tia lidar
+    CASTED_RAYS = 4   # số lượng tia lidar
     PI = math.pi
     HALF_PI = PI/2  # pi/2
     STEP_ANGLE = 2 * PI / CASTED_RAYS   # góc mỗi tia lidar
@@ -110,21 +111,19 @@ INT_INFINITY = 99999
 
 #! observe/ chuyen gia tri
 LENGTH_LIDARSIGNAL = 2   # 0,1 #! edit for new map
-SECTIONS_LIDARSPACE = 3  # ! 3 rays are: 0, 90 , 180
+SECTIONS_LIDARSPACE = 4  # ! 3 rays are: 0, 90 , 180
 
 # set các khoảng rời rạc
-DISTANCE_SPACE = 7
+DISTANCE_SPACE = 14
 ALPHA_SPACE = 10
-FWVELO_SPACE = 4
-RVELO_SPACE = 4
 
 # Định nghĩa các tham số đầu vào
 n_epsilondes = 10000  # Số lượng episode
 alpha = 0.1  # Hệ số học
 gamma = 0.99  # Hệ số giảm
-# epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon
-epsilon_decay = 10/1000000
-epsilon = 0.9 - 256000*epsilon_decay  # ! Xác suất khám phá
+epsilon_decay = 10/n_epsilondes  # Hệ số giảm epsilon
+# epsilon_decay = 10/10000
+epsilon = 0.9 - 0*epsilon_decay  # ! Xác suất khám phá
 epsilon_min = 0.001  # Giá trị nhỏ nhất của epsilon
 
 COUNTER = 200

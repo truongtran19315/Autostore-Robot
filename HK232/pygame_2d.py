@@ -172,11 +172,11 @@ class PyGame2D():
         self.robot = Robot()
         self.generateEnvironment()
 
-        # self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
-        # self.recordVideo = cv2.VideoWriter(self.videoFile_path,
-        #                                    cv2.VideoWriter_fourcc(*'MJPG'),
-        #                                    GAME_SETTING.FPS,
-        #                                    (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
+        self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
+        self.recordVideo = cv2.VideoWriter(self.videoFile_path,
+                                           cv2.VideoWriter_fourcc(*'MJPG'),
+                                           GAME_SETTING.FPS,
+                                           (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
         # self.n = 0
         # self.elapsed_time = 0
         # self.totalTime = 0
@@ -232,9 +232,10 @@ class PyGame2D():
             alpha += 2*PLAYER_SETTING.PI
 
         lidars = self.robot.lidarSignals
-        lidars_NumberSelected = [lidars[0], lidars[90], lidars[180]]
+        # lidars_NumberSelected = [lidars[0], lidars[90], lidars[180], lidars[270]]
+        lidars_NumberSelected = [lidars[0], lidars[1], lidars[2], lidars[3]]
 
-        lidarLength_bin = [40]
+        lidarLength_bin = [20]
         lidarLength_digitized = np.digitize(
             lidars_NumberSelected, lidarLength_bin)
 
