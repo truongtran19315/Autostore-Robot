@@ -1,4 +1,4 @@
-# Turtlebot3 in Warehouse Environment
+# Turtlebot3 in Warehouse Environment Simulation
 This guide will walk you through setting up the Autostore-Robot package. Follow these steps to get started:
 
 
@@ -42,7 +42,7 @@ roscore
 In a new terminal, launch the Gazebo simulation for the TurtleBot3:
 
 ```
-roslaunch turtlebot3_gazebo warehouse.launch
+roslaunch warehouse_pkg warehouse.launch
 ```
 
 ## 6. Run the Avoider Node

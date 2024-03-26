@@ -1,2 +1,0 @@
-turtlebot3_simulations/turtlebot3_gazebo
--DCATKIN_DEVEL_PREFIX=/home/truong/Documents/Autostore-Robot/warehouse_ws/devel -DCMAKE_INSTALL_PREFIX=/home/truong/Documents/Autostore-Robot/warehouse_ws/install -G Unix Makefiles
