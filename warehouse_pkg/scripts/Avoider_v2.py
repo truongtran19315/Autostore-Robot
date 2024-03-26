@@ -39,13 +39,11 @@ class AvoiderV2():
         print('robot_x: ', self.robot_x, ' robot_y: ', self.robot_y)
 
     def indentify_scan_msg(self, scan):
-        # Assuming scan is a list of distances at each degree
-        for i in range(0, 360):
-            if scan[i] == float('inf'):
-                pass
-            else:
-                index = (i + 90) % 360
-                self.lidars[index] = scan[i]
+        # Lấy giá trị khoảng cách tại các góc quét 0, 90, 180 và 270 độ
+        lidar_values = [scan.ranges[0], scan.ranges[90], scan.ranges[180], scan.ranges[270]]
+
+        # Lưu trữ giá trị khoảng cách vào một danh sách hoặc mảng
+        self.lidars = lidar_values
 
     def modify_angular(self):
         # Robot can only rotate 90 degrees left/right or 180 degrees
