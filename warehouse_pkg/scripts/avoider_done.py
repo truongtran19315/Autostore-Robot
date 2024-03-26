@@ -10,7 +10,7 @@ def main():
     rospy.init_node('obtacle_avoidance')
     avoider = AvoiderV2()
 
-    rospy.Subscriber('/scan', LaserScan, avoider.indentify_scan_msg)
+    rospy.Subscriber('/scan', LaserScan,     avoider.indentify_scan_msg)
     pub = rospy.Publisher("/cmd_vel", Twist, queue_size = 1)
 
     rate = rospy.Rate(0.5) #1Hz  #! edit
