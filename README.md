@@ -49,5 +49,5 @@ roslaunch warehouse_pkg warehouse.launch
 Finally, in another terminal, run the `avoider_done.py` node from the `warehouse_pkg` package:
 
 ```
-rosrun warehouse_pkg avoider_done.py
+rosrun warehouse_pkg runRobot.py
 ```
