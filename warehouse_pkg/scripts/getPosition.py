@@ -24,7 +24,7 @@ def odom_callback(data):
     rospy.loginfo("x: {}".format(x))
     rospy.loginfo("y: {}".format(y))
     rospy.loginfo("yaw: {}".format(yaw))
-    rospy.loginfo("======================== \n")
+    rospy.loginfo("==================== \n")
 
 def listener():
     rospy.init_node('robot_position_listener', anonymous=True)

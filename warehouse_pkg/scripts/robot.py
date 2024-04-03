@@ -40,7 +40,7 @@ class Robot():
 
     def scan_callback(self, data):
         # Lấy giá trị khoảng cách tại các góc quét phải, trước, trái và sau 
-        self.lidars = [data.ranges[0], data.ranges[90], data.ranges[180], data.ranges[270]]
+        self.lidars = [data.ranges[270], data.ranges[0], data.ranges[90], data.ranges[180]]
 
     def modify_angular(self):
         # Robot can only rotate 90 degrees left/right or 180 degrees
