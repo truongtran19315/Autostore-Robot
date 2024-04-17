@@ -1,12 +1,9 @@
 import cv2
 import numpy as np
 import math
-import random
 from obstacles import Obstacles, Goal
 from consts import *
 from utils import Utils
-import time
-from logVersion import *
 
 
 class Car():
@@ -168,25 +165,11 @@ class Robot(Car):
 class PyGame2D():
     def __init__(self, screen, map) -> None:
         self.env = screen
-
-        # init obstacles
-        self.obstacles = self._initObstacle(numOfRect=OBSTACLE_SETTING.RECT_OBSTACLE,
-                                            map=map)
-
+        self.obstacles = self._initObstacle(numOfRect=OBSTACLE_SETTING.RECT_OBSTACLE, map=map)
         self.goal = self.obstacles.goal
         self.robot = Robot()
         self.generateEnvironment()
-
-        self.videoFile_path = getlogVideo_path(getlogVersion(base_path))
-        self.recordVideo = cv2.VideoWriter(self.videoFile_path,
-                                           cv2.VideoWriter_fourcc(*'MJPG'),
-                                           GAME_SETTING.FPS,
-                                           (GAME_SETTING.SCREEN_WIDTH, GAME_SETTING.SCREEN_HEIGHT))
-        # self.n = 0
-        # self.elapsed_time = 0
-        # self.totalTime = 0
-        # self.minTime = INT_INFINITY
-        # self.maxTime = 0
+        self.distanceGoal = self.robot.checkAchieveGoal(self.goal)
 
     def _initObstacle(self, numOfRect, map):
         return Obstacles(numOfRect, map)
@@ -232,7 +215,6 @@ class PyGame2D():
         a = self.robot.currAngle
         b = Utils.angleBetweenTwoPoints(
             self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
-        # alpha = abs(a - b)
         alpha = a - b
         if alpha > PLAYER_SETTING.PI:
             alpha += -2*PLAYER_SETTING.PI
@@ -315,7 +297,6 @@ class PyGame2D():
         # action = str(action)
         # cv2.putText(screen, action, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
         # self.record(screen, input)
-
         # return screen
         cv2.imshow('Enviroment', screen)
         # cv2.waitKey(1)

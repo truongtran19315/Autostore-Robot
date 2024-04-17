@@ -1,10 +1,11 @@
 import pickle
-from consts import *
+from consts import GAME_SETTING
 import numpy as np
 from Game_class import *
 from datetime import datetime
+from logVersion import base_path
 
-date_train = '2024-03-04_V4'
+date_train = '2024-04-17_V1'
 foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 
 with open(foler_train_path, "rb") as f:
@@ -16,7 +17,7 @@ print('================ Start Run =========================')
 for i in range(1, numberRun + 1):
     print('At attempt number {}'.format(i))
     goal = 0
-    total_eps = 100  # ! số bước thử trong mỗi lần chạy
+    total_eps = 1000  # ! số bước thử trong mỗi lần chạy
     eps = 1
     while eps <= total_eps:
         screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
@@ -61,6 +62,7 @@ axes.text(numberRun * 1/9, 30, 'Phần trăm tỉ lệ tới đích trung bình 
 
 deploy_chartRun = os.path.join(base_path, date_train, ('chartRundeploy' + '_' + str(
     datetime.now().hour) + 'h' + str(datetime.now().minute) + 'p'))
+
 plt.savefig(deploy_chartRun)
 print(f"Diagram saved to: {deploy_chartRun}")
 plt.show()

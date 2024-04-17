@@ -2,6 +2,7 @@ import cv2
 from consts import *
 import numpy as np
 import math
+import random
 
 
 class StaticObstacles():

@@ -2,14 +2,14 @@ import cv2
 import pygame_2d
 from consts import *
 import numpy as np
-from logVersion import *
 import matplotlib.pyplot as plt
-import math
 from matplotlib.animation import FuncAnimation
-# plt.ion()
-
 import pickle
+from logVersion import logger
+import os
 
+
+folder_path = logger._get_log_version()
 
 class Game:
     def __init__(self, screen, map):
@@ -186,7 +186,7 @@ class Game:
         self.game = pygame_2d.PyGame2D(screen=self.screen, map=self.map)
 
         # to update the lidar scan state
-        self.game.action(action=ACTIONS.DO_NOTHING)
+        # self.game.action(action=4) # NOTHING
         obs = self.game.observe()
         return obs
 
