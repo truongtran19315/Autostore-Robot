@@ -210,7 +210,7 @@ class Utils:
         # Stop
         elif key == 27 or (key & 0xFF == 'q'):
             return 27
-        else:
-            # game.action(ACTIONS.DO_NOTHING)
-            return ACTIONS.DO_NOTHING
+        # else:
+        #     # game.action(ACTIONS.DO_NOTHING)
+        #     return ACTIONS.DO_NOTHING
         
