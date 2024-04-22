@@ -9,20 +9,27 @@ from tf.transformations import euler_from_quaternion
 import math
 import numpy as np
 
+# Constants
 DISTANCE_SPACE = 40
 ALPHA_SPACE = 8
 LIDAR_LENGH_BIN = [1]
 
-Q_TABLE_PATH = "/home/truong/Documents/DATA/q_table.pkl"
+Q_TABLE_PATH = "/home/truong/Documents/Autostore-Robot/HK232/DATA/2024-04-17_V1/q_table.pkl"
 
 class PLAYER_SETTING:
     PI = math.pi
     DISTANCEGOAL_MIN = 0
     DISTANCEGOAL_MAX = 48
-    X_INIT_POS = 6.5
-    Y_INIT_POS = 7.5
-    X_GOAL = -2.5
-    Y_GOAL = 6.5
+    X_INIT_POS = -9.5
+    Y_INIT_POS = 9.5
+    X_GOAL = 0.5
+    Y_GOAL = 0.5
+
+class ACTIONS:
+    FORWARD = 0
+    TURN_RIGHT = 1
+    TURN_LEFT = 2
+    TURN_BACK = 3
 
 class RobotController:
     def __init__(self):
@@ -32,175 +39,163 @@ class RobotController:
         self.current_yaw = 0
         self.current_x = PLAYER_SETTING.X_INIT_POS
         self.current_y = PLAYER_SETTING.Y_INIT_POS
-        self.current_yaw_Ox = self.convert_current_yaw_to_Ox()
-        self.rate = rospy.Rate(10)  # Tần số cập nhật 10 Hz
+        self.current_yaw_2pi = self.convert_current_yaw_2pi()
+        self.rate = rospy.Rate(10)  # Update rate 10 Hz
+        self.angular_speed = 0.2  # Adjust as needed
         self.lidar_sub = rospy.Subscriber('/scan', LaserScan, self.lidar_callback)
         self.lidars = []
         self.step_counter = 1
+        self.q_table = None
         
-        print("done init...!")
+        print("Initialization completed...!")
 
     def odom_callback(self, msg):
-        # Lấy tọa độ x, y từ dữ liệu odometry
+        # Get x, y coordinates from odometry data
         self.current_x = msg.pose.pose.position.x
         self.current_y = msg.pose.pose.position.y
         
-        # Lấy hướng quay (yaw) từ quaternion
+        # Get yaw from quaternion
         orientation_q = msg.pose.pose.orientation
         orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
         _, _, self.current_yaw = euler_from_quaternion(orientation_list)
         
-        self.current_yaw_Ox = self.convert_current_yaw_to_Ox()
-        #! print("topic /odom ")
+        self.current_yaw_2pi = self.convert_current_yaw_2pi()
 
     def lidar_callback(self, data):
-        # self.lidars = self.lidars = [data.ranges[270], data.ranges[0], data.ranges[90]]
-        self.lidars = self.lidars = [data.ranges[270], data.ranges[0], data.ranges[90], data.ranges[180]]
-        #! print("topic /lidar")
+        # Store lidar data
+        self.lidars = [data.ranges[270], data.ranges[0], data.ranges[90], data.ranges[180]]
 
     def move_forward(self, distance):
         twist_cmd = Twist()
-        twist_cmd.linear.x = 0.15  #! Tốc độ di chuyển về phía trước
+        twist_cmd.linear.x = 0.15  # Forward speed
         start_position = rospy.wait_for_message('/odom', Odometry).pose.pose.position
         last_yaw = self.current_yaw
         self.cmd_vel_pub.publish(twist_cmd)
-
         while not rospy.is_shutdown():
             current_position = rospy.wait_for_message('/odom', Odometry).pose.pose.position
             current_yaw = self.current_yaw
             distance_moved = math.sqrt((current_position.x - start_position.x)**2 + (current_position.y - start_position.y)**2)
             if distance_moved >= distance:
                 break
-
-            # Điều chỉnh tốc độ góc dựa trên sai số góc hiện tại
+            # Adjust angular speed based on current yaw error
             error_yaw = self.normalize_angle(current_yaw - last_yaw)
-            twist_cmd.angular.z = -0.1 * error_yaw  # Điều chỉnh tốc độ góc nếu cần
+            twist_cmd.angular.z = -0.1 * error_yaw  # Adjust angular speed if needed
             self.cmd_vel_pub.publish(twist_cmd)
             last_yaw = current_yaw
             self.rate.sleep()
-
         twist_cmd.linear.x = 0
         twist_cmd.angular.z = 0
         self.cmd_vel_pub.publish(twist_cmd)
 
     def rotate(self, angle, clockwise):
         twist_cmd = Twist()
-        twist_cmd.angular.z = -0.1 if clockwise else 0.1
+        twist_cmd.angular.z = -self.angular_speed if clockwise else self.angular_speed
         last_yaw = self.current_yaw
         angle_moved = 0.0
-
         self.cmd_vel_pub.publish(twist_cmd)
         while not rospy.is_shutdown() and abs(angle_moved) < abs(angle):
             self.rate.sleep()
             delta_yaw = self.normalize_angle(self.current_yaw - last_yaw)
             angle_moved += delta_yaw
             last_yaw = self.current_yaw
-        
         twist_cmd.angular.z = 0
         self.cmd_vel_pub.publish(twist_cmd)
 
     def normalize_angle(self, angle):
-        while angle > math.pi:
-            angle -= 2 * math.pi
-        while angle < -math.pi:
-            angle += 2 * math.pi
-        return angle
+        return (angle + math.pi) % (2 * math.pi) - math.pi
 
     def adjust_to_right_angle(self):
         target_yaw = round(self.current_yaw / (math.pi / 2)) * (math.pi / 2)
-        angle_diff = target_yaw - self.current_yaw
-
-        # Điều chỉnh tốc độ quay dựa trên góc cần quay
+        angle_diff = self.normalize_angle(target_yaw - self.current_yaw)
         twist_cmd = Twist()
-        if angle_diff > 0:
-            twist_cmd.angular.z = 0.1
-        else:
-            twist_cmd.angular.z = -0.1
-
-        # Quay robot cho đến khi đạt góc mong muốn
+        twist_cmd.angular.z = self.angular_speed if angle_diff > 0 else -self.angular_speed
+        self.cmd_vel_pub.publish(twist_cmd)
         while abs(angle_diff) > 0.01:
-            self.cmd_vel_pub.publish(twist_cmd)
-            rospy.sleep(0.1)  # Đợi một chút để robot cập nhật vị trí mới
-            self.odom_callback(self.get_odom_data())  # Cập nhật self.current_yaw sau mỗi lần quay
-            angle_diff = target_yaw - self.current_yaw
-
-        # Dừng robot
+            rospy.sleep(0.1)
+            angle_diff = self.normalize_angle(target_yaw - self.current_yaw)
         twist_cmd.angular.z = 0
         self.cmd_vel_pub.publish(twist_cmd)
-        
+
+    def stop_robot(self):
+        twist_cmd = Twist()
+        twist_cmd.linear.x = 0
+        twist_cmd.angular.z = 0
+        self.cmd_vel_pub.publish(twist_cmd)
+
     def get_odom_data(self):
         try:
             data = rospy.wait_for_message('/odom', Odometry, timeout=5)
             return data
         except rospy.ROSException as e:
-            rospy.logerr("Không thể nhận dữ liệu odometry: %s" % e)
+            rospy.logerr("Failed to receive odometry data: %s" % e)
 
     def load_q_table(self, filename):
         with open(filename, 'rb') as file:
             self.q_table = pickle.load(file)
-            print("Load Q-table complement!")
+            print("Q-table loaded successfully!")
 
     def choose_action(self, state):
-        # print("q[state] = {}".format(self.q_table[tuple(state)]))
-        # print("---end q-state---")
         return np.argmax(self.q_table[tuple(state)])
 
     def observe(self):
+        try:
+            odom_data = rospy.wait_for_message('/odom', Odometry, timeout=5)
+            lidar_data = rospy.wait_for_message('/scan', LaserScan, timeout=5)
+        except rospy.ROSException as e:
+            rospy.logerr("Failed to receive odometry or lidar data: %s" % e)
+
         goal_angle = self.angleBetweenTwoPoints(
             self.current_x, self.current_y, PLAYER_SETTING.X_GOAL, PLAYER_SETTING.Y_GOAL)
-        
+        print("Angle Goal : {} degree".format(self.convert_degree(goal_angle)))
         alpha = self.calculate_angle_difference(goal_angle)
-        print("ALPHA = {}".format(alpha))
-    
-        #! convert lidar length from robot to obstacle
-        lidarLength_bin = LIDAR_LENGH_BIN
-        lidarLength_digitized = np.digitize(
-            self.lidars, lidarLength_bin)
+        print("ALPHA : {} degree".format(self.convert_degree(alpha)))
+        
+        lidar_length_bin = LIDAR_LENGH_BIN
+        lidar_length_digitized = np.digitize(self.lidars, lidar_length_bin)
 
-        #! convert distance from robot to target
-        distanceGoal_bin = np.linspace(
+        distance_goal_bin = np.linspace(
             PLAYER_SETTING.DISTANCEGOAL_MIN, PLAYER_SETTING.DISTANCEGOAL_MAX, num=DISTANCE_SPACE, endpoint=False)
-        distanceGoal_bin = np.delete(distanceGoal_bin, 0)
-        infoStateVector = []
-        infoStateVector.append(np.digitize(
-            self.distance_Robot_to_Goal(), distanceGoal_bin))
-        print("DISTANCE TO GOAL = {}".format(self.distance_Robot_to_Goal()))
+        distance_goal_bin = np.delete(distance_goal_bin, 0)
+        info_state_vector = []
+        info_state_vector.append(np.digitize(
+            self.distance_Robot_to_Goal(), distance_goal_bin))
+        print("DISTANCE : {}".format(round(self.distance_Robot_to_Goal(), 2)))
 
-        #! convert angular deviation between robot and target
-        alphaGoal_bin = np.linspace(-math.pi, math.pi,
+        alpha_goal_bin = np.linspace(-math.pi, math.pi,
                                     num=ALPHA_SPACE, endpoint=False)
-        alphaGoal_bin = np.delete(alphaGoal_bin, 0)
-        infoStateVector.append(np.digitize(alpha, alphaGoal_bin))
+        alpha_goal_bin = np.delete(alpha_goal_bin, 0)
+        info_state_vector.append(np.digitize(alpha, alpha_goal_bin))
 
-        infoStateVector = np.array(infoStateVector)
-        lidarStateVector = np.array(lidarLength_digitized)
-        #! distance, alpha, 0, 90, 180
-        return np.concatenate((infoStateVector, lidarStateVector))
+        info_state_vector = np.array(info_state_vector)
+        lidar_state_vector = np.array(lidar_length_digitized)
+        return np.concatenate((info_state_vector, lidar_state_vector))
 
     def run(self):
         self.load_q_table(Q_TABLE_PATH)
         rospy.sleep(1)
         while not rospy.is_shutdown():
-            state = self.observe()
             print("----- Step {} :".format(self.step_counter))
+            state = self.observe()
             print("state = {}".format(state))
             action = self.choose_action(state)
             print("action = {}".format(action))
-            if action == 0:
-                self.adjust_to_right_angle()
+            if action == ACTIONS.FORWARD:
+                # self.adjust_to_right_angle()
                 self.move_forward(1)
-            elif action == 1:
+                self.stop_robot()
+            elif action == ACTIONS.TURN_RIGHT:
                 self.adjust_to_right_angle()
                 self.rotate(math.pi/2, True)
-            elif action == 2:
+                self.stop_robot()
+            elif action == ACTIONS.TURN_LEFT: 
                 self.adjust_to_right_angle()
                 self.rotate(math.pi/2, False)
-            elif action == 3:
+                self.stop_robot()
+            elif action == ACTIONS.TURN_BACK:
                 self.adjust_to_right_angle()
                 self.rotate(math.pi, True)
-            elif action == 4:
-                pass
-            # Không cần hành động cho trường hợp action == 4 vì đó là 'không làm gì cả'
+                self.stop_robot()
+            
             self.step_counter += 1
 
     def angleBetweenTwoPoints(self, xPointA, yPointA, xPointB, yPointB):
@@ -212,19 +207,23 @@ class RobotController:
         return radian_angle
 
     def calculate_angle_difference(self, target_angle):
-        angle_difference =  abs(target_angle - self.current_yaw_Ox)
+        angle_difference =  abs(target_angle - self.current_yaw_2pi)
         if angle_difference > math.pi:
             angle_difference -= 2 * math.pi
         return angle_difference
-        
-    def convert_current_yaw_to_Ox(self):
-        current_yaw_Ox = self.current_yaw + math.pi/2
-        if current_yaw_Ox > -math.pi/2 and current_yaw_Ox < 0:
-            current_yaw_Ox += 2 * math.pi
-        return current_yaw_Ox
     
+    def convert_current_yaw_2pi(self):
+        current_yaw_2pi = self.current_yaw
+        if current_yaw_2pi > -math.pi and current_yaw_2pi < 0:
+            current_yaw_2pi += 2 * math.pi
+        return current_yaw_2pi
+
     def distance_Robot_to_Goal(self):
-        return math.sqrt((PLAYER_SETTING.X_GOAL - self.current_x)**2 + (PLAYER_SETTING.Y_GOAL - self.current_y)**2)
+        return abs(self.current_x - PLAYER_SETTING.X_GOAL) + abs(self.current_y - PLAYER_SETTING.Y_GOAL)
+    
+    def convert_degree(self, angle):
+        return round(angle * 180 / math.pi, 2)
+
 
 
 if __name__ == '__main__':
@@ -233,8 +232,3 @@ if __name__ == '__main__':
         controller.run()
     except rospy.ROSInterruptException:
         pass
-
-
-# =============================================
-# Giá trị lớn nhất của yaw: 3.137074060411566
-# Giá trị nhỏ nhất của yaw: -3.139431611332625
