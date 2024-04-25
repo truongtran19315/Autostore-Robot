@@ -207,7 +207,7 @@ class PyGame2D():
         #     reward -= 5
 
         dentaGoal_Angle = observe[1]
-        reward -= (abs(dentaGoal_Angle - ALPHA_SPACE/2) * 100)
+        reward -= (abs(dentaGoal_Angle - SPACE.ALPHA_SPACE/2) * 100)
 
         return reward
 
@@ -222,30 +222,23 @@ class PyGame2D():
             alpha += 2*PLAYER_SETTING.PI
 
         lidars = self.robot.lidarSignals
-        # lidars_NumberSelected = [lidars[0], lidars[90], lidars[180], lidars[270]]
-        lidars_NumberSelected = [lidars[0], lidars[1], lidars[2], lidars[3]]
+        lidars_NumberSelected = lidars[:SPACE.SECTIONS_LIDARSPACE]
 
-        lidarLength_bin = [20]
-        lidarLength_digitized = np.digitize(
-            lidars_NumberSelected, lidarLength_bin)
+        lidarLength_digitized = np.digitize(lidars_NumberSelected, SPACE.LIDAR_LENGTH_SEGMENT)
 
-        distanceGoal_space = PLAYER_SETTING.DISTANCEGOAL_MIN, PLAYER_SETTING.DISTANCEGOAL_MAX
         distanceGoal_bin = np.linspace(
-            distanceGoal_space[0], distanceGoal_space[1], num=DISTANCE_SPACE, endpoint=False)
-        distanceGoal_bin = np.delete(distanceGoal_bin, 0)
-        infoStateVector = []
-        infoStateVector.append(np.digitize(
-            self.distanceGoal, distanceGoal_bin))
+            PLAYER_SETTING.DISTANCEGOAL_MIN, PLAYER_SETTING.DISTANCEGOAL_MAX, 
+            num=SPACE.DISTANCE_SPACE, endpoint=False)[1:]
 
-        alphaGoal_bin = np.linspace(-math.pi, math.pi,
-                                    num=ALPHA_SPACE, endpoint=False)
-        alphaGoal_bin = np.delete(alphaGoal_bin, 0)
-        infoStateVector.append(np.digitize(alpha, alphaGoal_bin))
+        alphaGoal_bin = np.linspace(
+            -math.pi, math.pi,
+            num=SPACE.ALPHA_SPACE, endpoint=False)[1:]
 
-        infoStateVector = np.array(infoStateVector)
-        lidarStateVector = np.array(lidarLength_digitized)
-        #! distance, alpha, 0, 90, 180
-        return np.concatenate((infoStateVector, lidarStateVector))
+        infoStateVector = np.digitize(self.distanceGoal, distanceGoal_bin)
+        infoStateVector = np.append(infoStateVector, np.digitize(alpha, alphaGoal_bin))
+
+        return np.concatenate((infoStateVector, lidarLength_digitized))
+
 
     def is_done(self):
         if self.robot.achieveGoal:
@@ -314,21 +307,21 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
-                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
-# game.view()
-while True:
-    input = Utils.inputUser()
-    game.action(input)
-    if game.robot.achieveGoal:
-        print("Great!!!!!!!!!")
-        input = 27
-    elif not game.robot.isAlive:
-        print("Oops!!!!!!!!!!")
-        input = 27
-    game.view()
-    if input == 27:
-        cv2.destroyAllWindows()
-        break
-    pass
+# screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+#                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
+# # game.view()
+# while True:
+#     input = Utils.inputUser()
+#     game.action(input)
+#     if game.robot.achieveGoal:
+#         print("Great!!!!!!!!!")
+#         input = 27
+#     elif not game.robot.isAlive:
+#         print("Oops!!!!!!!!!!")
+#         input = 27
+#     game.view()
+#     if input == 27:
+#         cv2.destroyAllWindows()
+#         break
+#     pass
