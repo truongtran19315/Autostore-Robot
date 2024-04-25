@@ -92,8 +92,8 @@ class Goal():
         # self.y = 200
         # self.xCenter = self.x + GAME_SETTING.GOAL_WIDTH/2
         # self.yCenter = self.y + GAME_SETTING.GOAL_WIDTH/2
-        print(xObstacle, yObstacle, height, width)
-        print(self.x, self.y, rand1, rand2, rand3)
+        #! print(xObstacle, yObstacle, height, width)
+        #! print(self.x, self.y, rand1, rand2, rand3)
 
     def draw(self, screen):
         cv2.rectangle(screen, (self.x, self.y),

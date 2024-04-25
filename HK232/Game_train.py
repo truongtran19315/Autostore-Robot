@@ -30,7 +30,7 @@ if os.path.exists(q_table_path):
         q_table = pickle.load(f)
     print("Q-table loaded successfully!")
 else:
-    q_table = np.random.uniform(low=-1, high=1, size=(*game.new_observation_shape, ACTION_SPACE))
+    q_table = np.random.uniform(low=-1, high=1, size=(*game.new_observation_shape, SPACE.ACTION_SPACE))
     print("No existing Q-table found. Creating a new Q-table ... ")
 
 print(f"Shape of Q-table: {q_table.shape}")
