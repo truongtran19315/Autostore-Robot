@@ -10,14 +10,13 @@ class Utils:
     def angleBetweenTwoPoints(xPointA, yPointA, xPointB, yPointB):
         delta_x = xPointB - xPointA
         delta_y = yPointB - yPointA
-        # print('a', delta_y, delta_x)
         radian_angle = math.atan2(delta_y, delta_x)
-        if radian_angle < 0:
+        if radian_angle <= 0:
             radian_angle = -radian_angle
-        else: radian_angle = PLAYER_SETTING.PI * 2 - radian_angle
-        # degree_angle = math.degrees(radian_angle)
+        else: 
+            radian_angle = math.pi * 2 - radian_angle
         return radian_angle
-
+    
     @staticmethod
     def distanceBetweenTwoPoints(xPointA, yPointA, xPointB, yPointB):
         return math.sqrt((xPointA - xPointB)**2 + (yPointA - yPointB)**2)
@@ -35,7 +34,7 @@ class Utils:
     
     @staticmethod
     def length2RightAngleEdge(goal, xPointA, yPointA):
-        return abs(xPointA - goal.xCenter) + abs(yPointA - goal.yCenter)
+        return abs(xPointA - goal.xCenter) + abs(yPointA - goal.yCenter) + 2 * GAME_SETTING.GRID_WIDTH  #! Truong edit
 
     @staticmethod
     def findLinePassTwoPoints(xPointA, yPointA, xPointB, yPointB):
