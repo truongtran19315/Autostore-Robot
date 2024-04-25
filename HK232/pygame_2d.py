@@ -23,8 +23,8 @@ class Car():
             self.currAngleIndex = (self.currAngleIndex + 1) % 4
         elif action == ACTIONS.TURN_RIGHT:
             self.currAngleIndex = (self.currAngleIndex - 1) % 4
-        elif action == ACTIONS.TURN_BACK:
-            self.currAngleIndex = (self.currAngleIndex + 2) % 4
+        # elif action == ACTIONS.TURN_BACK:
+        #     self.currAngleIndex = (self.currAngleIndex + 2) % 4
         else:
             pass
 
@@ -194,20 +194,21 @@ class PyGame2D():
         if self.robot.achieveGoal:
             reward += 100000
         elif not self.robot.isAlive:
-            reward -= 1000000
+            reward -= 100000
 
         observe = self.observe()
         goal_distance = observe[0]
         reward -= goal_distance*100
 
-        obstacles_distance = observe[-4:]  # ! 0, 90, 180, 270
+        obstacles_distance = observe[-3:]  # ! 0, 90, 180
         if obstacles_distance[1] == 0:
             reward -= 100
-        # if obstacles_distance[0] == 0 or obstacles_distance[2] == 0 or obstacles_distance[3] == 0:
-        #     reward -= 5
-
+        
         dentaGoal_Angle = observe[1]
-        reward -= (abs(dentaGoal_Angle - SPACE.ALPHA_SPACE/2) * 100)
+        if dentaGoal_Angle == SPACE.ALPHA_SPACE//2:
+            reward -= 480
+        else: 
+            reward -= 240/(abs(dentaGoal_Angle - SPACE.ALPHA_SPACE//2))
 
         return reward
 
@@ -215,11 +216,8 @@ class PyGame2D():
         a = self.robot.currAngle
         b = Utils.angleBetweenTwoPoints(
             self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
-        alpha = a - b
-        if alpha > PLAYER_SETTING.PI:
-            alpha += -2*PLAYER_SETTING.PI
-        elif alpha < -PLAYER_SETTING.PI:
-            alpha += 2*PLAYER_SETTING.PI
+        alpha = (a - b) % (2 * PLAYER_SETTING.PI)
+        # print("Angle goal = {}, Alpla = {}".format(b*180/math.pi, alpha*180/math.pi))
 
         lidars = self.robot.lidarSignals
         lidars_NumberSelected = lidars[:SPACE.SECTIONS_LIDARSPACE]
@@ -306,21 +304,22 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
-                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
-# game.view()
-while True:
-    input = Utils.inputUser()
-    game.action(input)
-    if game.robot.achieveGoal:
-        print("Great!!!!!!!!!")
-        input = 27
-    elif not game.robot.isAlive:
-        print("Oops!!!!!!!!!!")
-        input = 27
-    game.view()
-    if input == 27:
-        cv2.destroyAllWindows()
-        break
-    pass
+# screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+#                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
+# # game.view()
+# while True:
+#     input = Utils.inputUser()
+#     game.action(input)
+#     game.observe()
+#     if game.robot.achieveGoal:
+#         print("Great!!!!!!!!!")
+#         input = 27
+#     elif not game.robot.isAlive:
+#         print("Oops!!!!!!!!!!")
+#         input = 27
+#     game.view()
+#     if input == 27:
+#         cv2.destroyAllWindows()
+#         break
+#     pass
