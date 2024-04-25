@@ -227,5 +227,5 @@ obstacle.goal.draw(img)
 cv2.putText(img, str(len(obstacle.obstacles)), (50, 450),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
 
-cv2.imshow('WINDOW', img)
-cv2.waitKey(0)
+# cv2.imshow('WINDOW', img)
+# cv2.waitKey(0)
