@@ -17,16 +17,16 @@ class Game:
         self.map = map
         self.game = pygame_2d.PyGame2D(screen=self.screen, map=self.map)
         self.lidarspace_shape = tuple(
-            [LENGTH_LIDARSIGNAL] * SECTIONS_LIDARSPACE)
+            [SPACE.LENGTH_LIDARSIGNAL] * SPACE.SECTIONS_LIDARSPACE)
         self.new_observation_shape = (
-            DISTANCE_SPACE, ALPHA_SPACE) + self.lidarspace_shape
+            SPACE.DISTANCE_SPACE, SPACE.ALPHA_SPACE) + self.lidarspace_shape
         self.epsilon = epsilon
         self.epsilon_min = epsilon_min
         self.epsilon_decay = epsilon_decay
         self.alpha = alpha
         self.gamma = gamma
-        self.total_states = DISTANCE_SPACE * ALPHA_SPACE * \
-            math.pow(LENGTH_LIDARSIGNAL, SECTIONS_LIDARSPACE)
+        self.total_states = SPACE.DISTANCE_SPACE * SPACE.ALPHA_SPACE * \
+            math.pow(SPACE.LENGTH_LIDARSIGNAL, SPACE.SECTIONS_LIDARSPACE)
         self.fig = None
 
         #! create state count change to count the number of state change
@@ -76,7 +76,7 @@ class Game:
         if np.random.random() > self.epsilon:
             action = np.argmax(q_table[tuple(state)])
         else:
-            action = np.random.randint(0, ACTION_SPACE)
+            action = np.random.randint(0, SPACE.ACTION_SPACE)
         return action
 
     def run_episode(self, q_table, trackPosition, log_path, counter=COUNTER):
