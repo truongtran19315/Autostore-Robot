@@ -239,7 +239,6 @@ class PyGame2D():
 
         return np.concatenate((infoStateVector, lidarLength_digitized))
 
-
     def is_done(self):
         if self.robot.achieveGoal:
             return PLAYER_SETTING.GOAL
@@ -307,21 +306,21 @@ class PyGame2D():
         self.convert_lenLidar()
 
 
-# screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
-#                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
-# # game.view()
-# while True:
-#     input = Utils.inputUser()
-#     game.action(input)
-#     if game.robot.achieveGoal:
-#         print("Great!!!!!!!!!")
-#         input = 27
-#     elif not game.robot.isAlive:
-#         print("Oops!!!!!!!!!!")
-#         input = 27
-#     game.view()
-#     if input == 27:
-#         cv2.destroyAllWindows()
-#         break
-#     pass
+screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
+# game.view()
+while True:
+    input = Utils.inputUser()
+    game.action(input)
+    if game.robot.achieveGoal:
+        print("Great!!!!!!!!!")
+        input = 27
+    elif not game.robot.isAlive:
+        print("Oops!!!!!!!!!!")
+        input = 27
+    game.view()
+    if input == 27:
+        cv2.destroyAllWindows()
+        break
+    pass

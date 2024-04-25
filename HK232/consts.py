@@ -1,10 +1,10 @@
 import math
 
 class GAME_SETTING:
-    SCREEN_WIDTH = 500
-    SCREEN_HEIGHT = 500
-    GRID_WIDTH = 20
-    GOAL_WIDTH = 20
+    SCREEN_WIDTH = 1100
+    SCREEN_HEIGHT = 700
+    GRID_WIDTH = 10
+    GOAL_WIDTH = 10
     FPS = 60
     DT = 0.5
 
@@ -15,8 +15,8 @@ class PLAYER_SETTING:
     PI = math.pi
     HALF_PI = PI / 2
     STEP_ANGLE = 2 * PI / CASTED_RAYS
-    INITIAL_X = 10
-    INITIAL_Y = 10
+    INITIAL_X = 50
+    INITIAL_Y = 30
     CURR_ANGLE = [0, PI/2, PI, 3*PI/2]
     INITIAL_ANGLE_INDEX = 0
     GOAL = 2
@@ -58,7 +58,7 @@ class ACTIONS:
     FORWARD = 0
     TURN_RIGHT = 1
     TURN_LEFT = 2
-    # TURN_BACK = 3
+    TURN_BACK = 3
 
 class EQUATION:
     NO_SOLUTION = 0
