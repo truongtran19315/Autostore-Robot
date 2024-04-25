@@ -165,14 +165,14 @@ class Robot(Car):
 class PyGame2D():
     def __init__(self, screen, map) -> None:
         self.env = screen
-        self.obstacles = self._initObstacle(numOfRect=OBSTACLE_SETTING.RECT_OBSTACLE, map=map)
+        self.obstacles = self._initObstacle(map=map)
         self.goal = self.obstacles.goal
         self.robot = Robot()
         self.generateEnvironment()
         self.distanceGoal = self.robot.checkAchieveGoal(self.goal)
 
-    def _initObstacle(self, numOfRect, map):
-        return Obstacles(numOfRect, map)
+    def _initObstacle(self, map):
+        return Obstacles(map)
 
     # def randomObstacle(self):
     #     x = Obstacles()
