@@ -176,8 +176,8 @@ class Obstacles():
         for i in range(self.numberOfRectangleObstacles):
             x = random.randint(0, GAME_SETTING.SCREEN_WIDTH // 5) * 5
             y = random.randint(0, GAME_SETTING.SCREEN_HEIGHT // 5) * 5
-            h = random.randint(1, OBSTACLE_SETTING.MAX_HEIGHT // OBSTACLE_SETTING.MIN_HEIGHT) * OBSTACLE_SETTING.MIN_HEIGHT
-            w = random.randint(1, OBSTACLE_SETTING.MAX_WIDTH // OBSTACLE_SETTING.MIN_WIDTH) * OBSTACLE_SETTING.MIN_WIDTH
+            h = random.randint(2, OBSTACLE_SETTING.MAX_HEIGHT // OBSTACLE_SETTING.MIN_HEIGHT) * OBSTACLE_SETTING.MIN_HEIGHT
+            w = random.randint(2, OBSTACLE_SETTING.MAX_WIDTH // OBSTACLE_SETTING.MIN_WIDTH) * OBSTACLE_SETTING.MIN_WIDTH
             self.rectangleObstaclesArr.append([x, y, h, w])
             
         check = False    
@@ -218,14 +218,14 @@ class Obstacles():
             obstacle.draw(screen)
 
 
-img = np.ones((GAME_SETTING.SCREEN_HEIGHT, GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+# img = np.ones((GAME_SETTING.SCREEN_HEIGHT, GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
 
-obstacle = Obstacles(1)
-obstacle.generateObstacles(img)
-obstacle.goal.draw(img)
+# obstacle = Obstacles(1)
+# obstacle.generateObstacles(img)
+# obstacle.goal.draw(img)
 
-cv2.putText(img, str(len(obstacle.obstacles)), (50, 450),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
+# cv2.putText(img, str(len(obstacle.obstacles)), (50, 450),
+#                     cv2.FONT_HERSHEY_SIMPLEX, 1, COLOR.WHITE, 1)
 
 # cv2.imshow('WINDOW', img)
 # cv2.waitKey(0)

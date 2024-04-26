@@ -9,13 +9,13 @@ class GAME_SETTING:
     DT = 0.5
 
 class PLAYER_SETTING:
-    RADIUS_OBJECT = 10
+    RADIUS_OBJECT = 5
     RADIUS_LIDAR = 180
-    CASTED_RAYS = 3
+    CASTED_RAYS = 9
     PI = math.pi
     HALF_PI = PI / 2
     # STEP_ANGLE = 2 * PI / CASTED_RAYS
-    STEP_ANGLE = PI/2
+    STEP_ANGLE = PI / (CASTED_RAYS - 1)
     INITIAL_X = 55
     INITIAL_Y = 35
     CURR_ANGLE = [0, PI/2, PI, 3*PI/2]
@@ -24,7 +24,9 @@ class PLAYER_SETTING:
     GONE = 1
     ALIVE = 0
     DISTANCEGOAL_MIN = 0
-    DISTANCEGOAL_MAX = 960
+    DISTANCEGOAL_MAX = 1750
+    ALPHAGOAL_MIN = 0
+    ALPHAGOAL_MAX = 2 * PI
 
 class OBSTACLE_SETTING:
     NUM_OBSTACLE = 20
@@ -67,7 +69,7 @@ MAX_EPISODE = 100000
 INT_INFINITY = 99999
 
 class SPACE:
-    LIDAR_LENGTH_SEGMENT = [40, 60]
+    LIDAR_LENGTH_SEGMENT = [20]
     DISTANCE_SPACE = 175
     ALPHA_SPACE = 9
     LENGTH_LIDARSIGNAL = len(LIDAR_LENGTH_SEGMENT) + 1
@@ -82,4 +84,4 @@ epsilon_decay = 10 / n_epsilondes
 epsilon = 0.9 - 0 * epsilon_decay
 epsilon_min = 0.001
 
-COUNTER = 200
+COUNTER = 1000

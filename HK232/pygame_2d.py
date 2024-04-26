@@ -198,7 +198,7 @@ class PyGame2D():
 
         observe = self.observe()
         goal_distance = observe[0]
-        reward -= goal_distance*100
+        reward -= goal_distance*10
 
         obstacles_distance = observe[-3:]  # ! 0, 90, 180
         if obstacles_distance[1] == 0:
@@ -229,7 +229,7 @@ class PyGame2D():
             num=SPACE.DISTANCE_SPACE, endpoint=False)[1:]
 
         alphaGoal_bin = np.linspace(
-            -math.pi, math.pi,
+            PLAYER_SETTING.ALPHAGOAL_MIN, PLAYER_SETTING.ALPHAGOAL_MAX,
             num=SPACE.ALPHA_SPACE, endpoint=False)[1:]
 
         infoStateVector = np.digitize(self.distanceGoal, distanceGoal_bin)

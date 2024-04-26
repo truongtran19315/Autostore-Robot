@@ -34,7 +34,8 @@ class Utils:
     
     @staticmethod
     def length2RightAngleEdge(goal, xPointA, yPointA):
-        return abs(xPointA - goal.xCenter) + abs(yPointA - goal.yCenter) + 2 * GAME_SETTING.GRID_WIDTH  #! Truong edit
+        return abs(xPointA - goal.xCenter) + abs(yPointA - goal.yCenter)
+    # + 2 * GAME_SETTING.GRID_WIDTH  #! Truong edit
 
     @staticmethod
     def findLinePassTwoPoints(xPointA, yPointA, xPointB, yPointB):
