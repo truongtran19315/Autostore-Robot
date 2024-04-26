@@ -219,10 +219,10 @@ class PyGame2D():
         alpha = (a - b) % (2 * PLAYER_SETTING.PI)
         # print("Angle goal = {}, Alpla = {}".format(b*180/math.pi, alpha*180/math.pi))
 
-        lidars = self.robot.lidarSignals
-        lidars_NumberSelected = lidars[:SPACE.SECTIONS_LIDARSPACE]
+        lidars = np.reshape(self.robot.lidarSignals, (3,3))
+        lidars_RegionSelected = np.min(lidars, axis=1)   # Tìm phần tử nhỏ nhất trong mỗi hàng (mỗi vùng)
 
-        lidarLength_digitized = np.digitize(lidars_NumberSelected, SPACE.LIDAR_LENGTH_SEGMENT)
+        lidarLength_digitized = np.digitize(lidars_RegionSelected, SPACE.LIDAR_LENGTH_SEGMENT)
 
         distanceGoal_bin = np.linspace(
             PLAYER_SETTING.DISTANCEGOAL_MIN, PLAYER_SETTING.DISTANCEGOAL_MAX, 
