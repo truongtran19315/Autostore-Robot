@@ -127,14 +127,19 @@ class RobotController:
         if speed_rotate is None:
             speed_rotate = self.angular_adjust_right_speed
         if target_yaw is None:
-            target_yaw = round(self.current_yaw / (math.pi / 2)) * (math.pi / 2)
-        angle_diff = self.normalize_angle(target_yaw - self.current_yaw)
+            target_yaw = round(self.current_yaw_2pi / (math.pi / 2)) * (math.pi / 2)
         twist_cmd = Twist()
+        # Determine the direction of rotation based on the sign of angle_diff
+        angle_diff = self.normalize_angle(target_yaw - self.current_yaw_2pi)
         twist_cmd.angular.z = speed_rotate if angle_diff > 0 else -speed_rotate
         self.cmd_vel_pub.publish(twist_cmd)
+        # Adjust the robot until the angle difference is within the threshold
         while abs(angle_diff) > 0.01:
             rospy.sleep(0.1)
-            angle_diff = self.normalize_angle(target_yaw - self.current_yaw)
+            angle_diff = self.normalize_angle(target_yaw - self.current_yaw_2pi)
+            # Update the direction of rotation if necessary
+            twist_cmd.angular.z = speed_rotate if angle_diff > 0 else -speed_rotate
+            self.cmd_vel_pub.publish(twist_cmd)
         twist_cmd.angular.z = 0
         self.cmd_vel_pub.publish(twist_cmd)
 
