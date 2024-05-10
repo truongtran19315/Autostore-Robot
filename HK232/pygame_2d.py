@@ -4,6 +4,7 @@ import math
 from obstacles import Obstacles, Goal
 from consts import *
 from utils import Utils
+import sys
 
 
 class Car():
@@ -170,6 +171,7 @@ class PyGame2D():
         self.robot = Robot()
         self.generateEnvironment()
         self.distanceGoal = self.robot.checkAchieveGoal(self.goal)
+        self.angleGoal = Utils.angleBetweenTwoPoints(self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
 
     def _initObstacle(self, map):
         return Obstacles(map)
@@ -198,28 +200,38 @@ class PyGame2D():
 
         observe = self.observe()
         goal_distance = observe[0]
-        reward -= goal_distance*10
+        reward -= goal_distance*100
 
         obstacles_distance = observe[-3:]  # ! 0, 90, 180
         if obstacles_distance[1] == 0:
-            reward -= 100
+            reward -= 200
+        if obstacles_distance[1] == 2:
+            reward += 20
         
         dentaGoal_Angle = observe[1]
-        if dentaGoal_Angle == SPACE.ALPHA_SPACE//2:
-            reward -= 480
-        else: 
-            reward -= 240/(abs(dentaGoal_Angle - SPACE.ALPHA_SPACE//2))
+        # if dentaGoal_Angle == SPACE.ALPHA_SPACE//2:
+        #     reward -= 480
+        # else: 
+        #     reward -= 240/(abs(dentaGoal_Angle - SPACE.ALPHA_SPACE//2))
+        if self.convert_alpha_pi(self.angleGoal) == math.pi:
+            reward -= 1000
+        elif self.convert_alpha_pi(self.angleGoal) == math.pi/2: #! Trừ nhiều điểm nếu robot ở trên trục đến goal nhưng khác hướng
+            reward -= 100
+        else:
+            reward -= dentaGoal_Angle*30
 
         return reward
 
     def observe(self):
         a = self.robot.currAngle
-        b = Utils.angleBetweenTwoPoints(
-            self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
-        alpha = (a - b) % (2 * PLAYER_SETTING.PI)
-        # print("Angle goal = {}, Alpla = {}".format(b*180/math.pi, alpha*180/math.pi))
+        # b = Utils.angleBetweenTwoPoints(
+        #     self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
+        self.angleGoal = Utils.angleBetweenTwoPoints(self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
+        b = self.angleGoal
+        # alpha = (a - b) % (2 * PLAYER_SETTING.PI)
+        alpha = self.convert_alpha_pi(b)
 
-        lidars = np.reshape(self.robot.lidarSignals, (3,3))
+        lidars = np.reshape(self.robot.lidarSignals, (SPACE.REGION_LIDAR_SPAGE,SPACE.SECTIONS_LIDARSPACE))
         lidars_RegionSelected = np.min(lidars, axis=1)   # Tìm phần tử nhỏ nhất trong mỗi hàng (mỗi vùng)
 
         lidarLength_digitized = np.digitize(lidars_RegionSelected, SPACE.LIDAR_LENGTH_SEGMENT)
@@ -234,6 +246,13 @@ class PyGame2D():
 
         infoStateVector = np.digitize(self.distanceGoal, distanceGoal_bin)
         infoStateVector = np.append(infoStateVector, np.digitize(alpha, alphaGoal_bin))
+        
+        # clear_terminal()
+        # print("Current Robot: {}".format(round(a*180/math.pi)))
+        # print("Goal angle : {}".format(round(b*180/math.pi)))
+        # print("alpha = {}".format(alpha*180/math.pi))
+        # print("States: {}".format([self.distanceGoal, round(alpha*180/math.pi), np.round(lidars_RegionSelected)]))
+        # print("After convert: {}".format(np.concatenate((infoStateVector, lidarLength_digitized))))
 
         return np.concatenate((infoStateVector, lidarLength_digitized))
 
@@ -302,16 +321,34 @@ class PyGame2D():
 
     def convert_ObstacleDetectionArea(self):
         self.convert_lenLidar()
+        
+    def convert_alpha_pi(self, angle_robot_vs_Goal):
+        alpha = abs(self.robot.currAngle - angle_robot_vs_Goal)
+        if alpha > math.pi:
+            alpha = 2*math.pi - alpha
+        return alpha
 
 
 # screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
 #                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
 # game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
 # # game.view()
+# def clear_terminal():
+#     sys.stdout.write("\033[H\033[J")  # Clear terminal
+
 # while True:
 #     input = Utils.inputUser()
 #     game.action(input)
-#     game.observe()
+    
+#     clear_terminal()
+#     print("Current Robot: {}".format(round(game.robot.currAngle*180/math.pi)))
+#     print("Goal angle : {}".format(round(game.angleGoal*180/math.pi)))
+#     print("alpha = {}".format((game.convert_alpha_pi(game.angleGoal))*180/math.pi))
+#     print("distance = {}".format(game.distanceGoal))
+    
+#     print("States: {}".format(np.round(game.observe())))
+#     print("reward = {}".format(game.evaluate()))
+    
 #     if game.robot.achieveGoal:
 #         print("Great!!!!!!!!!")
 #         input = 27
