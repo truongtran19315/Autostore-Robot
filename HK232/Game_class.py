@@ -17,7 +17,7 @@ class Game:
         self.map = map
         self.game = pygame_2d.PyGame2D(screen=self.screen, map=self.map)
         self.lidarspace_shape = tuple(
-            [SPACE.LENGTH_LIDARSIGNAL] * SPACE.SECTIONS_LIDARSPACE)
+            [SPACE.REGION_LIDAR_SPAGE] * SPACE.SECTIONS_LIDARSPACE)
         self.new_observation_shape = (
             SPACE.DISTANCE_SPACE, SPACE.ALPHA_SPACE) + self.lidarspace_shape
         self.epsilon = epsilon
@@ -26,7 +26,7 @@ class Game:
         self.alpha = alpha
         self.gamma = gamma
         self.total_states = SPACE.DISTANCE_SPACE * SPACE.ALPHA_SPACE * \
-            math.pow(SPACE.LENGTH_LIDARSIGNAL, SPACE.SECTIONS_LIDARSPACE)
+            math.pow(SPACE.REGION_LIDAR_SPAGE, SPACE.SECTIONS_LIDARSPACE)
         self.fig = None
 
         #! create state count change to count the number of state change
