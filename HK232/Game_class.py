@@ -60,7 +60,7 @@ class Game:
                 self.reward_records = pickle.load(f)
         else:
             self.reward_records = []
-            print("Create new reward records!!")
+            # print("Create new reward records!!")
 
         #! create allState table to count the state change
         self.record_goal_step_count_filename = "record_goal_step_count.pkl"
@@ -90,8 +90,8 @@ class Game:
         turn_left = 0
         turn_right = 0
         forward = 0
-        backward = 0
-        nothing = 0
+        # backward = 0
+        # nothing = 0
         step_count = 1
 
         prev_state = None
@@ -101,15 +101,15 @@ class Game:
             action = self.pick_sample(state, q_table)
             action_records.append(action)
             if action == 0:
-                turn_right += 1
-            elif action == 1:
-                turn_left += 1
-            elif action == 2:
                 forward += 1
-            elif action == 3:
-                backward += 1
-            elif action == 4:
-                nothing += 1
+            elif action == 1:
+                turn_right += 1
+            elif action == 2:
+                turn_left += 1
+            # elif action == 3:
+            #     backward += 1
+            # elif action == 4:
+            #     nothing += 1
             step_count += 1
 
             next_state, reward, done = self.step(action)
@@ -145,30 +145,30 @@ class Game:
         cv2.circle(trackPosition, firstPosition,
                    PLAYER_SETTING.RADIUS_OBJECT, COLOR.RED, 1)
         state_change_str = 'State Change : ' + \
-            str(self.state_count_change/self.total_states)
-        cv2.putText(trackPosition, state_change_str, (260, 480),
+            str(round(self.state_count_change / self.total_states, 5))
+        cv2.putText(trackPosition, state_change_str, (600, 380),
                     cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLACK, 1)
 
         turn_right = 'Turn Right: ' + str(turn_right)
         turn_left = 'Turn Left : ' + str(turn_left)
         forward = 'Forward  : ' + str(forward)
-        backward = 'Backward : ' + str(backward)
-        nothing = 'Nothing  : ' + str(nothing)
+        # backward = 'Backward : ' + str(backward)
+        # nothing = 'Nothing  : ' + str(nothing)
 
         step_count_str = 'Total step : ' + str(step_count)
-        cv2.putText(trackPosition, step_count_str, (300, 400),
+        cv2.putText(trackPosition, step_count_str, (600, 340),
                     cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
-
-        cv2.putText(trackPosition, forward, (40, 400),
+        
+        cv2.putText(trackPosition, forward, (300, 340),
                     cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
-        cv2.putText(trackPosition, backward, (40, 420),
+        cv2.putText(trackPosition, turn_right, (300, 360),
                     cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
-        cv2.putText(trackPosition, turn_right, (40, 440),
+        cv2.putText(trackPosition, turn_left, (300, 380),
                     cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
-        cv2.putText(trackPosition, turn_left, (40, 460),
-                    cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
-        cv2.putText(trackPosition, nothing, (40, 480),
-                    cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
+        # cv2.putText(trackPosition, backward, (40, 420),
+        #             cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
+        # cv2.putText(trackPosition, nothing, (40, 480),
+        #             cv2.FONT_HERSHEY_TRIPLEX, 9/16, COLOR.BLUE, 1)
 
         self.record_state_change.append(self.state_count_change)
 
