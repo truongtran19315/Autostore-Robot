@@ -24,7 +24,7 @@ class PLAYER_SETTING:
     GONE = 1
     ALIVE = 0
     DISTANCEGOAL_MIN = 0
-    DISTANCEGOAL_MAX = 1120 #!1750
+    DISTANCEGOAL_MAX = 1500 #!1120 #!1750
     ALPHAGOAL_MIN = 0
     ALPHAGOAL_MAX = PI
 
@@ -70,14 +70,14 @@ INT_INFINITY = 99999
 
 class SPACE:
     LIDAR_LENGTH_SEGMENT = [24, 50]
-    DISTANCE_SPACE = 60 #!175
+    DISTANCE_SPACE = 30 #!60 #!175
     ALPHA_SPACE = 6 #9
     REGION_LIDAR_SPAGE = 3
     SECTIONS_LIDARSPACE = 3  
     ACTION_SPACE = 3
 
 
-n_epsilondes = 50000
+n_epsilondes = 10000
 alpha = 0.1
 gamma = 0.99
 epsilon_decay = 10 / n_epsilondes

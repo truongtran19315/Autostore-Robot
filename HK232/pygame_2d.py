@@ -201,25 +201,22 @@ class PyGame2D():
         observe = self.observe()
         goal_distance = observe[0]
         reward -= goal_distance*100
-
-        obstacles_distance = observe[-3:]  # ! 0, 90, 180
+        
+        obstacles_distance = observe[-3:]  
         if obstacles_distance[1] == 0:
-            reward -= 200
-        if obstacles_distance[1] == 2:
-            reward += 20
+            reward -= 300
+        if self.distanceGoal < 50:
+            if self.convert_alpha_pi(self.angleGoal) == 0.0 :
+                if obstacles_distance[1] == 0:
+                    reward += 300 - self.distanceGoal/2
+            else:
+                reward -= self.distanceGoal
         
         dentaGoal_Angle = observe[1]
-        # if dentaGoal_Angle == SPACE.ALPHA_SPACE//2:
-        #     reward -= 480
-        # else: 
-        #     reward -= 240/(abs(dentaGoal_Angle - SPACE.ALPHA_SPACE//2))
         if self.convert_alpha_pi(self.angleGoal) == math.pi:
             reward -= 1000
-        elif self.convert_alpha_pi(self.angleGoal) == math.pi/2: #! Trừ nhiều điểm nếu robot ở trên trục đến goal nhưng khác hướng
-            reward -= 100
-        else:
-            reward -= dentaGoal_Angle*30
-
+        if self.distanceGoal > 30 and (obstacles_distance[1] > 0 or (obstacles_distance[0] > 0 or obstacles_distance[2] > 0)):
+            reward -= dentaGoal_Angle*25
         return reward
 
     def observe(self):
