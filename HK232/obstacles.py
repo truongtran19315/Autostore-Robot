@@ -67,9 +67,12 @@ class Goal():
         rand2 = random.randint(0, 1)
         rand3 = random.randint(0, 1)
         
-        xObstacle, yObstacle, height, width = obstacleArr[rand1 - 1] 
-        h = height // GAME_SETTING.GOAL_WIDTH
-        w = width // GAME_SETTING.GOAL_WIDTH
+        xObstacle, yObstacle, height, width = obstacleArr[rand1 - 1]
+        height += 2
+        width += 2 
+        h = height   // GAME_SETTING.GOAL_WIDTH 
+        w = width   // GAME_SETTING.GOAL_WIDTH
+        
         if rand2: # rand2 = 1 right + top
             if rand3: # rand3 = 1 top
                 self.x = xObstacle - width // 2 + random.randint(0, w - 1) * GAME_SETTING.GOAL_WIDTH
@@ -121,64 +124,64 @@ class Obstacles():
             self.randomObstacle()
         elif map == MAP_SETTING.MAP_DEFAULT:
             # x, y height, width - 1100x700
-            self.rectangleObstaclesArr = [[950, 605, 90, 100],
-                                        [800, 605, 90, 100],
-                                        [650, 605, 90, 100],
-                                        [500, 605, 90, 100],
-                                        [350, 605, 90, 100],
-                                        [200, 605, 90, 100],
+            self.rectangleObstaclesArr = [[950, 605, 88, 98],
+                                        [800, 605, 88, 98],
+                                        [650, 605, 88, 98],
+                                        [500, 605, 88, 98],
+                                        [350, 605, 88, 98],
+                                        [200, 605, 88, 98],
 
-                                        [950, 455, 90, 100],
-                                        [800, 455, 90, 100],
-                                        [650, 455, 90, 100],
-                                        [500, 455, 90, 100],
-                                        [350, 455, 90, 100],
-                                        [200, 455, 90, 100],
+                                        [950, 455, 88, 98],
+                                        [800, 455, 88, 98],
+                                        [650, 455, 88, 98],
+                                        [500, 455, 88, 98],
+                                        [350, 455, 88, 98],
+                                        [200, 455, 88, 98],
 
-                                        [950, 255, 90, 100],
-                                        [800, 255, 90, 100],
-                                        [650, 255, 90, 100],
-                                        [500, 255, 90, 100],
-                                        [350, 255, 90, 100],
-                                        [200, 255, 90, 100],
+                                        [950, 255, 88, 98],
+                                        [800, 255, 88, 98],
+                                        [650, 255, 88, 98],
+                                        [500, 255, 88, 98],
+                                        [350, 255, 88, 98],
+                                        [200, 255, 88, 98],
                                         
-                                        [950, 105, 90, 100],
-                                        [800, 105, 90, 100],
-                                        [650, 105, 90, 100],
-                                        [500, 105, 90, 100],
-                                        [350, 105, 90, 100],
-                                        [200, 105, 90, 100],]
+                                        [950, 105, 88, 98],
+                                        [800, 105, 88, 98],
+                                        [650, 105, 88, 98],
+                                        [500, 105, 88, 98],
+                                        [350, 105, 88, 98],
+                                        [200, 105, 88, 98],]
             self.numberOfRectangleObstacles = len(self.rectangleObstaclesArr)
             self.goal.randomGoal(self.rectangleObstaclesArr)
 
         elif map == MAP_SETTING.MAP_DEMO:
-            self.rectangleObstaclesArr = [[950, 605, 90, 100],
-                                        [800, 605, 90, 100],
-                                        [650, 605, 90, 100],
-                                        [500, 605, 90, 100],
-                                        [350, 605, 90, 100],
-                                        [200, 605, 90, 100],
+            self.rectangleObstaclesArr = [[950, 605, 88, 98],
+                                        [800, 605, 88, 98],
+                                        [650, 605, 88, 98],
+                                        [500, 605, 88, 98],
+                                        [350, 605, 88, 98],
+                                        [200, 605, 88, 98],
 
-                                        [950, 455, 90, 100],
-                                        [800, 455, 90, 100],
-                                        [650, 455, 90, 100],
-                                        [500, 455, 90, 100],
-                                        [350, 455, 90, 100],
-                                        [200, 455, 90, 100],
+                                        [950, 455, 88, 98],
+                                        [800, 455, 88, 98],
+                                        [650, 455, 88, 98],
+                                        [500, 455, 88, 98],
+                                        [350, 455, 88, 98],
+                                        [200, 455, 88, 98],
 
-                                        [950, 255, 90, 100],
-                                        [800, 255, 90, 100],
-                                        [650, 255, 90, 100],
-                                        [500, 255, 90, 100],
-                                        [350, 255, 90, 100],
-                                        [200, 255, 90, 100],
+                                        [950, 255, 88, 98],
+                                        [800, 255, 88, 98],
+                                        [650, 255, 88, 98],
+                                        [500, 255, 88, 98],
+                                        [350, 255, 88, 98],
+                                        [200, 255, 88, 98],
                                         
-                                        [950, 105, 90, 100],
-                                        [800, 105, 90, 100],
-                                        [650, 105, 90, 100],
-                                        [500, 105, 90, 100],
-                                        [350, 105, 90, 100],
-                                        [200, 105, 90, 100],]
+                                        [950, 105, 88, 98],
+                                        [800, 105, 88, 98],
+                                        [650, 105, 88, 98],
+                                        [500, 105, 88, 98],
+                                        [350, 105, 88, 98],
+                                        [200, 105, 88, 98],]
             self.numberOfRectangleObstacles = len(self.rectangleObstaclesArr)
             #! Trái: [row_number][0]-60  Phải: [row_number][0]+50  
             #! Trên: [row_number][1]-55  Dưới: [row_number][1]+45
@@ -211,8 +214,8 @@ class Obstacles():
         for i in range(self.numberOfRectangleObstacles):
             x = random.randint(0, GAME_SETTING.SCREEN_WIDTH // 5) * 5
             y = random.randint(0, GAME_SETTING.SCREEN_HEIGHT // 5) * 5
-            h = random.randint(2, OBSTACLE_SETTING.MAX_HEIGHT // OBSTACLE_SETTING.MIN_HEIGHT) * OBSTACLE_SETTING.MIN_HEIGHT
-            w = random.randint(2, OBSTACLE_SETTING.MAX_WIDTH // OBSTACLE_SETTING.MIN_WIDTH) * OBSTACLE_SETTING.MIN_WIDTH
+            h = random.randint(2, OBSTACLE_SETTING.MAX_HEIGHT // OBSTACLE_SETTING.MIN_HEIGHT) * OBSTACLE_SETTING.MIN_HEIGHT - 2
+            w = random.randint(2, OBSTACLE_SETTING.MAX_WIDTH // OBSTACLE_SETTING.MIN_WIDTH) * OBSTACLE_SETTING.MIN_WIDTH - 2
             self.rectangleObstaclesArr.append([x, y, h, w])
             
         check = False    
