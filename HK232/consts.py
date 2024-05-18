@@ -41,6 +41,7 @@ class OBSTACLE_SETTING:
 class MAP_SETTING:
     MAP_DEFAULT = 0
     RANDOM_MAP = 1
+    MAP_DEMO = 2
 
 class COLOR:
     BLACK = (0, 0, 0)
@@ -77,7 +78,7 @@ class SPACE:
     ACTION_SPACE = 3
 
 
-n_epsilondes = 10000
+n_epsilondes = 100000
 alpha = 0.1
 gamma = 0.99
 epsilon_decay = 10 / n_epsilondes

@@ -205,7 +205,7 @@ class PyGame2D():
         obstacles_distance = observe[-3:]  
         if obstacles_distance[1] == 0:
             reward -= 300
-        if self.distanceGoal < 50:
+        if self.distanceGoal <= 50:
             if self.convert_alpha_pi(self.angleGoal) == 0.0 :
                 if obstacles_distance[1] == 0:
                     reward += 300 - self.distanceGoal/2
@@ -326,34 +326,34 @@ class PyGame2D():
         return alpha
 
 
-# screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
-#                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
-# # game.view()
-# def clear_terminal():
-#     sys.stdout.write("\033[H\033[J")  # Clear terminal
+screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+game = PyGame2D(screen, MAP_SETTING.MAP_DEMO)
+# game.view()
+def clear_terminal():
+    sys.stdout.write("\033[H\033[J")  # Clear terminal
 
-# while True:
-#     input = Utils.inputUser()
-#     game.action(input)
+while True:
+    input = Utils.inputUser()
+    game.action(input)
     
-#     clear_terminal()
-#     print("Current Robot: {}".format(round(game.robot.currAngle*180/math.pi)))
-#     print("Goal angle : {}".format(round(game.angleGoal*180/math.pi)))
-#     print("alpha = {}".format((game.convert_alpha_pi(game.angleGoal))*180/math.pi))
-#     print("distance = {}".format(game.distanceGoal))
+    clear_terminal()
+    print("Current Robot: {}".format(round(game.robot.currAngle*180/math.pi)))
+    print("Goal angle : {}".format(round(game.angleGoal*180/math.pi)))
+    print("alpha = {}".format((game.convert_alpha_pi(game.angleGoal))*180/math.pi))
+    print("distance = {}".format(game.distanceGoal))
     
-#     print("States: {}".format(np.round(game.observe())))
-#     print("reward = {}".format(game.evaluate()))
+    print("States: {}".format(np.round(game.observe())))
+    print("reward = {}".format(game.evaluate()))
     
-#     if game.robot.achieveGoal:
-#         print("Great!!!!!!!!!")
-#         input = 27
-#     elif not game.robot.isAlive:
-#         print("Oops!!!!!!!!!!")
-#         input = 27
-#     game.view()
-#     if input == 27:
-#         cv2.destroyAllWindows()
-#         break
-#     pass
+    if game.robot.achieveGoal:
+        print("Great!!!!!!!!!")
+        input = 27
+    elif not game.robot.isAlive:
+        print("Oops!!!!!!!!!!")
+        input = 27
+    game.view()
+    if input == 27:
+        cv2.destroyAllWindows()
+        break
+    pass

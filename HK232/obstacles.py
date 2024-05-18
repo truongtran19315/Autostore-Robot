@@ -150,7 +150,42 @@ class Obstacles():
                                         [200, 105, 90, 100],]
             self.numberOfRectangleObstacles = len(self.rectangleObstaclesArr)
             self.goal.randomGoal(self.rectangleObstaclesArr)
-            
+
+        elif map == MAP_SETTING.MAP_DEMO:
+            self.rectangleObstaclesArr = [[950, 605, 90, 100],
+                                        [800, 605, 90, 100],
+                                        [650, 605, 90, 100],
+                                        [500, 605, 90, 100],
+                                        [350, 605, 90, 100],
+                                        [200, 605, 90, 100],
+
+                                        [950, 455, 90, 100],
+                                        [800, 455, 90, 100],
+                                        [650, 455, 90, 100],
+                                        [500, 455, 90, 100],
+                                        [350, 455, 90, 100],
+                                        [200, 455, 90, 100],
+
+                                        [950, 255, 90, 100],
+                                        [800, 255, 90, 100],
+                                        [650, 255, 90, 100],
+                                        [500, 255, 90, 100],
+                                        [350, 255, 90, 100],
+                                        [200, 255, 90, 100],
+                                        
+                                        [950, 105, 90, 100],
+                                        [800, 105, 90, 100],
+                                        [650, 105, 90, 100],
+                                        [500, 105, 90, 100],
+                                        [350, 105, 90, 100],
+                                        [200, 105, 90, 100],]
+            self.numberOfRectangleObstacles = len(self.rectangleObstaclesArr)
+            #! Trái: [row_number][0]-60  Phải: [row_number][0]+50  
+            #! Trên: [row_number][1]-55  Dưới: [row_number][1]+45
+            row_number = 7
+            self.goal.x, self.goal.y = self.rectangleObstaclesArr[row_number][0]-40, self.rectangleObstaclesArr[row_number][1]+45
+            self.goal.xCenter = self.goal.x + GAME_SETTING.GOAL_WIDTH/2 
+            self.goal.yCenter = self.goal.y + GAME_SETTING.GOAL_WIDTH/2
         # self.rectangleObstaclesArr = []
 
         # add each of obstacleArr to a list of obstacle object
