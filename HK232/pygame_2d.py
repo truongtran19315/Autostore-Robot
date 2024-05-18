@@ -172,7 +172,8 @@ class PyGame2D():
         self.generateEnvironment()
         self.distanceGoal = self.robot.checkAchieveGoal(self.goal)
         self.angleGoal = Utils.angleBetweenTwoPoints(self.robot.xPos, self.robot.yPos, self.goal.xCenter, self.goal.yCenter)
-
+        self.lidars = []
+        
     def _initObstacle(self, map):
         return Obstacles(map)
 
@@ -190,34 +191,62 @@ class PyGame2D():
         self.distanceGoal = self.robot.checkAchieveGoal(self.goal)
         self.robot.checkCollision(distance)
 
+    # def evaluate(self):
+    #     reward = 0
+
+    #     if self.robot.achieveGoal:
+    #         reward += 100000
+    #     elif not self.robot.isAlive:
+    #         reward -= 100000
+
+    #     observe = self.observe()
+    #     goal_distance = observe[0]
+    #     reward -= goal_distance*100
+        
+    #     obstacles_distance = observe[-3:]  
+    #     if obstacles_distance[1] == 0:
+    #         reward -= 300
+    #     # if self.distanceGoal <= 50:
+    #     #     if self.convert_alpha_pi(self.angleGoal) == 0.0 :
+    #     #         if obstacles_distance[1] == 0:
+    #     #             reward += 300 - self.distanceGoal/2
+    #     #     else:
+    #     #         reward -= self.distanceGoal
+        
+    #     dentaGoal_Angle = observe[1]
+    #     if self.convert_alpha_pi(self.angleGoal) == math.pi:
+    #         reward -= 1000
+    #     if self.distanceGoal > 30 and (obstacles_distance[1] > 0 or (obstacles_distance[0] > 0 or obstacles_distance[2] > 0)):
+    #         reward -= dentaGoal_Angle*25
+    #     return reward
     def evaluate(self):
         reward = 0
-
+        
+        if not self.robot.isAlive:
+            reward -= 1000000
+        
         if self.robot.achieveGoal:
             reward += 100000
-        elif not self.robot.isAlive:
-            reward -= 100000
-
-        observe = self.observe()
-        goal_distance = observe[0]
-        reward -= goal_distance*100
-        
-        obstacles_distance = observe[-3:]  
-        if obstacles_distance[1] == 0:
-            reward -= 300
-        if self.distanceGoal <= 50:
-            if self.convert_alpha_pi(self.angleGoal) == 0.0 :
+        else:
+            reward -= 2000 * (self.distanceGoal / PLAYER_SETTING.DISTANCEGOAL_MAX)
+            # reward += 1000 * (1 - (self.distanceGoal / PLAYER_SETTING.DISTANCEGOAL_MAX))
+            if self.convert_alpha_pi(self.angleGoal) == math.pi:
+                reward -= 200
+            if self.convert_alpha_pi(self.angleGoal) != 0.0:
+                obstacles_distance = self.observe()[-3:]
                 if obstacles_distance[1] == 0:
-                    reward += 300 - self.distanceGoal/2
-            else:
-                reward -= self.distanceGoal
-        
-        dentaGoal_Angle = observe[1]
-        if self.convert_alpha_pi(self.angleGoal) == math.pi:
-            reward -= 1000
-        if self.distanceGoal > 30 and (obstacles_distance[1] > 0 or (obstacles_distance[0] > 0 or obstacles_distance[2] > 0)):
-            reward -= dentaGoal_Angle*25
+                    reward -= 100
+                if self.robot.lidarSignals[0] < 10 or self.robot.lidarSignals[8] < 10:
+                    reward -= 100
+            elif self.convert_alpha_pi(self.angleGoal) == 0.0:
+                if self.robot.lidarSignals[4] < 10:
+                    reward -= 100
+                    
+            alpha = self.convert_alpha_pi(self.angleGoal)
+            reward -= alpha * 10 
+            
         return reward
+
 
     def observe(self):
         a = self.robot.currAngle
@@ -228,8 +257,8 @@ class PyGame2D():
         # alpha = (a - b) % (2 * PLAYER_SETTING.PI)
         alpha = self.convert_alpha_pi(b)
 
-        lidars = np.reshape(self.robot.lidarSignals, (SPACE.REGION_LIDAR_SPAGE,SPACE.SECTIONS_LIDARSPACE))
-        lidars_RegionSelected = np.min(lidars, axis=1)   # Tìm phần tử nhỏ nhất trong mỗi hàng (mỗi vùng)
+        self.lidars = np.reshape(self.robot.lidarSignals, (SPACE.REGION_LIDAR_SPAGE,SPACE.SECTIONS_LIDARSPACE))
+        lidars_RegionSelected = np.min(self.lidars, axis=1)   # Tìm phần tử nhỏ nhất trong mỗi hàng (mỗi vùng)
 
         lidarLength_digitized = np.digitize(lidars_RegionSelected, SPACE.LIDAR_LENGTH_SEGMENT)
 
@@ -326,34 +355,40 @@ class PyGame2D():
         return alpha
 
 
-screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
-                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-game = PyGame2D(screen, MAP_SETTING.MAP_DEMO)
-# game.view()
-def clear_terminal():
-    sys.stdout.write("\033[H\033[J")  # Clear terminal
+# screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+#                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+# game = PyGame2D(screen, MAP_SETTING.RANDOM_MAP)
+# # game.view()
+# def clear_terminal():
+#     sys.stdout.write("\033[H\033[J")  # Clear terminal
 
-while True:
-    input = Utils.inputUser()
-    game.action(input)
+# while True:
+#     input = Utils.inputUser()
+#     game.action(input)
     
-    clear_terminal()
-    print("Current Robot: {}".format(round(game.robot.currAngle*180/math.pi)))
-    print("Goal angle : {}".format(round(game.angleGoal*180/math.pi)))
-    print("alpha = {}".format((game.convert_alpha_pi(game.angleGoal))*180/math.pi))
-    print("distance = {}".format(game.distanceGoal))
+#     clear_terminal()
+#     print("Current Robot: {}".format(round(game.robot.currAngle*180/math.pi)))
+#     print("Goal angle : {}".format(round(game.angleGoal*180/math.pi)))
+#     print("alpha = {}".format((game.convert_alpha_pi(game.angleGoal))*180/math.pi))
+#     print("distance = {}".format(game.distanceGoal))
+#     print("lidar_ray[4] = {}".format(game.robot.lidarSignals[4]))
+#     print("lidar_ray[1] = {}".format(game.robot.lidarSignals[1]))
+#     # print("lidar_ray[3] = {}".format(game.robot.lidarSignals[3]))
+#     # print("lidar_ray[5] = {}".format(game.robot.lidarSignals[5]))
+#     # print("lidar_ray[0] = {}".format(game.robot.lidarSignals[0]))
+#     # print("lidar_ray[8] = {}".format(game.robot.lidarSignals[8]))
     
-    print("States: {}".format(np.round(game.observe())))
-    print("reward = {}".format(game.evaluate()))
+#     print("States: {}".format(np.round(game.observe())))
+#     print("reward = {}".format(game.evaluate()))
     
-    if game.robot.achieveGoal:
-        print("Great!!!!!!!!!")
-        input = 27
-    elif not game.robot.isAlive:
-        print("Oops!!!!!!!!!!")
-        input = 27
-    game.view()
-    if input == 27:
-        cv2.destroyAllWindows()
-        break
-    pass
+#     if game.robot.achieveGoal:
+#         print("Great!!!!!!!!!")
+#         input = 27
+#     elif not game.robot.isAlive:
+#         print("Oops!!!!!!!!!!")
+#         input = 27
+#     game.view()
+#     if input == 27:
+#         cv2.destroyAllWindows()
+#         break
+#     pass
