@@ -5,7 +5,7 @@ from Game_class import *
 from datetime import datetime
 from logVersion import base_path
 
-date_train = '2024-05-13_V1_DONE'
+date_train = '2024-05-19_V1_DONE'
 foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 
 with open(foler_train_path, "rb") as f:
@@ -22,7 +22,7 @@ for i in range(1, numberRun + 1):
     while eps <= total_eps:
         screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-        robot = Game(screen, MAP_SETTING.MAP_DEFAULT)
+        robot = Game(screen, MAP_SETTING.MAP_DEMO)
         Env = robot.getEnv()
 
         state = robot.reset()

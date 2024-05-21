@@ -185,8 +185,8 @@ class Obstacles():
             self.numberOfRectangleObstacles = len(self.rectangleObstaclesArr)
             #! Trái: [row_number][0]-60  Phải: [row_number][0]+50  
             #! Trên: [row_number][1]-55  Dưới: [row_number][1]+45
-            row_number = 7
-            self.goal.x, self.goal.y = self.rectangleObstaclesArr[row_number][0]-40, self.rectangleObstaclesArr[row_number][1]+45
+            row_number = 8
+            self.goal.x, self.goal.y = self.rectangleObstaclesArr[row_number][0]-60, self.rectangleObstaclesArr[row_number][1]+5
             self.goal.xCenter = self.goal.x + GAME_SETTING.GOAL_WIDTH/2 
             self.goal.yCenter = self.goal.y + GAME_SETTING.GOAL_WIDTH/2
         # self.rectangleObstaclesArr = []

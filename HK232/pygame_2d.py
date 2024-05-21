@@ -355,40 +355,40 @@ class PyGame2D():
         return alpha
 
 
-# screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
-#                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-# game = PyGame2D(screen, MAP_SETTING.RANDOM_MAP)
-# # game.view()
-# def clear_terminal():
-#     sys.stdout.write("\033[H\033[J")  # Clear terminal
+screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
+                 GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
+game = PyGame2D(screen, MAP_SETTING.MAP_DEMO)
+# game.view()
+def clear_terminal():
+    sys.stdout.write("\033[H\033[J")  # Clear terminal
 
-# while True:
-#     input = Utils.inputUser()
-#     game.action(input)
+while True:
+    input = Utils.inputUser()
+    game.action(input)
     
-#     clear_terminal()
-#     print("Current Robot: {}".format(round(game.robot.currAngle*180/math.pi)))
-#     print("Goal angle : {}".format(round(game.angleGoal*180/math.pi)))
-#     print("alpha = {}".format((game.convert_alpha_pi(game.angleGoal))*180/math.pi))
-#     print("distance = {}".format(game.distanceGoal))
-#     print("lidar_ray[4] = {}".format(game.robot.lidarSignals[4]))
-#     print("lidar_ray[1] = {}".format(game.robot.lidarSignals[1]))
-#     # print("lidar_ray[3] = {}".format(game.robot.lidarSignals[3]))
-#     # print("lidar_ray[5] = {}".format(game.robot.lidarSignals[5]))
-#     # print("lidar_ray[0] = {}".format(game.robot.lidarSignals[0]))
-#     # print("lidar_ray[8] = {}".format(game.robot.lidarSignals[8]))
+    clear_terminal()
+    print("Current Robot: {}".format(round(game.robot.currAngle*180/math.pi)))
+    print("Goal angle : {}".format(round(game.angleGoal*180/math.pi)))
+    print("alpha = {}".format((game.convert_alpha_pi(game.angleGoal))*180/math.pi))
+    print("distance = {}".format(game.distanceGoal))
+    print("lidar_ray[4] = {}".format(game.robot.lidarSignals[4]))
+    print("lidar_ray[1] = {}".format(game.robot.lidarSignals[1]))
+    # print("lidar_ray[3] = {}".format(game.robot.lidarSignals[3]))
+    # print("lidar_ray[5] = {}".format(game.robot.lidarSignals[5]))
+    # print("lidar_ray[0] = {}".format(game.robot.lidarSignals[0]))
+    # print("lidar_ray[8] = {}".format(game.robot.lidarSignals[8]))
     
-#     print("States: {}".format(np.round(game.observe())))
-#     print("reward = {}".format(game.evaluate()))
+    print("States: {}".format(np.round(game.observe())))
+    print("reward = {}".format(game.evaluate()))
     
-#     if game.robot.achieveGoal:
-#         print("Great!!!!!!!!!")
-#         input = 27
-#     elif not game.robot.isAlive:
-#         print("Oops!!!!!!!!!!")
-#         input = 27
-#     game.view()
-#     if input == 27:
-#         cv2.destroyAllWindows()
-#         break
-#     pass
+    if game.robot.achieveGoal:
+        print("Great!!!!!!!!!")
+        input = 27
+    elif not game.robot.isAlive:
+        print("Oops!!!!!!!!!!")
+        input = 27
+    game.view()
+    if input == 27:
+        cv2.destroyAllWindows()
+        break
+    pass

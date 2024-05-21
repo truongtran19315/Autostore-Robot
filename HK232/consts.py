@@ -81,7 +81,7 @@ class SPACE:
     ACTION_SPACE = 3
 
 
-n_epsilondes = 100000
+n_epsilondes = 50000
 alpha = 0.1
 gamma = 0.99
 epsilon_decay = 10 / n_epsilondes
