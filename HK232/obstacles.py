@@ -212,10 +212,10 @@ class Obstacles():
     def randomObstacle(self):
         self.rectangleObstaclesArr = []
         for i in range(self.numberOfRectangleObstacles):
-            x = random.randint(0, GAME_SETTING.SCREEN_WIDTH // 5) * 5
-            y = random.randint(0, GAME_SETTING.SCREEN_HEIGHT // 5) * 5
-            h = random.randint(2, OBSTACLE_SETTING.MAX_HEIGHT // OBSTACLE_SETTING.MIN_HEIGHT) * OBSTACLE_SETTING.MIN_HEIGHT - 2
-            w = random.randint(2, OBSTACLE_SETTING.MAX_WIDTH // OBSTACLE_SETTING.MIN_WIDTH) * OBSTACLE_SETTING.MIN_WIDTH - 2
+            x = random.randint(0, GAME_SETTING.SCREEN_WIDTH // 10) * 10 
+            y = random.randint(0, GAME_SETTING.SCREEN_HEIGHT // 10) * 10 
+            h = random.randint(2, OBSTACLE_SETTING.MAX_HEIGHT // 20) * 20 - 2
+            w = random.randint(2, OBSTACLE_SETTING.MAX_WIDTH // 20) * 20 - 2 
             self.rectangleObstaclesArr.append([x, y, h, w])
             
         check = False    

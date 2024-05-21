@@ -1,0 +1,6 @@
+May 10 - 17h46:
+pygame_2d:
+- Sửa lại góc lệch alpha từ 0->pi
+- cập nhật lại hàm reward theo góc lệch này
+- Độ dài tia lidar chia làm 3 đoạn: [24,50]
+- Khoảng cách tính theo đường chéo: 0 -> 1120, chia làm 100 khoảng

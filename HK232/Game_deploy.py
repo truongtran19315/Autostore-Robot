@@ -22,7 +22,7 @@ for i in range(1, numberRun + 1):
     while eps <= total_eps:
         screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-        robot = Game(screen, MAP_SETTING.MAP_DEMO)
+        robot = Game(screen, MAP_SETTING.MAP_DEFAULT)
         Env = robot.getEnv()
 
         state = robot.reset()
