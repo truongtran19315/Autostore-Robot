@@ -236,16 +236,16 @@ class PyGame2D():
             if self.convert_alpha_pi(self.angleGoal) != 0.0:
                 obstacles_distance = self.observe()[-3:]
                 if obstacles_distance[1] == 0:
-                    reward -= 100
+                    reward -= 500
                 if self.robot.lidarSignals[0] < 10 or self.robot.lidarSignals[8] < 10:
-                    reward -= 100
+                    reward -= 300
             elif self.convert_alpha_pi(self.angleGoal) == 0.0:
                 if self.robot.lidarSignals[4] < 10 and self.distanceGoal > 10:
                     reward -= 100
                     
             # alpha = self.convert_alpha_pi(self.angleGoal)
             alpha = self.observe()[1]
-            reward -= alpha * 100 
+            reward -= alpha * 50
             
         return reward
 

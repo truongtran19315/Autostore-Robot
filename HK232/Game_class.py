@@ -72,11 +72,28 @@ class Game:
         else:
             self.record_goal_step_count = []
 
+        # List to keep track of the last 5 actions
+        self.last_3_actions = []
+    # def pick_sample(self, state, q_table):
+    #     if np.random.random() > self.epsilon:
+    #         action = np.argmax(q_table[tuple(state)])
+    #     else:
+    #         action = np.random.randint(0, SPACE.ACTION_SPACE)
+    #     return action
     def pick_sample(self, state, q_table):
-        if np.random.random() > self.epsilon:
+        if len(self.last_3_actions) == 3 and \
+            (all(action == ACTIONS.TURN_RIGHT for action in self.last_3_actions) or all(action == ACTIONS.TURN_LEFT for action in self.last_3_actions)):
+            action = ACTIONS.FORWARD  
+        elif np.random.random() > self.epsilon:
             action = np.argmax(q_table[tuple(state)])
         else:
             action = np.random.randint(0, SPACE.ACTION_SPACE)
+
+        # Update the last_3_actions list
+        self.last_3_actions.append(action)
+        if len(self.last_3_actions) > 3:
+            self.last_3_actions.pop(0)
+
         return action
 
     def run_episode(self, q_table, trackPosition, log_path, counter=COUNTER):
