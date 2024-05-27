@@ -88,4 +88,4 @@ epsilon_decay = 10 / n_epsilondes
 epsilon = 0.9 - 0 * epsilon_decay
 epsilon_min = 0.001
 
-COUNTER = 400
+COUNTER = 1000
