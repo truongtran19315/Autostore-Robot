@@ -5,7 +5,7 @@ from Game_class import *
 from datetime import datetime
 from logVersion import base_path
 
-date_train = '2024-05-27_V1_DONE'
+date_train = '2024-05-28_V1_DONE'
 foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 
 with open(foler_train_path, "rb") as f:

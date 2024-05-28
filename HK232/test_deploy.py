@@ -6,17 +6,17 @@ from datetime import datetime
 from logVersion import base_path
 import matplotlib.pyplot as plt
 
-date_train = '2024-05-19_V1_DONE'
+date_train = '2024-05-28_V1_DONE'
 folder_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 
 with open(folder_train_path, "rb") as f:
     q_table = pickle.load(f)
 
-numberRun = 100  # Số lần chạy
+numberRun = 10000  # Số lần chạy
+average_number = 100
 arrRun = []
 print('================ Start Run =========================')
 for i in range(1, numberRun + 1):
-    total_eps = 1000  # Số bước thử trong mỗi lần chạy
     screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
                       GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
     robot = Game(screen, MAP_SETTING.MAP_DEFAULT)
@@ -24,7 +24,7 @@ for i in range(1, numberRun + 1):
 
     state = robot.reset()
     done = 0
-    counter = 401
+    counter = 1000
     goal = 0
     while done == 0 and counter > 0:
         action = np.argmax(q_table[tuple(state)])
@@ -43,10 +43,10 @@ fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(8, 6))
 average_goal_step_count = []
 for idx in range(len(arrRun)):
     avg_list_goal_step_count = np.empty(shape=(1,), dtype=int)
-    if idx < 10:
+    if idx < average_number:
         avg_list_goal_step_count = arrRun[:idx+1]
     else:
-        avg_list_goal_step_count = arrRun[idx-9:idx+1]
+        avg_list_goal_step_count = arrRun[idx-(average_number-1):idx+1]
     average_goal_step_count.append(
         np.average(avg_list_goal_step_count))
 
@@ -63,5 +63,5 @@ axes.text(numberRun * 1/9, 1.01, 'Phần trăm tỉ lệ tới đích trung bìn
 deploy_chartRun = os.path.join(base_path, date_train, ('chartRundeploy' + '_' + str(
     datetime.now().hour) + 'h' + str(datetime.now().minute) + 'p'))
 
-# plt.savefig(deploy_chartRun)
+plt.savefig(deploy_chartRun)
 plt.show()

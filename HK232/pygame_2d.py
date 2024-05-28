@@ -221,7 +221,7 @@ class PyGame2D():
                 alpha = self.observe()[1]
                 reward -= alpha * 25
             else:
-                reward += 10* (1- self.distanceGoal/50)
+                reward += 10* (1- self.distanceGoal/100)
         return reward
 
     def observe(self):
