@@ -5,7 +5,7 @@ from Game_class import *
 from datetime import datetime
 from logVersion import base_path
 
-date_train = '2024-05-19_V1_DONE'
+date_train = '2024-05-28_V1_DONE'
 foler_train_path = os.path.join(base_path, date_train, 'q_table.pkl')
 
 with open(foler_train_path, "rb") as f:
@@ -28,13 +28,24 @@ for i in range(1, numberRun + 1):
         state = robot.reset()
         done = 0
         counter = 401
+        last_3_actions = []
         while done == 0 and counter > 0:
+            # if len(last_3_actions) == 3 and \
+            # (all(action == ACTIONS.TURN_RIGHT for action in last_3_actions) or all(action == ACTIONS.TURN_LEFT for action in last_3_actions)):
+            #     action = ACTIONS.FORWARD
+            # else:
+            #     action = np.argmax(q_table[tuple(state)])
+            # last_3_actions.append(action)
+            # if len(last_3_actions) > 3:
+            #     last_3_actions.pop(0)
+                
             action = np.argmax(q_table[tuple(state)])
             # print(f'Action: {action}')
             next_state, _, done = robot.step(action)
             
-            robot.game.view()
-            cv2.waitKey(1)
+            # robot.game.view()
+            # cv2.waitKey(1)
+            
             
             state = next_state
             counter -= 1

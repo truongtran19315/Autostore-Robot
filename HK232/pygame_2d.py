@@ -191,34 +191,6 @@ class PyGame2D():
         self.distanceGoal = self.robot.checkAchieveGoal(self.goal)
         self.robot.checkCollision(distance)
 
-    # def evaluate(self):
-    #     reward = 0
-
-    #     if self.robot.achieveGoal:
-    #         reward += 100000
-    #     elif not self.robot.isAlive:
-    #         reward -= 100000
-
-    #     observe = self.observe()
-    #     goal_distance = observe[0]
-    #     reward -= goal_distance*100
-        
-    #     obstacles_distance = observe[-3:]  
-    #     if obstacles_distance[1] == 0:
-    #         reward -= 300
-    #     # if self.distanceGoal <= 50:
-    #     #     if self.convert_alpha_pi(self.angleGoal) == 0.0 :
-    #     #         if obstacles_distance[1] == 0:
-    #     #             reward += 300 - self.distanceGoal/2
-    #     #     else:
-    #     #         reward -= self.distanceGoal
-        
-    #     dentaGoal_Angle = observe[1]
-    #     if self.convert_alpha_pi(self.angleGoal) == math.pi:
-    #         reward -= 1000
-    #     if self.distanceGoal > 30 and (obstacles_distance[1] > 0 or (obstacles_distance[0] > 0 or obstacles_distance[2] > 0)):
-    #         reward -= dentaGoal_Angle*25
-    #     return reward
     def evaluate(self):
         reward = 0
         
@@ -232,23 +204,25 @@ class PyGame2D():
             # reward += 1000 * (1 - (self.distanceGoal / PLAYER_SETTING.DISTANCEGOAL_MAX))
             reward -= self.observe()[0] * 100
             if self.convert_alpha_pi(self.angleGoal) == math.pi:
-                reward -= 200
+                reward -= 180
             if self.convert_alpha_pi(self.angleGoal) != 0.0:
                 obstacles_distance = self.observe()[-3:]
                 if obstacles_distance[1] == 0:
-                    reward -= 100
+                    reward -= 200
                 if self.robot.lidarSignals[0] < 10 or self.robot.lidarSignals[8] < 10:
-                    reward -= 100
+                    reward -= 80
             elif self.convert_alpha_pi(self.angleGoal) == 0.0:
                 if self.robot.lidarSignals[4] < 10 and self.distanceGoal > 10:
-                    reward -= 100
-                    
+                    reward -= 500
+                # reward -= self.distanceGoal
+                reward += 10* (1- self.distanceGoal/100)
             # alpha = self.convert_alpha_pi(self.angleGoal)
-            alpha = self.observe()[1]
-            reward -= alpha * 100 
-            
+            if self.distanceGoal >= 50:
+                alpha = self.observe()[1]
+                reward -= alpha * 25
+            else:
+                reward += 10* (1- self.distanceGoal/100)
         return reward
-
 
     def observe(self):
         a = self.robot.currAngle
@@ -359,7 +333,7 @@ class PyGame2D():
 
 # screen = np.ones((GAME_SETTING.SCREEN_HEIGHT,
 #                  GAME_SETTING.SCREEN_WIDTH, 3), dtype=np.uint8) * 255
-# game = PyGame2D(screen, MAP_SETTING.RANDOM_MAP)
+# game = PyGame2D(screen, MAP_SETTING.MAP_DEFAULT)
 # # game.view()
 # def clear_terminal():
 #     sys.stdout.write("\033[H\033[J")  # Clear terminal
@@ -374,16 +348,16 @@ class PyGame2D():
 #     print("alpha = {}".format((game.convert_alpha_pi(game.angleGoal))*180/math.pi))
 #     print("distance = {}".format(game.distanceGoal))
 #     print("lidar_ray[4] = {}".format(game.robot.lidarSignals[4]))
-#     print("lidar_ray[1] = {}".format(game.robot.lidarSignals[1]))
-#     print("lidar_ray[3] = {}".format(game.robot.lidarSignals[3]))
-#     print("lidar_ray[5] = {}".format(game.robot.lidarSignals[5]))
-#     print("lidar_ray[0] = {}".format(game.robot.lidarSignals[0]))
-#     print("lidar_ray[8] = {}".format(game.robot.lidarSignals[8]))
+#     # print("lidar_ray[1] = {}".format(game.robot.lidarSignals[1]))
+#     # print("lidar_ray[3] = {}".format(game.robot.lidarSignals[3]))
+#     # print("lidar_ray[5] = {}".format(game.robot.lidarSignals[5]))
+#     # print("lidar_ray[0] = {}".format(game.robot.lidarSignals[0]))
+#     # print("lidar_ray[8] = {}".format(game.robot.lidarSignals[8]))
     
 #     print("States: {}".format(np.round(game.observe())))
 #     print("reward = {}".format(game.evaluate()))
     
-#     print("x = {}, y = {}".format(game.robot.xPos, game.robot.yPos))
+#     # print("x = {}, y = {}".format(game.robot.xPos, game.robot.yPos))
     
 #     if game.robot.achieveGoal:
 #         print("Great!!!!!!!!!")

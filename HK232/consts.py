@@ -74,18 +74,18 @@ INT_INFINITY = 99999
 
 class SPACE:
     LIDAR_LENGTH_SEGMENT = [24, 50]
-    DISTANCE_SPACE = 30 #!60 #!175
+    DISTANCE_SPACE = 30  #!60 #!175
     ALPHA_SPACE = 4 #6 #9
     REGION_LIDAR_SPAGE = 3
     SECTIONS_LIDARSPACE = 3  
     ACTION_SPACE = 3
 
 
-n_epsilondes = 10000
+n_epsilondes = 100000
 alpha = 0.1
 gamma = 0.99
 epsilon_decay = 10 / n_epsilondes
 epsilon = 0.9 - 0 * epsilon_decay
 epsilon_min = 0.001
 
-COUNTER = 400
+COUNTER = 1000
