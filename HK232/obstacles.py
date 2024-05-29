@@ -218,12 +218,16 @@ class Obstacles():
         self.rectangleObstaclesArr.append([x0, y0, h - 2, w - 2])
         x = x0
         y = y0
-        while x + w // 2 <= 1000:
-            x = x + w + 50
-            while y + h // 2 <= 650:
-                y = y + h + 50
+        while True:
+            while True:
                 self.rectangleObstaclesArr.append([x, y, h - 2, w - 2])
+                y = y + h + 50
+                if (y + h // 2 <= 650):
+                    break
+            x = x + w + 50
             y = y0
+            if (x + w // 2 <= 1000):
+                break
         
         self.numberOfRectangleObstacles = len(self.rectangleObstaclesArr)
             
