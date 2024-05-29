@@ -120,7 +120,7 @@ class Obstacles():
         # self.wallArr = []
         
         if map == MAP_SETTING.RANDOM_MAP:
-            self.numberOfRectangleObstacles = OBSTACLE_SETTING.NUM_OBSTACLE
+            self.numberOfRectangleObstacles = 0
             self.randomObstacle()
         elif map == MAP_SETTING.MAP_DEFAULT:
             # x, y height, width - 1100x700
@@ -211,12 +211,21 @@ class Obstacles():
             
     def randomObstacle(self):
         self.rectangleObstaclesArr = []
-        for i in range(self.numberOfRectangleObstacles):
-            x = random.randint(0, GAME_SETTING.SCREEN_WIDTH // 10) * 10 
-            y = random.randint(0, GAME_SETTING.SCREEN_HEIGHT // 10) * 10 
-            h = random.randint(2, OBSTACLE_SETTING.MAX_HEIGHT // 20) * 20 - 2
-            w = random.randint(2, OBSTACLE_SETTING.MAX_WIDTH // 20) * 20 - 2 
-            self.rectangleObstaclesArr.append([x, y, h, w])
+        # for i in range(self.numberOfRectangleObstacles): 
+        w = h = random.randint(OBSTACLE_SETTING.MIN_WIDTH // 10, OBSTACLE_SETTING.MAX_WIDTH // 10) * 10
+        x0 = 150 + w // 2
+        y0 = 50 + h // 2
+        self.rectangleObstaclesArr.append([x0, y0, h - 2, w - 2])
+        x = x0
+        y = y0
+        while x + w // 2 <= 1000:
+            x = x + w + 50
+            while y + h // 2 <= 650:
+                y = y + h + 50
+                self.rectangleObstaclesArr.append([x, y, h - 2, w - 2])
+            y = y0
+        
+        self.numberOfRectangleObstacles = len(self.rectangleObstaclesArr)
             
         check = False    
         while not check:
