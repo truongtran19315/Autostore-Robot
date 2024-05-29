@@ -213,6 +213,13 @@ class Obstacles():
         self.rectangleObstaclesArr = []
         # for i in range(self.numberOfRectangleObstacles): 
         w = h = random.randint(OBSTACLE_SETTING.MIN_WIDTH // 10, OBSTACLE_SETTING.MAX_WIDTH // 10) * 10
+        if w <= 100:
+            obstacle_distance = 50 
+        elif w > 100 and w < 150:
+            obstacle_distance = 100
+        else:
+            obstacle_distance = 120
+        
         x0 = 150 + w // 2
         y0 = 50 + h // 2
         self.rectangleObstaclesArr.append([x0, y0, h - 2, w - 2])
@@ -221,12 +228,12 @@ class Obstacles():
         while True:
             while True:
                 self.rectangleObstaclesArr.append([x, y, h - 2, w - 2])
-                y = y + h + 50
-                if (y + h // 2 <= 650):
+                y = y + h + obstacle_distance
+                if (y + h // 2 > 650):
                     break
-            x = x + w + 50
+            x = x + w + obstacle_distance
             y = y0
-            if (x + w // 2 <= 1000):
+            if (x + w // 2 > 1000):
                 break
         
         self.numberOfRectangleObstacles = len(self.rectangleObstaclesArr)
